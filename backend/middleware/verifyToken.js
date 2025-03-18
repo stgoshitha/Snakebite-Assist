@@ -4,7 +4,7 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-const isAdmin = async (req, res, next) => {
+const isAdminOrSuperAdmin  = async (req, res, next) => {
   try{
     const token = req.cookies.token;
     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
@@ -16,8 +16,13 @@ const isAdmin = async (req, res, next) => {
   
     if(user.role !== 'superadmin') return res.status(400).json({msg: "Super admin resources access denied."});
 
-    req.user = user;
-    next();
+    // Allow access to both superadmins and admins
+    if (user.role === 'superadmin' || user.role === 'admin') {
+      req.user = user;  // Attach user object to request
+      return next();
+    } else {
+      return res.status(403).json({msg: "Admin resources access denied."});
+    }
 
   }catch(err){
     console.error(err);
@@ -25,4 +30,17 @@ const isAdmin = async (req, res, next) => {
   }
 };
 
-module.exports = {isAdmin};
+
+const isSuperAdmin = async (req, res, next) => {
+  try {
+    if (req.user.role !== 'superadmin') {
+      return res.status(403).json({ msg: "Access denied. Super Admins only." });
+    }
+    next();
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ msg: "Internal server error" });
+  }
+};
+
+module.exports = {isAdminOrSuperAdmin, isSuperAdmin};
