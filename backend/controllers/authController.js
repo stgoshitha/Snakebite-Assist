@@ -47,6 +47,15 @@ const login  = async(req,res) => {
       //password
       const isPasswordValid = await bcrypt.compare(password, user.password);
       if(!isPasswordValid) return res.status(401).json({success:false,message: 'Invalid credentials'});
+
+      if (!user) {
+        return res.status(400).send('User not found');
+      }
+  
+      // Check if the user is blocked
+      if (user.isBlocked) {
+        return res.status(403).send('Your account is blocked');
+      }
       
       // Set the token in an HTTP-only cookie for secure authentication
       const token = jwt.sign({id: user._id}, process.env.JWT_SECRET);
