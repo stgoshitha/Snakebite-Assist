@@ -1,6 +1,7 @@
 const Snake = require('../models/SnakeModel');
 
 // Get all snakes
+//test and confirm getting all snakes works
 const getAllSnakes = async (req, res) => {
     try {
         const snakes = await Snake.find({});
