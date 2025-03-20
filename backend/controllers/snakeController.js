@@ -50,6 +50,7 @@ const getSnakeById = async (req, res) => {
 };
 
 // Add new snake
+//est and confirm adding new snake data works
 const addSnake = async (req, res) => {
     try {
         const snake = await Snake.create(req.body);
