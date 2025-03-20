@@ -3,6 +3,8 @@ const connectDB = require('./config/db');
 const cookieparser = require('cookie-parser');
 const dotenv = require('dotenv');
 const cors = require('cors');
+const authRoute = require('./routes/authRoute');
+const adminRoute = require('./routes/adminRoute');
 
 dotenv.config();
 
@@ -20,6 +22,8 @@ app.get('/', (req, res) => {
   })
   
 // Routes
+app.use('/api/auth', authRoute);
+app.use('/api/admin', adminRoute);
 
 
 
