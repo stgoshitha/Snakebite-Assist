@@ -9,33 +9,36 @@ import AdminDashboardUsers from "./pages/AdminDashboardUsers";
 import HospitalDashboard from "./pages/HospitalDashboard";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-
+import SnakeDetails from './pages/SnakeDetails';
 
 function App() {
   return (
     <Router>
-      <div>
-        <Routes>
-        <Route path='/admin' element={<AdminLayout />}>
-            <Route index element={<Home />} />
-            <Route path='adminUsers' element={<AdminDashboardUsers />} />
-          </Route>
+      <div className="min-h-screen bg-gray-50">
+        <main className="container mx-auto px-4 py-8">
+          <Routes>
+            <Route path='/admin' element={<AdminLayout />}>
+              <Route index element={<Home />} />
+              <Route path='adminUsers' element={<AdminDashboardUsers />} />
+            </Route>
 
-          <Route path='/' element={<UserLayout />}>
-            <Route index element={<Home />} />
-          </Route>
+            <Route path='/' element={<UserLayout />}>
+              <Route index element={<Home />} />
+            </Route>
 
-          <Route path="/hospital" element={<HospitalLayout />}>
-            <Route index element={<Home />} />
-            <Route path="hospitaldash" element={<HospitalDashboard />} />
-          </Route>
+            <Route path="/hospital" element={<HospitalLayout />}>
+              <Route index element={<Home />} />
+              <Route path="hospitaldash" element={<HospitalDashboard />} />
+            </Route>
 
-          <Route path='/' element={<PublicLayout />}>
-            <Route path="login" element={<Login />} />
-            <Route path="register" element={<Register />} />
-          </Route>
+            <Route path='/' element={<PublicLayout />}>
+              <Route path="login" element={<Login />} />
+              <Route path="register" element={<Register />} />
+            </Route>
 
-        </Routes>
+            <Route path="/snake-details/*" element={<SnakeDetails />} />
+          </Routes>
+        </main>
       </div>
     </Router>
   );
