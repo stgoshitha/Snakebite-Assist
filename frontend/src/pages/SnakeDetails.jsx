@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Routes, Route, Link, useParams } from 'react-router-dom';
+import { Routes, Route, Link, useParams, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import SnakeList from '../components/snakes/SnakeList';
 import SnakeDetail from '../components/snakes/SnakeDetail';
@@ -13,6 +13,8 @@ const SnakeDetails = () => {
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingSnake, setEditingSnake] = useState(null);
+  const { id } = useParams();
+  const location = useLocation();
 
   useEffect(() => {
     fetchSnakes();
@@ -23,7 +25,7 @@ const SnakeDetails = () => {
       const response = await axios.get('http://localhost:3000/api/snakes');
       setSnakes(response.data.data);
       setLoading(false);
-    } catch (err) {
+    } catch (_err) {
       setError('Failed to fetch snakes. Please try again later.');
       setLoading(false);
     }
@@ -44,7 +46,7 @@ const SnakeDetails = () => {
       try {
         await axios.delete(`http://localhost:3000/api/snakes/${id}`);
         setSnakes(snakes.filter(snake => snake._id !== id));
-      } catch (err) {
+      } catch (_err) {
         setError('Failed to delete snake. Please try again later.');
       }
     }
@@ -67,7 +69,7 @@ const SnakeDetails = () => {
         setSnakes([...snakes, response.data.data]);
       }
       handleModalClose();
-    } catch (err) {
+    } catch (_err) {
       setError('Failed to save snake. Please try again later.');
     }
   };
@@ -75,6 +77,12 @@ const SnakeDetails = () => {
   if (loading) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error} />;
 
+  // If we have an ID from the URL params, render the detail view directly
+  if (id) {
+    return <SnakeDetail />;
+  }
+
+  // For nested routes within admin layout
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-8">
@@ -87,19 +95,27 @@ const SnakeDetails = () => {
         </button>
       </div>
 
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <SnakeList
-              snakes={snakes}
-              onEdit={handleEditSnake}
-              onDelete={handleDeleteSnake}
-            />
-          }
+      {location.pathname === "/admin/snake-details" ? (
+        <SnakeList
+          snakes={snakes}
+          onEdit={handleEditSnake}
+          onDelete={handleDeleteSnake}
         />
-        <Route path="/:id" element={<SnakeDetail />} />
-      </Routes>
+      ) : (
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <SnakeList
+                snakes={snakes}
+                onEdit={handleEditSnake}
+                onDelete={handleDeleteSnake}
+              />
+            }
+          />
+          <Route path="/:id" element={<SnakeDetail />} />
+        </Routes>
+      )}
 
       {isModalOpen && (
         <SnakeModal

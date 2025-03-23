@@ -16,7 +16,7 @@ const SnakeDetail = () => {
         const response = await axios.get(`http://localhost:3000/api/snakes/${id}`);
         setSnake(response.data.data);
         setLoading(false);
-      } catch (err) {
+      } catch (_err) {
         setError('Failed to fetch snake details. Please try again later.');
         setLoading(false);
       }
@@ -77,7 +77,7 @@ const SnakeDetail = () => {
 
           <div className="mt-6">
             <Link
-              to="/snake-details"
+              to="/admin/snake-details"
               className="text-blue-600 hover:text-blue-800"
             >
               ← Back to Snake List
