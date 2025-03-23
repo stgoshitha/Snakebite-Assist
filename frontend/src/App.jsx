@@ -10,6 +10,7 @@ import HospitalDashboard from "./pages/HospitalDashboard";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import SnakeDetails from './pages/SnakeDetails';
+import SnakeDetail from './components/snakes/SnakeDetail';
 
 function App() {
   return (
@@ -20,7 +21,8 @@ function App() {
             <Route path='/admin' element={<AdminLayout />}>
               <Route index element={<Home />} />
               <Route path='adminUsers' element={<AdminDashboardUsers />} />
-              <Route path="snake-details/*" element={<SnakeDetails />} />
+              <Route path="snake-details" element={<SnakeDetails />} />
+              <Route path="snake-details/:id" element={<SnakeDetail />} />
             </Route>
 
             <Route path='/' element={<UserLayout />}>
@@ -36,9 +38,6 @@ function App() {
               <Route path="login" element={<Login />} />
               <Route path="register" element={<Register />} />
             </Route>
-
-            {/* Add a route outside of the layouts for direct access */}
-            <Route path="/snake-details/:id" element={<SnakeDetails />} />
             
           </Routes>
         </main>

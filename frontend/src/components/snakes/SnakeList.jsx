@@ -24,7 +24,7 @@ const SnakeList = ({ snakes, onEdit, onDelete }) => {
             </div>
             <div className="mt-4 flex justify-between items-center">
               <Link
-                to={`/snake-details/${snake._id}`}
+                to={`/admin/snake-details/${snake._id}`}
                 className="text-blue-600 hover:text-blue-800"
               >
                 View Details

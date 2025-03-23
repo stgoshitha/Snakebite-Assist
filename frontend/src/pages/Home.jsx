@@ -62,7 +62,7 @@ const Home = () => {
             View User Details
           </button>
           <button
-            onClick={() => navigate("admin/snake-details")}
+            onClick={() => navigate("/admin/snake-details")}
             className="px-4 py-2 bg-green-500 text-white rounded"
           >
             View Snake Details

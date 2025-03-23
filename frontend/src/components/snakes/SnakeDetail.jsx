@@ -16,7 +16,8 @@ const SnakeDetail = () => {
         const response = await axios.get(`http://localhost:3000/api/snakes/${id}`);
         setSnake(response.data.data);
         setLoading(false);
-      } catch (_err) {
+      } catch (error) {
+        console.error("Error fetching snake details:", error);
         setError('Failed to fetch snake details. Please try again later.');
         setLoading(false);
       }
