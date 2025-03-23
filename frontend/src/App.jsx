@@ -20,6 +20,7 @@ function App() {
             <Route path='/admin' element={<AdminLayout />}>
               <Route index element={<Home />} />
               <Route path='adminUsers' element={<AdminDashboardUsers />} />
+              <Route path="snake-details/" element={<SnakeDetails />} />
             </Route>
 
             <Route path='/' element={<UserLayout />}>
@@ -36,7 +37,7 @@ function App() {
               <Route path="register" element={<Register />} />
             </Route>
 
-            <Route path="/snake-details/*" element={<SnakeDetails />} />
+            
           </Routes>
         </main>
       </div>
