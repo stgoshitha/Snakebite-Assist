@@ -9,6 +9,6 @@ hospitalRouter.get('/getAllHospitalNotApproved', isAdminOrSuperAdmin, getAllHosp
 hospitalRouter.get('/getOneHospital/:id', authenticateHospital, getOneHospital);
 hospitalRouter.put('/updateHospital/:id', authenticateHospital, updateHospital);
 hospitalRouter.delete('/deleteHospital/:id', authenticateHospital, deleteHospital);
-hospitalRouter.put('/hospitals/:id/approve', isAdminOrSuperAdmin, approveHospital);
+hospitalRouter.put('/approve/:id', isAdminOrSuperAdmin, approveHospital);
 
 module.exports = hospitalRouter;
