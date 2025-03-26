@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const authRoute = require('./routes/authRoute');
 const adminRoute = require('./routes/adminRoute');
+const hospitalRoute = require('./routes/hospitalRoute');
 
 dotenv.config();
 
@@ -24,7 +25,7 @@ app.get('/', (req, res) => {
 // Routes
 app.use('/api/auth', authRoute);
 app.use('/api/admin', adminRoute);
-
+app.use('/api/hospital', hospitalRoute);
 
 
 // Connect to the MongoDB database
