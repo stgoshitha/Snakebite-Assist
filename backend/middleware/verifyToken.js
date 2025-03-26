@@ -63,12 +63,13 @@ const authenticateHospital = (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     //console.log("Decoded Token:", decoded);
 
+    req.user = decoded;
+
     // Check if the authenticated user has the 'hospital' role
     if (req.user.role !== 'hospital') {
       return res.status(403).json({ message: 'Access denied. Hospital authorization required.' });
     }
 
-    req.user = decoded;
     next();
 
   } catch (error) {
