@@ -30,7 +30,8 @@ const HospitalSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId, 
       ref: 'user',
       required: true 
-    }
+    },
+    isApproved: { type: Boolean, default: false }
   },
   { timestamps: true } 
 );
