@@ -27,14 +27,11 @@ function App() {
               <Route path='adminUsers' element={<AdminDashboardUsers />} />
                <Route path='adminHospitalApproved' element={<AdminHospitalApproved />} />
               <Route path='adminHospitalNotApproved' element={<AdminHospitalNotApproved />} />
-              <Route path="snake-details" element={<SnakeDetails />} />
-              <Route path="snake-details/:id" element={<SnakeDetail />} />
             </Route>
 
             <Route path='/' element={<UserLayout />}>
               <Route index element={<Home />} />
             </Route>
-
 
             <Route path="/hospital" element={<HospitalLayout />}>
               <Route index element={<Home />} />
@@ -47,6 +44,9 @@ function App() {
               <Route path="login" element={<Login />} />
               <Route path="register" element={<Register />} />
             </Route>
+
+            <Route path="/admin/snake-details" element={<SnakeDetails />} />
+            <Route path="/snake-details/:id" element={<SnakeDetail />} />
             
           </Routes>
         </main>
