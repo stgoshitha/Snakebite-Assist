@@ -9,6 +9,10 @@ import AdminDashboardUsers from "./pages/AdminDashboardUsers";
 import HospitalDashboard from "./pages/HospitalDashboard";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import AdminHospitalApproved from "./pages/AdminHospitalApproved";
+import AdminHospitalNotApproved from "./pages/AdminHospitalNotApproved";
+import HospitalProfile from "./pages/HospitalProfile";
+import CreateHospitalForm from "./pages/CreateHospitalForm";
 
 
 function App() {
@@ -19,6 +23,8 @@ function App() {
         <Route path='/admin' element={<AdminLayout />}>
             <Route index element={<Home />} />
             <Route path='adminUsers' element={<AdminDashboardUsers />} />
+            <Route path='adminHospitalApproved' element={<AdminHospitalApproved />} />
+            <Route path='adminHospitalNotApproved' element={<AdminHospitalNotApproved />} />
           </Route>
 
           <Route path='/' element={<UserLayout />}>
@@ -28,6 +34,8 @@ function App() {
           <Route path="/hospital" element={<HospitalLayout />}>
             <Route index element={<Home />} />
             <Route path="hospitaldash" element={<HospitalDashboard />} />
+            <Route path="hospitalprofile" element={<HospitalProfile />} />
+            <Route path="hospitalprofile/createHospitalForm" element={<CreateHospitalForm />} />
           </Route>
 
           <Route path='/' element={<PublicLayout />}>
