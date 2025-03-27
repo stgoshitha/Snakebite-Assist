@@ -1,41 +1,71 @@
 const Hospital = require('../models/Hospital');
+const User = require('../models/User');
 
-//create new hospital
+// Create a new hospital (One-to-One Relationship)
 const createHospital = async (req, res) => {
   try {
     const { hospitalName, address, city, phoneNumber, email, latitude, longitude, is24hrService, workingHours, proofCertificate, hospitalImages } = req.body;
 
     const userId = req.user.id;
 
+    // Create new hospital
     const newHospital = new Hospital({
       hospitalName,
       address,
       city,
       phoneNumber,
-      email,  
+      email,
       latitude,
       longitude,
       is24hrService,
       workingHours,
       proofCertificate,
-      hospitalImages,
+      hospitalImages:hospitalImages && hospitalImages.length > 0 ? hospitalImages : ['https://example.com/default-hospital.jpg'],
       user: userId,
-      isApproved: false 
+      isApproved: false
     });
 
-    const hospital = await newHospital.save();
+    await newHospital.save();
 
-    res.status(201).json({
+    // Link hospital to user
+    const user = await User.findById(userId);
+    if (user) {
+      user.hospitalId = newHospital._id;
+      await user.save();
+    }
+
+    return res.status(201).json({
       message: 'Hospital created successfully',
-      hospital
+      hospital: newHospital,
     });
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
   }
 };
 
-//get all approved hospital details
+// Get the hospital for the logged-in user
+const getUserHospital = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).populate('hospitalId');
+    //console.log(user.hospitalId);
+    //console.log(user);
+    
+    if (!user || !user.hospitalId) {
+        return res.status(404).json({ message: 'Hospital not found' });
+    }
+
+    res.json(user.hospitalId); 
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server Error' });
+  }
+};
+
+
+// Get all approved hospitals
 const getAllHospitalApproved = async (req, res) => {
   try {
     const hospitals = await Hospital.find({ isApproved: true });
@@ -43,9 +73,9 @@ const getAllHospitalApproved = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: 'Server Error', error: error.message });
   }
-}
+};
 
-//get all not approved hospital details
+// Get all unapproved hospitals
 const getAllHospitalNotApproved = async (req, res) => {
   try {
     const hospitals = await Hospital.find({ isApproved: false });
@@ -53,26 +83,9 @@ const getAllHospitalNotApproved = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: 'Server Error', error: error.message });
   }
-}
-
-//get one hospital detail
-const getOneHospital = async (req, res) => {
-  try {
-    const hospitalId = req.params.id;
-    const hospital = await Hospital.findById(hospitalId);
-
-    if (!hospital) {
-      return res.status(404).json({ message: 'Hospital not found' });
-    }
-
-    res.json(hospital);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error', error: error.message });
-  }
 };
 
-//get one hospital detail
+// Approve a hospital
 const approveHospital = async (req, res) => {
   try {
     const hospitalId = req.params.id;
@@ -92,40 +105,63 @@ const approveHospital = async (req, res) => {
   }
 };
 
-//update hospital detail
+// Update hospital details
 const updateHospital = async (req, res) => {
   try {
-    const hospitalId = req.params.id;
-    const updateData = req.body; 
+    const hospitalId = req.params.id;  
+    const userId = req.user.id; 
 
-    const updatedHospital = await Hospital.findByIdAndUpdate(hospitalId, updateData, { new: true, runValidators: true });
-
-    if (!updatedHospital) {
-      return res.status(404).json({ message: 'Hospital not found' });
-    }
-
-    res.json({ message: 'Hospital updated successfully', hospital: updatedHospital });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server error', error: error.message });
-  }
-};
-
-//delete hospital detail
-const deleteHospital = async (req, res) => {
-  try {
-    const hospitalId = req.params.id;
-    const hospital = await Hospital.findByIdAndDelete(hospitalId);
-
+    const hospital = await Hospital.findById(hospitalId);
     if (!hospital) {
       return res.status(404).json({ message: 'Hospital not found' });
     }
 
-    res.json({ message: 'Hospital deleted successfully', hospital });
+    if (hospital.user.toString() !== userId) {
+      return res.status(403).json({ message: 'Unauthorized: You do not own this hospital' });
+    }
+
+    const allowedFields = ['hospitalName', 'address', 'city', 'phoneNumber', 'latitude', 'longitude', 'is24hrService', 'workingHours', 'hospitalImages'];
+    allowedFields.forEach(field => {
+      if (req.body[field] !== undefined) {
+        hospital[field] = req.body[field];
+      }
+    });
+
+    await hospital.save();
+
+    res.json({ message: 'Hospital updated successfully', hospital });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
 
-module.exports = { createHospital, getAllHospitalApproved, getAllHospitalNotApproved, getOneHospital, approveHospital, updateHospital, deleteHospital};
+
+// Delete a hospital 
+const deleteHospital = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const hospital = await Hospital.findOneAndDelete({ user: userId });
+
+    if (!hospital) {
+      return res.status(404).json({ message: 'Hospital not found or unauthorized' });
+    }
+
+    await User.findByIdAndUpdate(userId, { hospitalId: null });
+
+    res.json({ message: 'Hospital deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
+module.exports = { 
+  createHospital, 
+  getUserHospital, 
+  getAllHospitalApproved, 
+  getAllHospitalNotApproved, 
+  approveHospital, 
+  updateHospital, 
+  deleteHospital 
+};
