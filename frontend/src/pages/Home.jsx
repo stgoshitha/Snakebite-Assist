@@ -69,10 +69,16 @@ const Home = () => {
           </button>
 
           <button
-            onClick={() => navigate("/hospital-details")}
-            className="px-4 py-2 bg-purple-500 text-white rounded"
+            onClick={() => navigate("/admin/adminHospitalApproved")}
+            className="px-4 py-2 bg-blue-500 text-white rounded"
           >
-            View Hospital Details
+            View Hospital Approved Details
+          </button>
+          <button
+            onClick={() => navigate("/admin/adminHospitalNotApproved")}
+            className="px-4 py-2 bg-yellow-500 text-white rounded"
+          >
+            View Hospital Not Approved Details
           </button>
         </div>
       )}
