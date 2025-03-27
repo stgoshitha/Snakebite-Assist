@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const authRoute = require('./routes/authRoute');
 const adminRoute = require('./routes/adminRoute');
+const hospitalRoute = require('./routes/hospitalRoute');
 const snakeRoute = require('./routes/snakeRoute');
 
 dotenv.config();
@@ -28,6 +29,7 @@ app.get('/', (req, res) => {
 // Routes
 app.use('/api/auth', authRoute);
 app.use('/api/admin', adminRoute);
+app.use('/api/hospital', hospitalRoute);
 app.use('/api/snakes', snakeRoute);
 
 // Error handling middleware
@@ -39,6 +41,7 @@ app.use((err, req, res, next) => {
     message: process.env.NODE_ENV === 'development' ? err.message : 'Internal Server Error'
   });
 });
+
 
 // Handle 404 routes
 app.use((req, res) => {

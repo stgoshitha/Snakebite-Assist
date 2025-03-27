@@ -42,4 +42,28 @@ const isSuperAdmin = async (req, res, next) => {
   }
 };
 
-module.exports = { isAdminOrSuperAdmin, isSuperAdmin };
+const authenticate = async (req, res, next) => {
+  try {
+    const token = req.header('Authorization').replace('Bearer ', ''); 
+    //console.log(token);
+  
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    //console.log(decoded);
+    //console.log(decoded.id);
+    
+    const user = await User.findById(decoded.id);
+    
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    req.user = user; 
+    next();
+  } catch (err) {
+    console.error(err);
+    return res.status(401).json({ message: 'Authentication failed', error: err.message });
+  }
+};
+
+
+module.exports = { isAdminOrSuperAdmin, isSuperAdmin, authenticate };
