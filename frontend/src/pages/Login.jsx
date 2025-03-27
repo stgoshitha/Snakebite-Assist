@@ -24,7 +24,12 @@ const Login = () => {
     try {
       const request = await post("/api/auth/login", { email, password });
       const response = request.data;
-      if (request.status === 200) {
+      console.log(response.token);
+      if (request.status === 200 && response.token) {
+        localStorage.setItem("token", response.token);
+        // localStorage.setItem("user", response.user._id);
+        dispatch(SetUser(response.user));
+
         if (
           response.user.role === "admin" || response.user.role === "superadmin"
         ) {
@@ -34,7 +39,7 @@ const Login = () => {
         } else if (response.user.role === "user") {
           navigate("/");
         }
-        dispatch(SetUser(response.user));
+        
       }
       console.log(response);
     } catch (err) {
