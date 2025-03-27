@@ -42,7 +42,6 @@ app.use((err, req, res, next) => {
   });
 });
 
-
 // Handle 404 routes
 app.use((req, res) => {
   res.status(404).json({
@@ -51,19 +50,14 @@ app.use((req, res) => {
   });
 });
 
-// Connect to MongoDB and start server
-const startServer = async () => {
-  try {
-    await connectDB();
-    console.log('MongoDB Connected Successfully!');
-    
+// Connect to the MongoDB database
+connectDB();
+
+//Server
+try {
     app.listen(port, () => {
       console.log(`Server is running on port ${port}`);
     });
   } catch (error) {
-    console.error('Failed to connect to MongoDB:', error);
-    process.exit(1);
-  }
-};
-
-startServer();
+      console.error("Failed to start the server:", error);
+}
