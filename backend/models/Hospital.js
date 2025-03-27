@@ -25,7 +25,7 @@ const HospitalSchema = new mongoose.Schema(
       },
     ],
     proofCertificate: { type: String, required: true },
-    hospitalImages: { type: [String] },
+    hospitalImages: { type: [String],default: ['https://example.com/default-hospital.jpg'] },
     user: { 
       type: mongoose.Schema.Types.ObjectId, 
       ref: 'user',
