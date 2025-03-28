@@ -46,7 +46,7 @@ function App() {
             </Route>
 
             <Route path="/admin/snake-details" element={<SnakeDetails />} />
-            <Route path="/snake-details/:id" element={<SnakeDetail />} />
+            <Route path="/admin/snake-details/:id" element={<SnakeDetail />} />
             
           </Routes>
         </main>

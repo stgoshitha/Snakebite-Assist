@@ -7,11 +7,15 @@ const authRoute = require('./routes/authRoute');
 const adminRoute = require('./routes/adminRoute');
 const hospitalRoute = require('./routes/hospitalRoute');
 const snakeRoute = require('./routes/snakeRoute');
+const searchRoute = require('./routes/searchRoute');
 
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+// Connect to the MongoDB database
+connectDB();
 
 // Middleware
 app.use(express.json());
@@ -31,6 +35,7 @@ app.use('/api/auth', authRoute);
 app.use('/api/admin', adminRoute);
 app.use('/api/hospital', hospitalRoute);
 app.use('/api/snakes', snakeRoute);
+app.use('/api/search', searchRoute);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -50,9 +55,6 @@ app.use((req, res) => {
   });
 });
 
-// Connect to the MongoDB database
-connectDB();
-
 //Server
 try {
     app.listen(port, () => {
@@ -61,3 +63,5 @@ try {
   } catch (error) {
       console.error("Failed to start the server:", error);
 }
+
+

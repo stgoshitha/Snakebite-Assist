@@ -19,6 +19,7 @@ const CreateHospitalForm = () => {
   });
 
   const navigate = useNavigate();
+  const [errors, setErrors] = useState({});
 
   const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
@@ -68,27 +69,124 @@ const CreateHospitalForm = () => {
     }
   };
 
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.hospitalName) newErrors.hospitalName = 'Hospital Name is required';
+
+    if (!formData.address) newErrors.address = 'Address is required';
+
+    if (!formData.city) newErrors.city = 'City is required';
+
+    if (!formData.phoneNumber) newErrors.phoneNumber = 'Phone Number is required';
+    else if (!/^\d{10}$/.test(formData.phoneNumber)) newErrors.phoneNumber = 'Phone Number must be 10 digits';
+
+    if (!formData.email) newErrors.email = 'Email is required';
+    else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email is invalid';
+
+
+    if (!formData.proofCertificate) newErrors.proofCertificate = 'Proof Certificate URL is required';
+    if (formData.workingHours.some((hours) => !hours.open || !hours.close)) {
+      newErrors.workingHours = 'Working hours must have both open and close times';
+    }
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
+  };
+
   return (
     <div>
-      <h2>Create Hospital</h2>
+      <h1 className='text-2xl mb-8'>Create Hospital</h1>
       <form onSubmit={handleSubmit}>
-        <input type="text" name="hospitalName" placeholder="Hospital Name" onChange={handleChange} required />
-        <input type="text" name="address" placeholder="Address" onChange={handleChange} required />
-        <input type="text" name="city" placeholder="City" onChange={handleChange} required />
-        <input type="text" name="phoneNumber" placeholder="Phone Number" onChange={handleChange} required />
-        <input type="email" name="email" placeholder="Email" onChange={handleChange} required />
+        <label>Hospital Name: </label>
+        <input
+          type="text"
+          name="hospitalName"
+          placeholder="Hospital Name"
+          onChange={handleChange}
+          required
+        />
+        {errors.hospitalName && <span className="text-red-500">{errors.hospitalName}</span>}
+        <br />
+
+        <label>Hospital Address: </label>
+        <input
+          type="text"
+          name="address"
+          placeholder="Address"
+          onChange={handleChange}
+          required
+        />
+        {errors.address && <span className="text-red-500">{errors.address}</span>}
+        <br />
+
+        <label>City: </label>
+        <input
+          type="text"
+          name="city"
+          placeholder="City"
+          onChange={handleChange}
+          required
+        />
+        {errors.city && <span className="text-red-500">{errors.city}</span>}
+        <br />
+
+        <label>Hospital Phone Number: </label>
+        <input
+          type="text"
+          name="phoneNumber"
+          placeholder="Phone Number"
+          onChange={handleChange}
+          onInput={(e) => {
+            e.target.value = e.target.value.replace(/\D/g, '');
+          }}
+          required
+        />
+        {errors.phoneNumber && <span className="text-red-500">{errors.phoneNumber}</span>}
+        <br />
+
+        <label>Hospital Email: </label>
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          onChange={handleChange}
+          required
+        />
+        {errors.email && <span className="text-red-500">{errors.email}</span>}
+        <br />
+
         <LocationPicker formData={formData} setFormData={setFormData} />
-        <input type="text" name="proofCertificate" placeholder="Proof Certificate URL" onChange={handleChange} required />
-        <input type="text" name="hospitalImages" placeholder="Hospital Image URL" onChange={handleChange} defaultValue="https://example.com/default-hospital.jpg" />
+        <br />
+
+        <label>Proof Certificate: </label>
+        <input
+          type="text"
+          name="proofCertificate"
+          placeholder="Proof Certificate URL"
+          onChange={handleChange}
+          required
+        />
+        {errors.proofCertificate && <span className="text-red-500">{errors.proofCertificate}</span>}
+        <br />
+
+        <label>Hospital Images: </label>
+        <input
+          type="text"
+          name="hospitalImages"
+          placeholder="Hospital Image URL"
+          onChange={handleChange}
+        />
+        <br />
 
         {/* Working Hours Section */}
         <h3>Working Hours</h3>
         {formData.workingHours.map((hours, index) => (
           <div key={index} style={{ marginBottom: '10px' }}>
             <label>Day:</label>
-            <select 
-              value={hours.day} 
-              onChange={(e) => handleWorkingHoursChange(index, "day", e.target.value)}
+            <select
+              value={hours.day}
+              onChange={(e) => handleWorkingHoursChange(index, 'day', e.target.value)}
               required
             >
               {daysOfWeek.map((day) => (
@@ -97,25 +195,32 @@ const CreateHospitalForm = () => {
                 </option>
               ))}
             </select>
-            <input 
-              type="time" 
-              value={hours.open} 
-              onChange={(e) => handleWorkingHoursChange(index, "open", e.target.value)} 
+            <input
+              type="time"
+              value={hours.open}
+              onChange={(e) => handleWorkingHoursChange(index, 'open', e.target.value)}
               required
             />
             -
-            <input 
-              type="time" 
-              value={hours.close} 
-              onChange={(e) => handleWorkingHoursChange(index, "close", e.target.value)} 
+            <input
+              type="time"
+              value={hours.close}
+              onChange={(e) => handleWorkingHoursChange(index, 'close', e.target.value)}
               required
             />
-            <button type="button" onClick={() => removeWorkingHours(index)}>Remove</button>
+            <button type="button" onClick={() => removeWorkingHours(index)} className="px-4 py-2 bg-red-600 text-white rounded">
+              Remove
+            </button>
           </div>
         ))}
-        <button type="button" onClick={addWorkingHours}>+ Add Working Hours</button>
+        <button type="button" onClick={addWorkingHours} className="px-4 py-2 bg-green-600 text-white rounded">
+          + Add Working Hours
+        </button>
+        <br />
 
-        <button type="submit">Create Hospital</button>
+        <button type="submit" className="px-4 py-2 mt-4 bg-zinc-600 text-white rounded">
+          Create Hospital
+        </button>
       </form>
     </div>
   );
