@@ -60,11 +60,11 @@ const LocationPicker = ({ formData, setFormData }) => {
           value={city}
           onChange={(e) => setCity(e.target.value)}
         />
-        <button onClick={handleSearch}>Search</button>
+        <button onClick={handleSearch} className="px-4 py-2 mt-4 bg-zinc-600 text-white rounded">Search</button>
       </div>
 
       {/* Map Container */}
-      <MapContainer center={position} zoom={8} style={{ height: "400px", width: "100%" }}>
+      <MapContainer center={position} zoom={8} style={{ height: "400px", width: "50%" }}>
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
         {formData.latitude && formData.longitude && <Marker position={[formData.latitude, formData.longitude]} />}
         <MapClickHandler />

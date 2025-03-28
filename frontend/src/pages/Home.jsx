@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { post } from "../services/ApiEndpoint";
 import { Logout } from "../redux/AuthSlice";
 
+import AutocompleteSearch from "../components/AutocompleteSearch";
+
 const Home = () => {
   const user = useSelector((state) => state.Auth.user);
   const dispatch = useDispatch();
@@ -35,48 +37,57 @@ const Home = () => {
 
   return (
     <div>
-      <h1 className="text-xl font-bold mt-4">{getWelcomeMessage()}</h1>
+      <h1 className="text-xl font-bold mt-4 flex justify-center">
+        {getWelcomeMessage()}
+      </h1>
 
       {user ? (
-        <button
-          onClick={handleLogout}
-          className="mt-4 px-4 py-2 w-40 bg-red-500 text-white rounded"
-        >
-          Logout
-        </button>
+        <div className="flex justify-center items-center">
+          <button
+            onClick={handleLogout}
+            className="mt-4 mb-4 px-4 py-2 w-40 bg-red-500 text-white rounded"
+          >
+            Logout
+          </button>
+        </div>
       ) : (
-        <button
-          onClick={() => navigate("/login")}
-          className="mt-4 px-4 py-2 w-40  bg-blue-500 text-white rounded"
-        >
-          Login
-        </button>
+        <div>
+          <div className="flex justify-center items-center">
+            <button
+              onClick={() => navigate("/login")}
+              className="mt-4 mb-4 px-4 py-2 w-40  bg-blue-500 text-white rounded"
+            >
+              Login
+            </button>
+          </div>
+          <AutocompleteSearch />
+        </div>
       )}
 
       {user?.role === "admin" && (
         <div className="mt-4 space-x-4">
           <button
             onClick={() => navigate("/admin/adminUsers")}
-            className="px-4 py-2 bg-purple-500 text-white rounded"
+            className="px-4 py-2 bg-zinc-600 text-white rounded"
           >
             View User Details
           </button>
           <button
             onClick={() => navigate("/admin/snake-details")}
-            className="px-4 py-2 bg-green-500 text-white rounded"
+            className="px-4 py-2 bg-zinc-600 text-white rounded"
           >
             View Snake Details
           </button>
 
           <button
             onClick={() => navigate("/admin/adminHospitalApproved")}
-            className="px-4 py-2 bg-blue-500 text-white rounded"
+            className="px-4 py-2 bg-zinc-600 text-white rounded"
           >
             View Hospital Approved Details
           </button>
           <button
             onClick={() => navigate("/admin/adminHospitalNotApproved")}
-            className="px-4 py-2 bg-yellow-500 text-white rounded"
+            className="px-4 py-2 bg-zinc-600 text-white rounded"
           >
             View Hospital Not Approved Details
           </button>
@@ -84,15 +95,15 @@ const Home = () => {
       )}
 
       {user?.role === "hospital" && (
-              <div className="mt-4 space-x-4">
-                <button
-                  onClick={() => navigate("/hospital/hospitaldash")}
-                  className="px-4 py-2 bg-purple-500 text-white rounded"
-                >
-                  hosital Dashboard
-                </button>
-              </div>
-            )}
+        <div className="mt-4 space-x-4">
+          <button
+            onClick={() => navigate("/hospital/hospitalprofile")}
+            className="px-4 py-2 bg-zinc-600 text-white rounded"
+          >
+            Hosital Profile
+          </button>
+        </div>
+      )}
     </div>
   );
 };
