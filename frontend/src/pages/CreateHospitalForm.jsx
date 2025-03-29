@@ -50,15 +50,64 @@ const CreateHospitalForm = () => {
     setFormData({ ...formData, workingHours: updatedWorkingHours });
   };
 
+  // **Validation function**
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!formData.hospitalName.trim()) {
+      newErrors.hospitalName = 'Hospital Name is required';
+    }
+
+    if (!formData.address.trim()) {
+      newErrors.address = 'Address is required';
+    }
+
+    if (!formData.city.trim()) {
+      newErrors.city = 'City is required';
+    }
+
+    if (!formData.phoneNumber.trim()) {
+      newErrors.phoneNumber = 'Phone Number is required';
+    } else if (!/^\d{10}$/.test(formData.phoneNumber)) {
+      newErrors.phoneNumber = 'Phone Number must be exactly 10 digits';
+    }
+
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = 'Email format is invalid';
+    }
+
+    // if (!formData.proofCertificate.trim()) {
+    //   newErrors.proofCertificate = 'Proof Certificate URL is required';
+    // } else if (!/^https?:\/\/.+\.(pdf|jpg|jpeg|png)$/i.test(formData.proofCertificate)) {
+    //   newErrors.proofCertificate = 'Proof Certificate must be a valid PDF or image URL';
+    // }
+
+    if (formData.workingHours.some((hours) => !hours.open || !hours.close)) {
+      newErrors.workingHours = 'All working hours must have both open and close times';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   // Submit form
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!validateForm()) {
+      alert('Please fix the errors before submitting.');
+      return;
+    }
+
     try {
-      const token = localStorage.getItem('token'); // Assuming JWT token is stored in localStorage
-      const response = await axios.post('http://localhost:3000/api/hospital/createHospital', formData, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const token = localStorage.getItem('token'); // Assuming JWT token is stored
+      const response = await axios.post(
+        'http://localhost:3000/api/hospital/createHospital',
+        formData,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
       alert('Hospital created successfully!');
       navigate('/hospital/hospitalprofile');
@@ -67,31 +116,6 @@ const CreateHospitalForm = () => {
       console.error(error.response?.data || error.message);
       alert('Failed to create hospital.');
     }
-  };
-
-  const validateForm = () => {
-    const newErrors = {};
-    if (!formData.hospitalName) newErrors.hospitalName = 'Hospital Name is required';
-
-    if (!formData.address) newErrors.address = 'Address is required';
-
-    if (!formData.city) newErrors.city = 'City is required';
-
-    if (!formData.phoneNumber) newErrors.phoneNumber = 'Phone Number is required';
-    else if (!/^\d{10}$/.test(formData.phoneNumber)) newErrors.phoneNumber = 'Phone Number must be 10 digits';
-
-    if (!formData.email) newErrors.email = 'Email is required';
-    else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email is invalid';
-
-
-    if (!formData.proofCertificate) newErrors.proofCertificate = 'Proof Certificate URL is required';
-    if (formData.workingHours.some((hours) => !hours.open || !hours.close)) {
-      newErrors.workingHours = 'Working hours must have both open and close times';
-    }
-
-    setErrors(newErrors);
-
-    return Object.keys(newErrors).length === 0;
   };
 
   return (
@@ -105,6 +129,7 @@ const CreateHospitalForm = () => {
           placeholder="Hospital Name"
           onChange={handleChange}
           required
+          className="p-1 border rounded focus:outline-none focus:ring-2 mb-1 w-72"
         />
         {errors.hospitalName && <span className="text-red-500">{errors.hospitalName}</span>}
         <br />
@@ -116,6 +141,7 @@ const CreateHospitalForm = () => {
           placeholder="Address"
           onChange={handleChange}
           required
+          className="p-1 border rounded focus:outline-none focus:ring-2 mb-1"
         />
         {errors.address && <span className="text-red-500">{errors.address}</span>}
         <br />
@@ -127,6 +153,7 @@ const CreateHospitalForm = () => {
           placeholder="City"
           onChange={handleChange}
           required
+          className="p-1 border rounded focus:outline-none focus:ring-2 mb-1"
         />
         {errors.city && <span className="text-red-500">{errors.city}</span>}
         <br />
@@ -141,6 +168,7 @@ const CreateHospitalForm = () => {
             e.target.value = e.target.value.replace(/\D/g, '');
           }}
           required
+          className="p-1 border rounded focus:outline-none focus:ring-2 mb-1"
         />
         {errors.phoneNumber && <span className="text-red-500">{errors.phoneNumber}</span>}
         <br />
@@ -152,6 +180,7 @@ const CreateHospitalForm = () => {
           placeholder="Email"
           onChange={handleChange}
           required
+          className="p-1 border rounded focus:outline-none focus:ring-2 mb-1"
         />
         {errors.email && <span className="text-red-500">{errors.email}</span>}
         <br />
@@ -166,6 +195,7 @@ const CreateHospitalForm = () => {
           placeholder="Proof Certificate URL"
           onChange={handleChange}
           required
+          className="p-1 border rounded focus:outline-none focus:ring-2 mb-1"
         />
         {errors.proofCertificate && <span className="text-red-500">{errors.proofCertificate}</span>}
         <br />
@@ -176,6 +206,7 @@ const CreateHospitalForm = () => {
           name="hospitalImages"
           placeholder="Hospital Image URL"
           onChange={handleChange}
+          className="p-1 border rounded focus:outline-none focus:ring-2 mb-1"
         />
         <br />
 
