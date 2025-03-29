@@ -7,11 +7,15 @@ const authRoute = require('./routes/authRoute');
 const adminRoute = require('./routes/adminRoute');
 const hospitalRoute = require('./routes/hospitalRoute');
 const snakeRoute = require('./routes/snakeRoute');
+const searchRoute = require('./routes/searchRoute');
 
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+// Connect to the MongoDB database
+connectDB();
 
 // Middleware
 app.use(express.json());
@@ -31,6 +35,7 @@ app.use('/api/auth', authRoute);
 app.use('/api/admin', adminRoute);
 app.use('/api/hospital', hospitalRoute);
 app.use('/api/snakes', snakeRoute);
+app.use('/api/search', searchRoute);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -42,7 +47,6 @@ app.use((err, req, res, next) => {
   });
 });
 
-
 // Handle 404 routes
 app.use((req, res) => {
   res.status(404).json({
@@ -51,19 +55,13 @@ app.use((req, res) => {
   });
 });
 
-// Connect to MongoDB and start server
-const startServer = async () => {
-  try {
-    await connectDB();
-    console.log('MongoDB Connected Successfully!');
-    
+//Server
+try {
     app.listen(port, () => {
       console.log(`Server is running on port ${port}`);
     });
   } catch (error) {
-    console.error('Failed to connect to MongoDB:', error);
-    process.exit(1);
-  }
-};
+      console.error("Failed to start the server:", error);
+}
 
-startServer();
+

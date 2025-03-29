@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import LocationPicker from '../components/LocationPicker';
 
 const HospitalProfile = () => {
   const [hospital, setHospital] = useState(null);
@@ -116,7 +117,7 @@ const HospitalProfile = () => {
       <div>
         <h2>No Hospital Found</h2>
         <p>You have not created a hospital profile yet.</p>
-        <button onClick={() => navigate("/hospital/hospitalprofile/createHospitalForm")}>Create Hospital</button>
+        <button onClick={() => navigate("/hospital/hospitalprofile/createHospitalForm")} className="px-4 py-2 bg-zinc-600 text-white rounded">Create Hospital</button>
       </div>
     );
   }
@@ -127,7 +128,7 @@ const HospitalProfile = () => {
 
   return (
     <div>
-      <h2>Hospital Profile</h2>
+      <h2 className='text-2xl mb-8'>Hospital Profile</h2>
       {!isEditing ? (
         <div>
           <h2>{hospital.hospitalName}</h2>
@@ -158,8 +159,9 @@ const HospitalProfile = () => {
           <p><strong>Proof Certificate:</strong> {hospital.proofCertificate}</p>
           <p><strong>Approved:</strong> {hospital.isApproved ? "Yes" : "No"}</p>
 
-          <button onClick={() => setIsEditing(true)}>Edit</button>
-          <button onClick={handleDelete} style={{ marginLeft: "10px", backgroundColor: "red", color: "white" }}>Delete</button>
+          <button onClick={() => setIsEditing(true)} className="px-4 py-2 bg-zinc-600 text-white rounded">Edit</button>
+          <button onClick={handleDelete} style={{ marginLeft: "10px", backgroundColor: "red", color: "white" }} className="px-4 py-2 bg-red-600 text-white rounded">Delete</button>
+          <button type="submit" onClick={()=> navigate('/hospital')}className="px-4 py-2 ml-2 bg-zinc-600 text-white rounded">Back</button>
         </div>
       ) : (
         <form onSubmit={handleUpdate}>
@@ -167,37 +169,31 @@ const HospitalProfile = () => {
             Hospital Name:
             <input type="text" name="hospitalName" value={formData.hospitalName} onChange={handleChange} required />
           </label>
-
+          <br/>
           <label>
             Address:
             <input type="text" name="address" value={formData.address} onChange={handleChange} required />
           </label>
-
+          <br/>
           <label>
             City:
             <input type="text" name="city" value={formData.city} onChange={handleChange} required />
           </label>
-
+          <br/>
           <label>
             Phone Number:
             <input type="text" name="phoneNumber" value={formData.phoneNumber} onChange={handleChange} required />
           </label>
-
+          <br/>
           <label>
             Email:
             <input type="email" name="email" value={formData.email} onChange={handleChange} required />
           </label>
+          <br/>
 
-          <label>
-            Latitude:
-            <input type="number" name="latitude" value={formData.latitude} onChange={handleChange} />
-          </label>
+           <LocationPicker formData={formData} setFormData={setFormData} />
 
-          <label>
-            Longitude:
-            <input type="number" name="longitude" value={formData.longitude} onChange={handleChange} />
-          </label>
-
+          <br/>
           <label>
             24/7 Service:
             <input type="checkbox" name="is24hrService" checked={formData.is24hrService} onChange={handleChange} />
@@ -211,16 +207,17 @@ const HospitalProfile = () => {
               <input type="time" value={hours.open} onChange={(e) => handleWorkingHoursChange(index, "open", e.target.value)} />
               -
               <input type="time" value={hours.close} onChange={(e) => handleWorkingHoursChange(index, "close", e.target.value)} />
-              <button type="button" onClick={() => removeWorkingHours(index)}>Remove</button>
+              <button type="button" onClick={() => removeWorkingHours(index)} className="px-4 py-2 mt-1 bg-red-600 text-white rounded">Remove</button>
             </div>
           ))}
-          <button type="button" onClick={addWorkingHours}>+ Add Working Hours</button>
+          <button type="button" onClick={addWorkingHours} className="px-4 py-2 bg-zinc-600 text-white rounded">+ Add Working Hours</button>
 
           <h3>Update Hospital Images</h3>
           <input type="file" multiple accept="image/*" onChange={handleImageUpload} />
 
-          <button type="submit">Update</button>
-          <button type="button" onClick={() => setIsEditing(false)}>Cancel</button>
+          <button type="submit" className="px-4 py-2 bg-zinc-600 text-white rounded">Update</button>
+          <button type="button" onClick={() => setIsEditing(false)} className="px-4 py-2 ml-4 bg-red-600 text-white rounded">Cancel</button>
+          
         </form>
       )}
     </div>

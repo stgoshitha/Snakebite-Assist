@@ -3,19 +3,19 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 export default function AdminLayouts() {
-
     const user = useSelector((state) => state.Auth.user);
     const navigate = useNavigate();
     console.log(user);
 
-    useEffect(()=>{
-        if(!user || user.role !== "admin" ){
+    useEffect(() => {
+        if (!user || (user.role !== "admin" && user.role !== "superadmin")) {
             navigate('/login');
         }
-    })
-  return (
-    <>
-        <Outlet/>
-    </>
-  )
+    }, [user, navigate]);
+
+    return (
+        <>
+            <Outlet />
+        </>
+    );
 }

@@ -7,7 +7,7 @@ dotenv.config();
 
 const register = async (req, res) => {
   try{
-    const { name, email, password } = req.body;
+    const { name, email, password, role } = req.body;
 
     //find if user already exists
     const exitUser = await User.findOne({email});
@@ -23,7 +23,8 @@ const register = async (req, res) => {
     const user = new User({
       name,
       email,
-      password: passwordHash
+      password: passwordHash,
+      role
     });
 
     //save the new user
