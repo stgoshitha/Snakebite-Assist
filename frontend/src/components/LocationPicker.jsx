@@ -20,7 +20,7 @@ const LocationPicker = ({ formData, setFormData }) => {
   };
 
   // Handle city search
-  const handleSearch = async () => {
+  const handleSearchlocation = async () => {
     if (!city) return;
 
     try {
@@ -60,7 +60,7 @@ const LocationPicker = ({ formData, setFormData }) => {
           value={city}
           onChange={(e) => setCity(e.target.value)}
         />
-        <button onClick={handleSearch} className="px-4 py-2 mt-4 bg-zinc-600 text-white rounded">Search</button>
+        <button onClick={handleSearchlocation} className="px-4 py-2 mt-4 bg-zinc-600 text-white rounded">Search</button>
       </div>
 
       {/* Map Container */}
