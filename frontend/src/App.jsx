@@ -6,6 +6,8 @@ import UserLayout from "./layouts/UserLayout";
 import PublicLayout from "./layouts/PublicLayout";
 import Home from "./pages/Home";
 import AdminDashboardUsers from "./pages/AdminDashboardUsers";
+import AdminDashboardAdmins from "./pages/AdminDashboardAdmins";
+import AddNewAdmin from "./pages/AddNewAdmin";
 import HospitalDashboard from "./pages/HospitalDashboard";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -25,7 +27,9 @@ function App() {
             <Route path='/admin' element={<AdminLayout />}>
               <Route index element={<Home />} />
               <Route path='adminUsers' element={<AdminDashboardUsers />} />
-               <Route path='adminHospitalApproved' element={<AdminHospitalApproved />} />
+              <Route path='allAdmins' element={<AdminDashboardAdmins />} />
+              <Route path='allAdmins/addAdminForm' element={<AddNewAdmin />} />
+              <Route path='adminHospitalApproved' element={<AdminHospitalApproved />} />
               <Route path='adminHospitalNotApproved' element={<AdminHospitalNotApproved />} />
             </Route>
 
