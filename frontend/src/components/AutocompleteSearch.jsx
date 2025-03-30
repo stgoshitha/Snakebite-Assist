@@ -78,7 +78,7 @@ const AutocompleteSearch = () => {
               <img
                 src={snake.image}
                 alt={snake.name}
-                className="w-10 h-10 rounded-full mr-2"
+                className="w-15 h-15 rounded-full mr-2"
               />
             )}
             <span className="font-medium">{snake.name}</span>
@@ -149,7 +149,7 @@ const AutocompleteSearch = () => {
 
       {/* Suggestions Dropdown */}
       {suggestions.length > 0 && (
-        <div className="absolute w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-md">
+        <div className="absolute w-full mt-1  bg-white border border-gray-200 rounded-lg shadow-md">
           {renderSuggestions()}
         </div>
       )}
