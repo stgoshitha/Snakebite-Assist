@@ -1,28 +1,49 @@
 import { React, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { get, patch } from "../services/ApiEndpoint";
+import { Lock, Unlock } from "lucide-react";
+import { FaUsers, FaUser, FaHospital, FaUserSlash } from "react-icons/fa";
 
 const AdminDashboardUsers = () => {
-  const user = useSelector((state) => state.Auth.user);
   const [users, setUsers] = useState([]);
+  const [roleFilter, setRoleFilter] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
+  const [userCount, setUserCount] = useState(0);
+  const [hospitalCount, setHospitalCount] = useState(0);
+  const [blockedCount, setBlockedCount] = useState(0);
 
   useEffect(() => {
     const getUsers = async () => {
       try {
         const request = await get("/api/admin/getUser");
         const response = request.data.users;
-        //console.log(response);
-        const filteredUsers = response.filter(
+
+        const filterUserHospital = response.filter(
           (user) => user.role === "user" || user.role === "hospital"
         );
+
+        const filteredUsers = filterUserHospital.filter((user) => {
+          const roleMatch = roleFilter ? user.role === roleFilter : true;
+          const statusMatch =
+            statusFilter === ""
+              ? true
+              : user.isBlocked === (statusFilter === "blocked");
+          return roleMatch && statusMatch;
+        });
+
         setUsers(filteredUsers);
+
+        setUserCount(response.filter((user) => user.role === "user").length);
+        setHospitalCount(
+          response.filter((user) => user.role === "hospital").length
+        );
+        setBlockedCount(response.filter((user) => user.isBlocked).length);
       } catch (err) {
         console.error(err);
       }
     };
 
     getUsers();
-  }, []);
+  }, [roleFilter, statusFilter]);
 
   const handleBlockUser = async (userId, isBlocked) => {
     try {
@@ -47,39 +68,120 @@ const AdminDashboardUsers = () => {
   return (
     <div className="p-4">
       <h1 className="text-2xl font-semibold mb-4">User Details</h1>
-      <table className="min-w-full table-auto border-collapse bg-white shadow-md rounded-md">
-        <thead>
-          <tr className="bg-gray-100">
-            <th className="py-2 px-4 border-b">ID</th>
-            <th className="py-2 px-4 border-b">Email</th>
-            <th className="py-2 px-4 border-b">Role</th>
-            <th className="py-2 px-4 border-b">Status</th>
-            <th className="py-2 px-4 border-b">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user) => (
-            <tr key={user._id} className="hover:bg-gray-50">
-              <td className="py-2 px-4 border-b">{user._id}</td>
-              <td className="py-2 px-4 border-b">{user.email}</td>
-              <td className="py-2 px-4 border-b">{user.role}</td>
-              <td className="py-2 px-4 border-b">
-                {user.isBlocked ? "Blocked" : "Active"}
-              </td>
-              <td className="py-2 px-4 border-b">
-                <button
-                  onClick={() => handleBlockUser(user._id, user.isBlocked)}
-                  className={`px-4 py-2 rounded-md text-white ${
-                    user.isBlocked ? "bg-green-600" : "bg-red-600"
-                  } hover:bg-opacity-80`}
-                >
-                  {user.isBlocked ? "Unblock" : "Block"}
-                </button>
-              </td>
+
+      {/* Cards for Counts */}
+      <div className="grid grid-cols-4 gap-4 mb-4">
+        <div className="flex justify-between items-center bg-purple-100 p-4 rounded-lg shadow-md">
+          <div>
+            <h3 className="font-semibold text-xl">All Users</h3>
+            <p className="text-5xl font-bold">{users.length}</p>
+          </div>
+          <FaUsers className="text-purple-600 text-5xl" />
+        </div>
+
+        <div className="flex justify-between items-center bg-blue-100 p-4 rounded-lg shadow-md">
+          <div>
+            <h3 className="font-semibold text-xl">Users</h3>
+            <p className="text-5xl font-bold">{userCount}</p>
+          </div>
+          <FaUser className="text-blue-600 text-5xl" />
+        </div>
+
+        <div className="flex justify-between items-center bg-green-100 p-4 rounded-lg shadow-md">
+          <div>
+            <h3 className="font-semibold text-xl">Hospital Users</h3>
+            <p className="text-5xl font-bold">{hospitalCount}</p>
+          </div>
+          <FaHospital className="text-green-600 text-5xl" />
+        </div>
+
+        <div className="flex justify-between items-center bg-yellow-100 p-4 rounded-lg shadow-md">
+          <div>
+            <h3 className="font-semibold text-xl">Blocked Users</h3>
+            <p className="text-5xl font-bold">{blockedCount}</p>
+          </div>
+          <FaUserSlash className="text-yellow-600 text-5xl" />
+        </div>
+      </div>
+
+      <div className="overflow-x-auto">
+        <table className="min-w-full table-auto border-collapse bg-white shadow-md rounded-md">
+          <thead>
+            <tr className="bg-gray-100">
+              <th className="py-2 px-4 border-b text-left w-xl">Email</th>
+              <th className="py-2 px-4 border-b text-left w-sm">
+                <div className="flex gap-1 justify-left items-center">
+                  <label className="mr-2">Role </label>
+                  <select
+                    value={roleFilter}
+                    onChange={(e) => setRoleFilter(e.target.value)}
+                    className="p-2 w-48 border rounded-md"
+                  >
+                    <option value="">All Roles</option>
+                    <option value="user">User</option>
+                    <option value="hospital">Hospital</option>
+                  </select>
+                </div>
+              </th>
+              <th className="py-2 px-4 border-b w-sm">
+                <div className="flex gap-1 justify-left items-center">
+                  <label className="mr-2">Access Status </label>
+                  <select
+                    value={statusFilter}
+                    onChange={(e) => setStatusFilter(e.target.value)}
+                    className="p-2 w-48 border rounded-md"
+                  >
+                    <option value="">All Statuses</option>
+                    <option value="blocked">Blocked</option>
+                    <option value="active">Active</option>
+                  </select>
+                </div>
+              </th>
+              <th className="py-2 px-4 border-b">Change Status</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {users.map((user) => (
+              <tr key={user._id} className="hover:bg-gray-50">
+                <td className="py-2 px-4 border-b">{user.email}</td>
+                <td className="py-2 px-4 border-b">{user.role}</td>
+                <td className="py-2 px-4 border-b">
+                  <div className="flex justify-center items-center">
+                    <div
+                      className={`text-center w-20 rounded-2xl font-semibold border ${
+                        user.isBlocked
+                          ? "bg-red-100 text-red-600 border-none"
+                          : "bg-green-100 text-green-600 border-none"
+                      }`}
+                    >
+                      {user.isBlocked ? "Blocked" : "Active"}
+                    </div>
+                  </div>
+                </td>
+                <td className="py-2 px-4 border-b">
+                  <div className="flex justify-center items-center">
+                    <button
+                      onClick={() => handleBlockUser(user._id, user.isBlocked)}
+                      className={`flex items-center gap-2 px-4 py-2 w-28 rounded-md text-white font-medium shadow-md ${
+                        user.isBlocked
+                          ? "bg-green-600 hover:bg-green-500"
+                          : "bg-red-600 hover:bg-red-500"
+                      }`}
+                    >
+                      {user.isBlocked ? (
+                        <Unlock size={18} />
+                      ) : (
+                        <Lock size={18} />
+                      )}
+                      {user.isBlocked ? "Unblock" : "Block"}
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
