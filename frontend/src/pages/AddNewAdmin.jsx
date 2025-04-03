@@ -39,7 +39,7 @@ const AddNewAdmin = () => {
     }));
   };
 
-  // Form validation 
+  // Form validation
   const validateForm = () => {
     const newErrors = {};
 
@@ -198,9 +198,7 @@ const AddNewAdmin = () => {
                 onChange={handleChange}
                 className="h-5 w-5"
               />
-              <span className="ml-2 text-justify ">
-                Super Admin
-              </span>
+              <span className="ml-2 text-justify ">Super Admin</span>
             </label>
 
             <label className="flex justify-start items-center cursor-pointer">
@@ -224,9 +222,7 @@ const AddNewAdmin = () => {
             type="submit"
             className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
           >
-            {formData.role === "superadmin"
-              ? "Add Super Admin"
-              : "Add Admin"}
+            {formData.role === "superadmin" ? "Add Super Admin" : "Add Admin"}
           </button>
         </form>
       </div>
