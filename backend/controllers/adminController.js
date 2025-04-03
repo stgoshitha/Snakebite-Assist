@@ -66,4 +66,33 @@ const deletUser = async (req, res) => {
 };
 
 
-module.exports = { getUser, blockUser, unblockUser,deletUser };
+const updateAdmins = async (req, res) => {
+  const {adminId} = req.params;
+  const {name,email,password,role} = req.body;
+
+  try{
+    if(req.user.role !== "admin" && req.user.role !== "superadmin")
+      return res.status(403).json({ message: "Only admin details can be updated" });
+
+    const admin = await User.findById(adminId);
+    if (!admin) return res.status(404).send('Admin not found');
+
+    if(name) admin.name = name;
+    if(email) admin.email = email;
+    if(password) {
+      const salt = await bcrypt.genSalt(10);
+      admin.password = await bcrypt.hash(password, salt);
+    };
+    if(role) admin.role = role;
+
+    await admin.save();
+    res.status(200).json({ message: 'Admin details updated successfully' });
+
+  }catch(err){
+    console.error(err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+  
+};
+
+module.exports = { getUser, blockUser, unblockUser,deletUser,updateAdmins };
