@@ -109,8 +109,8 @@ const AddNewAdmin = () => {
           Add New Admin
         </h1>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-          <div className="relative">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <div className="relative gap-1">
             <input
               type="text"
               name="name"
@@ -124,7 +124,7 @@ const AddNewAdmin = () => {
             )}
           </div>
 
-          <div className="relative">
+          <div className="relative gap-1 ">
             <input
               type="email"
               name="email"
@@ -138,7 +138,7 @@ const AddNewAdmin = () => {
             )}
           </div>
 
-          <div className="relative">
+          <div className="relative gap-1">
             <input
               type={passwordVisibility.password ? "text" : "password"}
               name="password"
@@ -163,7 +163,7 @@ const AddNewAdmin = () => {
             )}
           </div>
 
-          <div className="relative">
+          <div className="relative gap-1">
             <input
               type={passwordVisibility.confirmPassword ? "text" : "password"}
               name="confirmPassword"
