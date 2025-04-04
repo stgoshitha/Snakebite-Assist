@@ -86,8 +86,8 @@ const AddNewAdmin = () => {
 
     try {
       await post("/api/auth/register", formData);
-      alert("Registration successful! Please log in.");
-      navigate("/login");
+      alert("Admin added successfully");
+      navigate("/admin/allAdmins");
     } catch (err) {
       const errorMessage = err.response?.data?.message || "Registration failed";
       setErrors({ form: errorMessage });
