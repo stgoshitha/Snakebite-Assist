@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const bcrypt = require('bcrypt');
 
 // Get all users
 const getUser = async (req, res) => {
@@ -67,14 +68,14 @@ const deletUser = async (req, res) => {
 
 
 const updateAdmins = async (req, res) => {
-  const {adminId} = req.params;
+  const {editAdminId} = req.params;
   const {name,email,password,role} = req.body;
 
   try{
     if(req.user.role !== "admin" && req.user.role !== "superadmin")
       return res.status(403).json({ message: "Only admin details can be updated" });
 
-    const admin = await User.findById(adminId);
+    const admin = await User.findById(editAdminId);
     if (!admin) return res.status(404).send('Admin not found');
 
     if(name) admin.name = name;
@@ -94,5 +95,7 @@ const updateAdmins = async (req, res) => {
   }
   
 };
+
+
 
 module.exports = { getUser, blockUser, unblockUser,deletUser,updateAdmins };
