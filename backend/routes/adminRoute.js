@@ -7,6 +7,6 @@ adminRoute.get('/getUser', isAdminOrSuperAdmin, getUser);
 adminRoute.patch('/blockUser/:userId', isAdminOrSuperAdmin, blockUser);
 adminRoute.patch('/unblockUser/:userId', isAdminOrSuperAdmin, unblockUser);
 adminRoute.delete('/deleteUser/:userId', isAdminOrSuperAdmin, isSuperAdmin, deletUser); 
-adminRoute.patch('/updateAdmin/:adminId', isAdminOrSuperAdmin, isSuperAdmin, updateAdmins);
+adminRoute.patch('/updateAdmin/:editAdminId', isAdminOrSuperAdmin, isSuperAdmin, updateAdmins);
 
 module.exports = adminRoute;
