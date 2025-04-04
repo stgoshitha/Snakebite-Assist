@@ -132,9 +132,9 @@ const AdminDashboardAdmins = () => {
         <table className="min-w-full table-auto border-collapse bg-white shadow-md rounded-md">
           <thead>
             <tr className="bg-gray-100">
-              <th className="py-2 px-4 border-b text-left">Name</th>
-              <th className="py-2 px-4 border-b text-left">Email</th>
-              <th className="py-2 px-4 border-b text-left">
+              <th className="py-2 px-4 border-b text-left w-64">Name</th>
+              <th className="py-2 px-4 border-b text-left w-72">Email</th>
+              <th className="py-2 px-4 border-b text-left w-64">
                 <div className="flex gap-1 justify-left items-center">
                   <label className="mr-2">Role </label>
                   <select
@@ -148,7 +148,7 @@ const AdminDashboardAdmins = () => {
                   </select>
                 </div>
               </th>
-              <th className="py-2 px-4 border-b text-left">Password</th>
+              <th className="py-2 px-4 border-b text-left w-32">Password</th>
               <th className="py-2 px-4 border-b">Access Status</th>
               <th className="py-2 px-4 border-b">Change Access</th>
               <th className="py-2 px-4 border-b">Actions</th>
@@ -220,7 +220,7 @@ const AdminDashboardAdmins = () => {
                     </div>
                   </div>
                 </td>
-                <td className="py-2 px-4 border-b text-center">
+                <td className="flex justify-center items-center py-2 px-4 border-b">
                   <button
                     onClick={() => handleBlockUser(user._id, user.isBlocked)}
                     className={`flex items-center gap-2 px-4 py-2 w-28 rounded-md text-white font-medium shadow-md ${
