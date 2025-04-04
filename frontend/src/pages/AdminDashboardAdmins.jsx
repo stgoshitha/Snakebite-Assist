@@ -4,7 +4,7 @@ import { get, patch, deleteUser } from "../services/ApiEndpoint";
 import { useNavigate } from "react-router-dom";
 import { Lock, Unlock } from "lucide-react";
 import { CgAddR } from "react-icons/cg";
-import { FaEdit } from "react-icons/fa";
+import { FaEdit, FaSave } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 
 const AdminDashboardAdmins = () => {
@@ -12,7 +12,10 @@ const AdminDashboardAdmins = () => {
   const [users, setUsers] = useState([]);
   const navigate = useNavigate();
   const [roleFilter, setRoleFilter] = useState("");
+  const [editAdminId, setEditAdminId] = useState(null);
+  const [editAdminData, setEditAdminData] = useState({});
 
+  //get all admins
   useEffect(() => {
     const getUsers = async () => {
       try {
@@ -36,6 +39,7 @@ const AdminDashboardAdmins = () => {
     getUsers();
   }, [roleFilter]);
 
+  //block/unblock admins
   const handleBlockUser = async (userId, isBlocked) => {
     try {
       const endpoint = isBlocked
@@ -56,6 +60,7 @@ const AdminDashboardAdmins = () => {
     }
   };
 
+  //delete admins
   const handleDeleteUser = async (userId) => {
     try {
       const response = await deleteUser(`/api/admin/deleteUser/${userId}`);
@@ -69,6 +74,44 @@ const AdminDashboardAdmins = () => {
       }
     } catch (err) {
       console.error("Error deleting user:", err.response?.data || err.message);
+    }
+  };
+
+  const handleEditClick = (user) => {
+    setEditAdminId(user._id);
+    setEditAdminData({ ...user });
+  };
+
+  const handleInputChange = (e, field) => {
+    setEditAdminData((prevData) => ({
+      ...prevData,
+      [field]: e.target.value,
+    }));
+  };
+
+  //update admins
+  const handleSaveEdit = async () => {
+    try {
+      const updatedData = { ...editAdminData };
+      if (!updatedData.password) delete updatedData.password;
+
+      console.log("Updating Admin:", updatedData);
+
+      const response = await patch(
+        `/api/admin/updateAdmin/${editAdminId}`,
+        updatedData
+      );
+
+      console.log("Update response:", response);
+
+      setUsers(
+        users.map((user) =>
+          user._id === editAdminId ? { ...user, ...updatedData } : user
+        )
+      );
+      setEditAdminId(null);
+    } catch (err) {
+      console.error("Error updating user:", err);
     }
   };
 
@@ -105,6 +148,7 @@ const AdminDashboardAdmins = () => {
                   </select>
                 </div>
               </th>
+              <th className="py-2 px-4 border-b text-left">Password</th>
               <th className="py-2 px-4 border-b">Access Status</th>
               <th className="py-2 px-4 border-b">Change Access</th>
               <th className="py-2 px-4 border-b">Actions</th>
@@ -113,9 +157,56 @@ const AdminDashboardAdmins = () => {
           <tbody>
             {users.map((user) => (
               <tr key={user._id} className="hover:bg-gray-50">
-                <td className="py-2 px-4 border-b">{user.name}</td>
-                <td className="py-2 px-4 border-b">{user.email}</td>
-                <td className="py-2 px-4 border-b">{user.role}</td>
+                <td className="py-2 px-4 border-b">
+                  {editAdminId === user._id ? (
+                    <input
+                      type="text"
+                      value={editAdminData.name}
+                      onChange={(e) => handleInputChange(e, "name")}
+                      className="p-2 border rounded-md w-full"
+                    />
+                  ) : (
+                    user.name
+                  )}
+                </td>
+                <td className="py-2 px-4 border-b">
+                  {editAdminId === user._id ? (
+                    <input
+                      type="email"
+                      value={editAdminData.email}
+                      onChange={(e) => handleInputChange(e, "email")}
+                      className="p-2 border rounded-md w-full"
+                    />
+                  ) : (
+                    user.email
+                  )}
+                </td>
+                <td className="py-2 px-4 border-b">
+                  {editAdminId === user._id ? (
+                    <select
+                      value={editAdminData.role || ""}
+                      onChange={(e) => handleInputChange(e, "role")}
+                      className="p-2 border rounded-md w-full"
+                    >
+                      <option value="superadmin">Super Admin</option>
+                      <option value="admin">Admin</option>
+                    </select>
+                  ) : (
+                    user.role
+                  )}
+                </td>
+                <td className="py-2 px-4 border-b">
+                  {editAdminId === user._id ? (
+                    <input
+                      type="password"
+                      value={editAdminData.password}
+                      onChange={(e) => handleInputChange(e, "password")}
+                      className="p-2 border rounded-md w-full"
+                    />
+                  ) : (
+                    "******" 
+                  )}
+                </td>
                 <td className="py-2 px-4 border-b">
                   <div className="flex justify-center items-center">
                     <div
@@ -130,31 +221,35 @@ const AdminDashboardAdmins = () => {
                   </div>
                 </td>
                 <td className="py-2 px-4 border-b text-center">
-                  <div className="flex justify-center items-center">
-                    <button
-                      onClick={() => handleBlockUser(user._id, user.isBlocked)}
-                      className={`flex items-center gap-2 px-4 py-2 w-28 rounded-md text-white font-medium shadow-md ${
-                        user.isBlocked
-                          ? "bg-green-600 hover:bg-green-500"
-                          : "bg-red-600 hover:bg-red-500"
-                      }`}
-                    >
-                      {user.isBlocked ? (
-                        <Unlock size={18} />
-                      ) : (
-                        <Lock size={18} />
-                      )}
-                      {user.isBlocked ? "Unblock" : "Block"}
-                    </button>
-                  </div>
+                  <button
+                    onClick={() => handleBlockUser(user._id, user.isBlocked)}
+                    className={`flex items-center gap-2 px-4 py-2 w-28 rounded-md text-white font-medium shadow-md ${
+                      user.isBlocked
+                        ? "bg-green-600 hover:bg-green-500"
+                        : "bg-red-600 hover:bg-red-500"
+                    }`}
+                  >
+                    {user.isBlocked ? <Unlock size={18} /> : <Lock size={18} />}
+                    {user.isBlocked ? "Unblock" : "Block"}
+                  </button>
                 </td>
                 <td className="py-2 px-4 border-b">
                   <div className="flex gap-2 justify-center">
-                    <button
-                      className="px-4 py-2 rounded-md text-white bg-green-500 hover:bg-green-600"
-                    >
-                      <FaEdit size={20} />
-                    </button>
+                    {editAdminId === user._id ? (
+                      <button
+                        onClick={handleSaveEdit}
+                        className="px-4 py-2 rounded-md text-white bg-green-500 hover:bg-green-600"
+                      >
+                        <FaSave size={20} />
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => handleEditClick(user)}
+                        className="px-4 py-2 rounded-md text-white bg-green-500 hover:bg-green-600"
+                      >
+                        <FaEdit size={20} />
+                      </button>
+                    )}
                     <button
                       onClick={() => handleDeleteUser(user._id)}
                       className="px-4 py-2 rounded-md text-white bg-red-500 hover:bg-red-600"
