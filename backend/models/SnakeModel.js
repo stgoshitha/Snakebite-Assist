@@ -64,6 +64,31 @@ const snakeSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true
+  },
+  nativeProvinces: {
+    type: [{
+      type: String,
+      enum: [
+        'Central Province',
+        'Eastern Province',
+        'North Central Province',
+        'Northern Province',
+        'North Western Province',
+        'Sabaragamuwa Province',
+        'Southern Province',
+        'Uva Province',
+        'Western Province'
+      ]
+    }],
+    required: true,
+    validate: [
+      {
+        validator: function(provinces) {
+          return provinces.length > 0;
+        },
+        message: 'At least one province must be selected'
+      }
+    ]
   }
 }, {
   timestamps: true  // Adds createdAt and updatedAt timestamps

@@ -21,6 +21,7 @@ const SnakeList = ({ snakes, onEdit, onDelete, onDownloadReport }) => {
               <p><span className="font-medium">Size:</span> {snake.size}</p>
               <p><span className="font-medium">Length:</span> {snake.length}</p>
               <p><span className="font-medium">Venom Type:</span> {snake.venomType}</p>
+              <p><span className="font-medium">Found in:</span> {snake.nativeProvince}</p>
             </div>
             <div className="mt-4 flex justify-between items-center">
               <Link

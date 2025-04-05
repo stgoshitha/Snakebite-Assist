@@ -2,10 +2,28 @@ const Snake = require('../models/SnakeModel');
 const PDFDocument = require('pdfkit');
 
 // Get all snakes
-//test and confirm getting all snakes works
 const getAllSnakes = async (req, res) => {
     try {
         const snakes = await Snake.find({});
+        res.status(200).json({
+            success: true,
+            count: snakes.length,
+            data: snakes
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            error: 'Server Error',
+            message: error.message
+        });
+    }
+};
+
+// Get snakes by province
+const getSnakesByProvince = async (req, res) => {
+    try {
+        const { province } = req.params;
+        const snakes = await Snake.find({ nativeProvinces: province });
         res.status(200).json({
             success: true,
             count: snakes.length,
@@ -52,7 +70,6 @@ const getSnakeById = async (req, res) => {
 };
 
 // Add new snake
-//est and confirm adding new snake data works
 const addSnake = async (req, res) => {
     try {
         const snake = await Snake.create(req.body);
@@ -224,5 +241,6 @@ module.exports = {
     addSnake,
     updateSnake,
     deleteSnake,
+    getSnakesByProvince,
     generateReport
 }; 

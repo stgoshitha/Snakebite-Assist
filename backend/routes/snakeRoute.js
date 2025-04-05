@@ -6,13 +6,19 @@ const {
     addSnake,
     updateSnake,
     deleteSnake,
-    generateReport
+    generateReport,
+    getSnakesByProvince
 } = require('../controllers/snakeController');
 
 // @route   GET /api/snakes
 // @desc    Get all snakes
 // @access  Public
 router.get('/', getAllSnakes);
+
+// @route   GET /api/snakes/province/:province
+// @desc    Get snakes by province
+// @access  Public
+router.get('/province/:province', getSnakesByProvince);
 
 // @route   GET /api/snakes/:id
 // @desc    Get snake by ID
