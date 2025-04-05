@@ -8,14 +8,23 @@ import ErrorMessage from '../components/common/ErrorMessage';
 
 const SnakeDetails = () => {
   const [snakes, setSnakes] = useState([]);
+  const [filteredSnakes, setFilteredSnakes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingSnake, setEditingSnake] = useState(null);
+  
+  // Search and filter states
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedVenomType, setSelectedVenomType] = useState('');
 
   useEffect(() => {
     fetchSnakes();
   }, []);
+
+  useEffect(() => {
+    filterSnakes();
+  }, [snakes, searchTerm, selectedVenomType]);
 
   const fetchSnakes = async () => {
     try {
@@ -27,6 +36,35 @@ const SnakeDetails = () => {
       setError('Failed to fetch snakes. Please try again later.');
       setLoading(false);
     }
+  };
+
+  const filterSnakes = () => {
+    let filtered = [...snakes];
+
+    // Apply search filter
+    if (searchTerm) {
+      const searchLower = searchTerm.toLowerCase();
+      filtered = filtered.filter(snake => 
+        snake.name.toLowerCase().includes(searchLower) ||
+        snake.color.toLowerCase().includes(searchLower) ||
+        snake.venomType.toLowerCase().includes(searchLower)
+      );
+    }
+
+    // Apply venom type filter
+    if (selectedVenomType) {
+      filtered = filtered.filter(snake => snake.venomType === selectedVenomType);
+    }
+
+    setFilteredSnakes(filtered);
+  };
+
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleVenomTypeChange = (e) => {
+    setSelectedVenomType(e.target.value);
   };
 
   const handleAddSnake = () => {
@@ -74,8 +112,30 @@ const SnakeDetails = () => {
     }
   };
 
+  const handleDownloadReport = async (snakeId) => {
+    try {
+      const response = await axios.get(`http://localhost:3000/api/snakes/${snakeId}/report`, {
+        responseType: 'blob'
+      });
+      
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `snake-report-${snakeId}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      console.error("Error downloading report:", error);
+      setError('Failed to download report. Please try again later.');
+    }
+  };
+
   if (loading) return <LoadingSpinner />;
   if (error) return <ErrorMessage message={error} />;
+
+  // Get unique venom types for filter dropdown
+  const venomTypes = [...new Set(snakes.map(snake => snake.venomType))];
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -89,10 +149,41 @@ const SnakeDetails = () => {
         </button>
       </div>
 
+      {/* Search and Filter Section */}
+      <div className="mb-8 space-y-4">
+        <div className="flex flex-col md:flex-row gap-4">
+          {/* Search Bar */}
+          <div className="flex-1">
+            <input
+              type="text"
+              placeholder="Search by name, color, or venom type..."
+              value={searchTerm}
+              onChange={handleSearch}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          {/* Venom Type Filter */}
+          <div className="w-full md:w-48">
+            <select
+              value={selectedVenomType}
+              onChange={handleVenomTypeChange}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">All Venom Types</option>
+              {venomTypes.map(type => (
+                <option key={type} value={type}>{type}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+      </div>
+
       <SnakeList
-        snakes={snakes}
+        snakes={filteredSnakes}
         onEdit={handleEditSnake}
         onDelete={handleDeleteSnake}
+        onDownloadReport={handleDownloadReport}
       />
 
       {isModalOpen && (

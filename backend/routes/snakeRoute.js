@@ -5,7 +5,8 @@ const {
     getSnakeById,
     addSnake,
     updateSnake,
-    deleteSnake
+    deleteSnake,
+    generateReport
 } = require('../controllers/snakeController');
 
 // @route   GET /api/snakes
@@ -32,5 +33,10 @@ router.put('/:id', updateSnake);
 // @desc    Delete a snake
 // @access  Public
 router.delete('/:id', deleteSnake);
+
+// @route   GET /api/snakes/:id/report
+// @desc    Generate snake report
+// @access  Public
+router.get('/:id/report', generateReport);
 
 module.exports = router; 
