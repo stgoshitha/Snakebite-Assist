@@ -45,21 +45,23 @@ const SnakeDetail = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Snake Detail Section */}
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
           <div className="p-6">
-            <h1 className="text-3xl font-bold text-gray-800 mb-4">{snake.name}</h1>
+            <h1 className="text-3xl lg:text-4xl font-bold text-gray-800 mb-4">{snake.name}</h1>
             
             <div className="space-y-6">
-              <div>
+              <div className="relative">
                 <img
                   src={snake.image}
                   alt={snake.name}
-                  className="w-full h-96 object-cover rounded-lg"
+                  className="w-full h-full object-cover rounded-lg"
                 />
               </div>
 
-              <div>
-                <h2 className="text-xl font-semibold text-gray-700 mb-2">Physical Characteristics</h2>
+              {/* Physical Characteristics Section */}
+              <div className="space-y-4">
+                <h2 className="text-xl font-semibold text-gray-700">Physical Characteristics</h2>
                 <div className="space-y-2 text-gray-600">
                   <p><span className="font-medium">Color:</span> {snake.color}</p>
                   <p><span className="font-medium">Size:</span> {snake.size}</p>
@@ -69,16 +71,18 @@ const SnakeDetail = () => {
                 </div>
               </div>
 
-              <div>
-                <h2 className="text-xl font-semibold text-gray-700 mb-2">Location & Behavior</h2>
+              {/* Location & Behavior Section */}
+              <div className="space-y-4">
+                <h2 className="text-xl font-semibold text-gray-700">Location & Behavior</h2>
                 <div className="space-y-2 text-gray-600">
                   <p><span className="font-medium">Native Provinces:</span> {nativeProvinces.join(', ')}</p>
                   <p><span className="font-medium">Behavior:</span> {snake.behavior}</p>
                 </div>
               </div>
 
-              <div>
-                <h2 className="text-xl font-semibold text-gray-700 mb-2">Venom & Symptoms</h2>
+              {/* Venom & Symptoms Section */}
+              <div className="space-y-4">
+                <h2 className="text-xl font-semibold text-gray-700">Venom & Symptoms</h2>
                 <div className="space-y-2 text-gray-600">
                   <p><span className="font-medium">Venom Type:</span> {snake.venomType}</p>
                   <p><span className="font-medium">Pain Level:</span> {snake.painLevel}/10</p>
@@ -87,8 +91,9 @@ const SnakeDetail = () => {
                 </div>
               </div>
 
-              <div>
-                <h2 className="text-xl font-semibold text-gray-700 mb-2">Common Symptoms</h2>
+              {/* Common Symptoms Section */}
+              <div className="space-y-4">
+                <h2 className="text-xl font-semibold text-gray-700">Common Symptoms</h2>
                 <ul className="list-disc list-inside text-gray-600">
                   {snake.commonSymptoms.map((symptom, index) => (
                     <li key={index}>{symptom}</li>
@@ -108,10 +113,11 @@ const SnakeDetail = () => {
           </div>
         </div>
 
+        {/* Province Map Section */}
         <div className="sticky top-4">
           <div className="bg-white rounded-lg shadow-md p-6">
             <h2 className="text-2xl font-semibold text-gray-800 mb-4">Native Provinces</h2>
-            <div className="h-[600px]">
+            <div className="h-[600px] md:h-[500px] lg:h-[600px]">
               <ProvinceMap selectedProvinces={nativeProvinces} />
             </div>
           </div>
@@ -121,4 +127,4 @@ const SnakeDetail = () => {
   );
 };
 
-export default SnakeDetail; 
+export default SnakeDetail;

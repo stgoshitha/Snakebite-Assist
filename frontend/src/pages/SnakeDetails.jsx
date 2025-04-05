@@ -164,18 +164,16 @@ const SnakeDetails = () => {
 
   // Get unique venom types for filter dropdown
   const venomTypes = snakes && Array.isArray(snakes) 
-    ? [...new Set(snakes.map(snake => snake.venomType))]
+    ? [...new Set(snakes.map(snake => snake.venomType))] 
     : [];
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 bg-gray-100 rounded-lg shadow-md">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">
-          {province ? `Snakes in ${province}` : 'All Snakes'}
-        </h1>
+        <h1 className="text-4xl font-bold text-indigo-700">{province ? `Snakes in ${province}` : 'All Snakes'}</h1>
         <button
           onClick={handleAddSnake}
-          className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+          className="px-6 py-3 bg-green-600 text-white font-semibold rounded-md hover:bg-green-700 transition duration-300"
         >
           Add New Snake
         </button>
@@ -188,12 +186,12 @@ const SnakeDetails = () => {
           placeholder="Search snakes..."
           value={searchTerm}
           onChange={handleSearch}
-          className="w-full px-4 py-2 border rounded-lg"
+          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
         <select
           value={selectedVenomType}
           onChange={handleVenomTypeChange}
-          className="w-full px-4 py-2 border rounded-lg"
+          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
         >
           <option value="">All Venom Types</option>
           {venomTypes.map(type => (
@@ -220,4 +218,4 @@ const SnakeDetails = () => {
   );
 };
 
-export default SnakeDetails; 
+export default SnakeDetails;
