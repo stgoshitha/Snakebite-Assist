@@ -2,6 +2,9 @@ const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema(
   {
+    name: {
+      type: String
+    },
     email: {
       type: String,
       required: true,
@@ -9,7 +12,7 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["user", "hospital", "admin", "superadmin"]
+      enum: ["user", "hospital", "admin", "superadmin"],
     },
     isBlocked: { 
       type: Boolean, 
@@ -18,6 +21,11 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: true,
+    },
+    hospitalId: {  
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'hospital', 
+      default: null, 
     },
   },
   { timestamps: true }
