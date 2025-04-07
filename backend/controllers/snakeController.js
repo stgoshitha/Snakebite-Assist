@@ -1,5 +1,17 @@
 const Snake = require('../models/SnakeModel');
 const PDFDocument = require('pdfkit');
+const axios = require('axios');
+const path = require('path');
+const fs = require('fs');
+
+// Try to load the canvas module, but provide a fallback if it fails
+let canvas = null;
+try {
+  const { createCanvas, Image } = require('canvas');
+  canvas = { createCanvas, Image };
+} catch (error) {
+  console.warn('Canvas module not available, using fallback for image processing');
+}
 
 // Get all snakes
 const getAllSnakes = async (req, res) => {
@@ -188,10 +200,72 @@ const generateReport = async (req, res) => {
         
         // Add snake image if available
         if (snake.image) {
-            doc.image(snake.image, {
-                fit: [250, 250],
-                align: 'center'
-            });
+            try {
+                // Handle image based on URL type
+                if (snake.image.startsWith('http')) {
+                    if (canvas) {
+                        // For remote images with canvas module, fetch them first
+                        const response = await axios.get(snake.image, { responseType: 'arraybuffer' });
+                        const imageBuffer = Buffer.from(response.data);
+                        
+                        // Create temporary in-memory image
+                        const img = new canvas.Image();
+                        img.src = imageBuffer;
+                        
+                        // Draw the image to a canvas to handle potentially problematic images
+                        const canvasEl = canvas.createCanvas(img.width || 300, img.height || 300);
+                        const ctx = canvasEl.getContext('2d');
+                        ctx.drawImage(img, 0, 0);
+                        
+                        // Add the processed image to PDF
+                        doc.image(canvasEl.toBuffer(), {
+                            fit: [250, 250],
+                            align: 'center'
+                        });
+                    } else {
+                        // Fallback: Download image to temp file
+                        const response = await axios.get(snake.image, { responseType: 'arraybuffer' });
+                        const imageBuffer = Buffer.from(response.data);
+                        
+                        // Create a unique temp filename
+                        const tempFilePath = path.join(__dirname, '..', 'temp', `temp_image_${Date.now()}.jpg`);
+                        
+                        // Ensure temp directory exists
+                        const tempDir = path.dirname(tempFilePath);
+                        if (!fs.existsSync(tempDir)) {
+                            fs.mkdirSync(tempDir, { recursive: true });
+                        }
+                        
+                        // Write the buffer to a temp file
+                        fs.writeFileSync(tempFilePath, imageBuffer);
+                        
+                        // Add the image from temp file to PDF
+                        doc.image(tempFilePath, {
+                            fit: [250, 250],
+                            align: 'center'
+                        });
+                        
+                        // Clean up temp file (async, don't wait for it)
+                        setTimeout(() => {
+                            try {
+                                fs.unlinkSync(tempFilePath);
+                            } catch (cleanupError) {
+                                console.error('Error cleaning up temp file:', cleanupError);
+                            }
+                        }, 5000);
+                    }
+                } else {
+                    // For local images
+                    doc.image(snake.image, {
+                        fit: [250, 250],
+                        align: 'center'
+                    });
+                }
+            } catch (imgError) {
+                console.error('Error adding image to PDF:', imgError);
+                // Add error message instead of image
+                doc.fontSize(10).text('(Image could not be loaded)', { align: 'center', color: 'grey' });
+            }
             doc.moveDown();
         }
 
@@ -222,6 +296,18 @@ const generateReport = async (req, res) => {
         snake.commonSymptoms.forEach(symptom => {
             doc.text(`• ${symptom}`);
         });
+        
+        // Native Provinces
+        doc.fontSize(16).text('Native Provinces');
+        doc.fontSize(12);
+        if (Array.isArray(snake.nativeProvinces)) {
+            snake.nativeProvinces.forEach(province => {
+                doc.text(`• ${province}`);
+            });
+        } else if (snake.nativeProvince) {
+            doc.text(`• ${snake.nativeProvince}`);
+        }
+        doc.moveDown();
 
         // Finalize the PDF
         doc.end();

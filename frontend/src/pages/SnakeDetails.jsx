@@ -168,36 +168,60 @@ const SnakeDetails = () => {
     : [];
 
   return (
-    <div className="container mx-auto px-4 py-8 bg-gray-100 rounded-lg shadow-md">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-4xl font-bold text-indigo-700">{province ? `Snakes in ${province}` : 'All Snakes'}</h1>
+    <div className="container mx-auto px-4 py-8 font-['Inter']">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-800 leading-tight">
+          {province ? `Snakes in ${province}` : 'Snake Database'}
+          <div className="h-1 w-20 bg-indigo-600 mt-2 rounded-full"></div>
+        </h1>
         <button
           onClick={handleAddSnake}
-          className="px-6 py-3 bg-green-600 text-white font-semibold rounded-md hover:bg-green-700 transition duration-300"
+          className="px-6 py-3 bg-indigo-600 text-white font-medium rounded-lg shadow-md hover:bg-indigo-700 transform hover:translate-y-[-2px] transition-all duration-300 flex items-center"
         >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+            <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
+          </svg>
           Add New Snake
         </button>
       </div>
 
       {/* Search and Filter Section */}
-      <div className="mb-6 space-y-4">
-        <input
-          type="text"
-          placeholder="Search snakes..."
-          value={searchTerm}
-          onChange={handleSearch}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-        />
-        <select
-          value={selectedVenomType}
-          onChange={handleVenomTypeChange}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-        >
-          <option value="">All Venom Types</option>
-          {venomTypes.map(type => (
-            <option key={type} value={type}>{type}</option>
-          ))}
-        </select>
+      <div className="bg-white rounded-xl shadow-md p-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg className="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
+              </svg>
+            </div>
+            <input
+              type="text"
+              placeholder="Search by name, color, venom type..."
+              value={searchTerm}
+              onChange={handleSearch}
+              className="pl-10 w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+            />
+          </div>
+          
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg className="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M11 17a1 1 0 001.447.894l4-2A1 1 0 0017 15V9.236a1 1 0 00-1.447-.894l-4 2a1 1 0 00-.553.894V17zM15.211 6.276a1 1 0 000-1.788l-4.764-2.382a1 1 0 00-.894 0L4.789 4.488a1 1 0 000 1.788l4.764 2.382a1 1 0 00.894 0l4.764-2.382zM4.447 8.342A1 1 0 003 9.236V15a1 1 0 00.553.894l4 2A1 1 0 009 17v-5.764a1 1 0 00-.553-.894l-4-2z" />
+              </svg>
+            </div>
+            <select
+              value={selectedVenomType}
+              onChange={handleVenomTypeChange}
+              className="pl-10 w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors appearance-none"
+              style={{ backgroundImage: "url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e\")", backgroundPosition: "right 0.5rem center", backgroundRepeat: "no-repeat", backgroundSize: "1.5em 1.5em", paddingRight: "2.5rem" }}
+            >
+              <option value="">All Venom Types</option>
+              {venomTypes.map(type => (
+                <option key={type} value={type}>{type}</option>
+              ))}
+            </select>
+          </div>
+        </div>
       </div>
 
       <SnakeList
