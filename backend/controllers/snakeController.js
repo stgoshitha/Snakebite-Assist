@@ -3,6 +3,7 @@ const PDFDocument = require('pdfkit');
 const axios = require('axios');
 const path = require('path');
 const fs = require('fs');
+const { uploadToCloudinary } = require('../utils/cloudinaryUpload');
 
 // Try to load the canvas module, but provide a fallback if it fails
 let canvas = null;
@@ -81,10 +82,40 @@ const getSnakeById = async (req, res) => {
     }
 };
 
-// Add new snake
+// Add new snake with image upload
 const addSnake = async (req, res) => {
     try {
-        const snake = await Snake.create(req.body);
+        let imageData = { url: req.body.image };
+        
+        // Check if file was uploaded
+        if (req.file) {
+            // Upload image to Cloudinary
+            const uploadResult = await uploadToCloudinary(req.file.path);
+            
+            if (!uploadResult.success) {
+                return res.status(400).json({
+                    success: false,
+                    error: 'Image upload failed',
+                    message: uploadResult.error
+                });
+            }
+            
+            // Use the Cloudinary URL if available, otherwise use provided URL
+            imageData = {
+                url: uploadResult.url,
+                public_id: uploadResult.public_id,
+                format: uploadResult.format
+            };
+        }
+        
+        // Create snake with uploaded image or URL
+        const snakeData = {
+            ...req.body,
+            image: imageData.url,
+            imageData: req.file ? imageData : undefined
+        };
+        
+        const snake = await Snake.create(snakeData);
         
         res.status(201).json({
             success: true,
@@ -107,12 +138,36 @@ const addSnake = async (req, res) => {
     }
 };
 
-// Update snake
+// Update snake with image upload
 const updateSnake = async (req, res) => {
     try {
+        let updatedData = { ...req.body };
+        
+        // Check if file was uploaded
+        if (req.file) {
+            // Upload image to Cloudinary
+            const uploadResult = await uploadToCloudinary(req.file.path);
+            
+            if (!uploadResult.success) {
+                return res.status(400).json({
+                    success: false,
+                    error: 'Image upload failed',
+                    message: uploadResult.error
+                });
+            }
+            
+            // Update image data
+            updatedData.image = uploadResult.url;
+            updatedData.imageData = {
+                url: uploadResult.url,
+                public_id: uploadResult.public_id,
+                format: uploadResult.format
+            };
+        }
+        
         const snake = await Snake.findByIdAndUpdate(
             req.params.id,
-            req.body,
+            updatedData,
             {
                 new: true,
                 runValidators: true

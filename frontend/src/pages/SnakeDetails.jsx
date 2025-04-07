@@ -117,8 +117,20 @@ const SnakeDetails = () => {
 
   const handleSnakeSubmit = async (snakeData) => {
     try {
+      // Set content type to multipart/form-data for file uploads
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      };
+
       if (editingSnake) {
-        const response = await axios.put(`http://localhost:3000/api/snakes/${editingSnake._id}`, snakeData);
+        const response = await axios.put(
+          `http://localhost:3000/api/snakes/${editingSnake._id}`, 
+          snakeData,
+          config
+        );
+        
         if (response.data.success) {
           dispatch({ type: 'UPDATE_SNAKE', payload: response.data.data });
           handleModalClose();
@@ -126,7 +138,12 @@ const SnakeDetails = () => {
           setError('Failed to update snake');
         }
       } else {
-        const response = await axios.post('http://localhost:3000/api/snakes/add', snakeData);
+        const response = await axios.post(
+          'http://localhost:3000/api/snakes/add', 
+          snakeData,
+          config
+        );
+        
         if (response.data.success) {
           dispatch({ type: 'ADD_SNAKE', payload: response.data.data });
           handleModalClose();

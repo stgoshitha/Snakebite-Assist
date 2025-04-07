@@ -10,6 +10,11 @@ const snakeSchema = new mongoose.Schema({
     type: String,  // URL to the image
     required: true
   },
+  imageData: {
+    url: String,
+    public_id: String,
+    format: String
+  },
   color: {
     type: String,
     required: true,

@@ -9,6 +9,7 @@ const {
     generateReport,
     getSnakesByProvince
 } = require('../controllers/snakeController');
+const upload = require('../middleware/uploadMiddleware');
 
 // @route   GET /api/snakes
 // @desc    Get all snakes
@@ -28,12 +29,12 @@ router.get('/:id', getSnakeById);
 // @route   POST /api/snakes/add
 // @desc    Add a new snake
 // @access  Public
-router.post('/add', addSnake);
+router.post('/add', upload.single('snakeImage'), addSnake);
 
 // @route   PUT /api/snakes/:id
 // @desc    Update a snake
 // @access  Public
-router.put('/:id', updateSnake);
+router.put('/:id', upload.single('snakeImage'), updateSnake);
 
 // @route   DELETE /api/snakes/:id
 // @desc    Delete a snake

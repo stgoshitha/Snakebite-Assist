@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ProvinceMap from '../maps/ProvinceMap';
 
 const SnakeModal = ({ snake, onClose, onSubmit }) => {
@@ -18,6 +18,10 @@ const SnakeModal = ({ snake, onClose, onSubmit }) => {
     commonSymptoms: [''],
     nativeProvinces: []
   });
+  const [uploadedImage, setUploadedImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState('');
+  const [useUrlInput, setUseUrlInput] = useState(true);
+  const fileInputRef = useRef(null);
 
   const provinces = [
     'Central Province',
@@ -55,6 +59,40 @@ const SnakeModal = ({ snake, onClose, onSubmit }) => {
     }));
   };
 
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setUploadedImage(file);
+      
+      // Create a preview URL
+      const previewUrl = URL.createObjectURL(file);
+      setImagePreview(previewUrl);
+      
+      // Clear the URL input if we're using file upload
+      if (!useUrlInput) {
+        setFormData(prev => ({
+          ...prev,
+          image: ''
+        }));
+      }
+    }
+  };
+
+  const toggleImageInputMode = () => {
+    setUseUrlInput(!useUrlInput);
+    if (useUrlInput) {
+      // Switching to file upload
+      setFormData(prev => ({
+        ...prev,
+        image: ''
+      }));
+    } else {
+      // Switching to URL input
+      setUploadedImage(null);
+      setImagePreview('');
+    }
+  };
+
   const handleProvinceChange = (e) => {
     const selectedOptions = Array.from(e.target.selectedOptions).map(option => option.value);
     setFormData(prev => ({
@@ -88,7 +126,28 @@ const SnakeModal = ({ snake, onClose, onSubmit }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(formData);
+    
+    // Prepare form data for submission
+    const submitData = new FormData();
+    
+    // Add all form fields
+    Object.keys(formData).forEach(key => {
+      if (key === 'nativeProvinces' || key === 'commonSymptoms') {
+        // Handle arrays
+        formData[key].forEach(value => {
+          submitData.append(`${key}[]`, value);
+        });
+      } else {
+        submitData.append(key, formData[key]);
+      }
+    });
+    
+    // Add the image file if it exists
+    if (uploadedImage) {
+      submitData.append('snakeImage', uploadedImage);
+    }
+    
+    onSubmit(submitData);
   };
 
   return (
@@ -140,16 +199,74 @@ const SnakeModal = ({ snake, onClose, onSubmit }) => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
-                  <input
-                    type="url"
-                    name="image"
-                    value={formData.image}
-                    onChange={handleChange}
-                    required
-                    className="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
-                    placeholder="Enter image URL"
-                  />
+                  <div className="flex justify-between items-center mb-2">
+                    <label className="block text-sm font-medium text-gray-700">Snake Image</label>
+                    <button
+                      type="button"
+                      onClick={toggleImageInputMode}
+                      className="text-xs font-medium text-blue-600 hover:text-blue-800 transition-colors"
+                    >
+                      {useUrlInput ? 'Switch to File Upload' : 'Switch to URL Input'}
+                    </button>
+                  </div>
+                  
+                  {useUrlInput ? (
+                    <input
+                      type="url"
+                      name="image"
+                      value={formData.image}
+                      onChange={handleChange}
+                      className="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors"
+                      placeholder="Enter image URL"
+                      required={!uploadedImage}
+                    />
+                  ) : (
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-center w-full">
+                        <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors">
+                          <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                            <svg className="w-8 h-8 mb-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                            </svg>
+                            <p className="mb-1 text-sm text-gray-500"><span className="font-semibold">Click to upload</span> or drag and drop</p>
+                            <p className="text-xs text-gray-500">PNG, JPG or JPEG (MAX. 5MB)</p>
+                          </div>
+                          <input 
+                            type="file" 
+                            className="hidden" 
+                            accept="image/*"
+                            ref={fileInputRef}
+                            onChange={handleImageUpload}
+                            required={!formData.image && !uploadedImage}
+                          />
+                        </label>
+                      </div>
+                      
+                      {imagePreview && (
+                        <div className="relative w-full h-40 mt-2 rounded-lg overflow-hidden">
+                          <img 
+                            src={imagePreview} 
+                            alt="Preview" 
+                            className="w-full h-full object-cover rounded-lg" 
+                          />
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setUploadedImage(null);
+                              setImagePreview('');
+                              if (fileInputRef.current) fileInputRef.current.value = '';
+                            }}
+                            className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full hover:bg-red-600 transition-colors"
+                            title="Remove image"
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
