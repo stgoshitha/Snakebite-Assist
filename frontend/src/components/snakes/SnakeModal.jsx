@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ProvinceMap from '../maps/ProvinceMap';
+import { useTransliteration } from '../../context/TransliterationContext';
 
 const SnakeModal = ({ snake, onClose, onSubmit }) => {
   const [formData, setFormData] = useState({
@@ -22,7 +23,8 @@ const SnakeModal = ({ snake, onClose, onSubmit }) => {
   const [imagePreview, setImagePreview] = useState('');
   const [useUrlInput, setUseUrlInput] = useState(true);
   const fileInputRef = useRef(null);
-
+  const { isEnabled, toggleTransliteration, transliterate } = useTransliteration();
+  
   const provinces = [
     'Central Province',
     'Eastern Province',
@@ -53,9 +55,17 @@ const SnakeModal = ({ snake, onClose, onSubmit }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    
+    // Apply transliteration if enabled (for text fields only)
+    const textFields = ['name', 'color', 'size', 'headShape', 'pattern', 'behavior', 'venomType', 'painType'];
+    const isTextField = textFields.includes(name);
+    
+    // For text fields, use transliteration if enabled
+    const processedValue = isEnabled && isTextField ? transliterate(value) : value;
+    
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: processedValue
     }));
   };
 
@@ -103,7 +113,10 @@ const SnakeModal = ({ snake, onClose, onSubmit }) => {
 
   const handleSymptomsChange = (index, value) => {
     const newSymptoms = [...formData.commonSymptoms];
-    newSymptoms[index] = value;
+    
+    // Apply transliteration if enabled
+    newSymptoms[index] = isEnabled ? transliterate(value) : value;
+    
     setFormData(prev => ({
       ...prev,
       commonSymptoms: newSymptoms
@@ -115,6 +128,9 @@ const SnakeModal = ({ snake, onClose, onSubmit }) => {
       ...prev,
       commonSymptoms: [...prev.commonSymptoms, '']
     }));
+    
+    // We will rely on the useEffect in useTransliterationInput to handle this
+    // The key thing is to ensure each new input gets a unique ID
   };
 
   const removeSymptom = (index) => {
@@ -150,6 +166,35 @@ const SnakeModal = ({ snake, onClose, onSubmit }) => {
     onSubmit(submitData);
   };
 
+  // Add this inside your return statement, before the form sections
+  const renderTransliterationToggle = () => (
+    <div className="mb-6 px-6 py-3 bg-[#60B5FF]/10 rounded-lg border border-[#AFDDFF]">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center space-x-2">
+          <svg className="w-5 h-5 text-[#60B5FF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+          </svg>
+          <span className="font-medium text-gray-700">Sinhala Transliteration</span>
+        </div>
+        <label className="relative inline-flex items-center cursor-pointer">
+          <input 
+            type="checkbox" 
+            className="sr-only peer" 
+            checked={isEnabled}
+            onChange={toggleTransliteration}
+          />
+          <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#60B5FF] rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#60B5FF]"></div>
+          <span className="ms-2 text-sm font-medium text-gray-700">
+            {isEnabled ? 'On' : 'Off'}
+          </span>
+        </label>
+      </div>
+      <p className="text-xs text-gray-500 mt-1">
+        When enabled, type in English to get Sinhala text (e.g., "amma" becomes "අම්මා").
+      </p>
+    </div>
+  );
+
   return (
     <div className="fixed inset-0 bg-gray-900/75 backdrop-blur-sm flex items-center justify-center p-4 z-50">
       <div className="bg-white/95 backdrop-blur-sm rounded-xl max-w-5xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-gray-100">
@@ -175,6 +220,8 @@ const SnakeModal = ({ snake, onClose, onSubmit }) => {
         </div>
         
         <div className="p-6">
+          {renderTransliterationToggle()}
+          
           <form onSubmit={handleSubmit} className="space-y-8">
             {/* Basic Information Section */}
             <div className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg p-6 shadow-sm border border-gray-200">
@@ -473,30 +520,39 @@ const SnakeModal = ({ snake, onClose, onSubmit }) => {
                     Common Symptoms
                   </h3>
                   <div className="space-y-3 bg-white p-4 rounded-lg border border-[#AFDDFF]">
-                    {formData.commonSymptoms.map((symptom, index) => (
-                      <div key={index} className="flex gap-3">
-                        <input
-                          type="text"
-                          value={symptom}
-                          onChange={(e) => handleSymptomsChange(index, e.target.value)}
-                          required
-                          className="flex-1 rounded-lg border-[#AFDDFF] shadow-sm focus:border-[#60B5FF] focus:ring-[#60B5FF] transition-colors"
-                          placeholder={`Symptom ${index + 1}`}
-                        />
-                        {index > 0 && (
-                          <button
-                            type="button"
-                            onClick={() => removeSymptom(index)}
-                            className="p-2 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-lg transition-colors"
-                            title="Remove symptom"
-                          >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                            </svg>
-                          </button>
-                        )}
-                      </div>
-                    ))}
+                    {formData.commonSymptoms.map((symptom, index) => {
+                      // Create a custom hook for each symptom input
+                      const SymptomInput = () => {
+                        return (
+                          <input
+                            type="text"
+                            value={symptom}
+                            onChange={(e) => handleSymptomsChange(index, e.target.value)}
+                            required
+                            className="flex-1 rounded-lg border-[#AFDDFF] shadow-sm focus:border-[#60B5FF] focus:ring-[#60B5FF] transition-colors"
+                            placeholder={`Symptom ${index + 1}`}
+                          />
+                        );
+                      };
+                      
+                      return (
+                        <div key={index} className="flex gap-3">
+                          <SymptomInput />
+                          {index > 0 && (
+                            <button
+                              type="button"
+                              onClick={() => removeSymptom(index)}
+                              className="p-2 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-lg transition-colors"
+                              title="Remove symptom"
+                            >
+                              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                              </svg>
+                            </button>
+                          )}
+                        </div>
+                      );
+                    })}
                     <button
                       type="button"
                       onClick={addSymptom}
