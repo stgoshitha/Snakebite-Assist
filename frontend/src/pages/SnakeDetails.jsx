@@ -186,11 +186,39 @@ const SnakeDetails = () => {
 
   return (
     <div className="container mx-auto px-4 py-8 font-['Inter']">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-800 leading-tight">
-          {province ? `Snakes in ${province}` : 'Snake Database'}
-          <div className="h-1 w-20 bg-indigo-600 mt-2 rounded-full"></div>
-        </h1>
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
+        {/* Title Section */}
+        <div>
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-800 leading-tight">
+            {province ? `Snakes in ${province}` : 'Snake Database'}
+            <div className="h-1 w-20 bg-indigo-600 mt-2 rounded-full"></div>
+          </h1>
+        </div>
+
+        {/* Total Snakes Card */}
+        <div className="bg-purple-50 rounded-xl p-4 shadow-sm min-w-[200px]">
+          <div className="flex justify-between items-center">
+            <div>
+              <h2 className="text-lg font-medium text-purple-900 mb-1">All Snakes</h2>
+              <div className="text-4xl font-bold text-purple-900">
+                {snakes ? snakes.length : 0}
+              </div>
+            </div>
+            <div className="text-purple-500">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth="1.5"
+                  d="M6.5 6.5C3.5 9.5 3.5 14.5 6.5 17.5L12 12L17.5 17.5C20.5 14.5 20.5 9.5 17.5 6.5C14.5 3.5 9.5 3.5 6.5 6.5Z"
+                />
+                <circle cx="15" cy="9" r="1" fill="currentColor" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        {/* Add Snake Button */}
         <button
           onClick={handleAddSnake}
           className="px-6 py-3 bg-indigo-600 text-white font-medium rounded-lg shadow-md hover:bg-indigo-700 transform hover:translate-y-[-2px] transition-all duration-300 flex items-center"
