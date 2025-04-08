@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require('mongoose');
 
 const BlockSchema = new mongoose.Schema({
   type: {
@@ -19,11 +19,10 @@ const BlogSchema = new mongoose.Schema({
   },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "user",
-    required: true,
+    ref: "user"
   },
   blocks: [BlockSchema],
-  like:[{type: mongoose.Schema.Types.ObjectId, ref: "user"}],
+  likes:[{type: mongoose.Schema.Types.ObjectId, ref: "user"}],
   isApproved: {
     type: Boolean,
     default: false,
@@ -31,4 +30,4 @@ const BlogSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 const Blog = mongoose.model("blog", BlogSchema);
-model.exports = Blog;
+module.exports = Blog;
