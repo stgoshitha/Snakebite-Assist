@@ -1,8 +1,10 @@
-const {createBlog} = require("../controllers/BlogController.js");
+const {createBlog,getAllApprovedBlogs,getAllNotApprovedBlogs} = require("../controllers/BlogController.js");
 const express = require("express");
 const blogRoute = express.Router();
-const { authenticate } = require("../middleware/verifyToken.js");
+const { authenticate, isAdminOrSuperAdmin } = require("../middleware/verifyToken.js");
 
 blogRoute.post("/create", authenticate, createBlog);
+blogRoute.get("/getAllApprovedBlogs", getAllApprovedBlogs);
+blogRoute.get("/getAllNotApprovedBlogs", isAdminOrSuperAdmin, getAllNotApprovedBlogs);
 
 module.exports = blogRoute;
