@@ -47,8 +47,41 @@ const getAllNotApprovedBlogs = async (req, res) => {
   }
 };
 
+//get all blogs by userId
+const getAllBlogsByUserId = async(req, res) => {
+  try{
+    const userId = req.params.userId;
+  
+    if(!userId) return res.status(400).json({message: "User ID is required"});
+
+    const blogs = await Blog.find({userId});
+    res.json(blogs);
+  }catch(err){
+    res.status(500).json({ error: err.message });
+  }
+}
+
+//get blog by blogId
+const getBlogByBlogId = async(req, res) => {
+  try{
+    const blogId = req.params.blogId;
+  
+    if(!blogId) return res.status(400).json({message: "Blog ID is required"});
+    
+    const blogs = await Blog.findById(blogId);
+
+    if(!blogs) return res.status(404).json({message: "Blog not found"});
+
+    res.json(blogs);
+  }catch(err){
+    res.status(500).json({ error: err.message });
+  }
+}
+
 module.exports = {
   createBlog,
   getAllApprovedBlogs,
-  getAllNotApprovedBlogs
+  getAllNotApprovedBlogs,
+  getAllBlogsByUserId,
+  getBlogByBlogId
 };
