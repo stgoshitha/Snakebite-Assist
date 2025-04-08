@@ -1,5 +1,6 @@
 const Blog = require("../models/Blog");
 
+//Create a new blog
 const createBlog = async (req, res) => {
   try {
     const { title, blocks } = req.body;
@@ -21,6 +22,33 @@ const createBlog = async (req, res) => {
   }
 };
 
+//get all approved blogs with pagination
+const getAllApprovedBlogs = async (req, res) => {
+  try {
+    const { page = 1, limit = 10 } = req.query;
+    const blogs = await Blog.find({ isApproved: true }) 
+      .skip((page - 1) * limit)
+      .limit(Number(limit))
+      .populate('userId', 'username'); 
+
+    res.json(blogs);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+//get all not approved blogs
+const getAllNotApprovedBlogs = async (req, res) => {
+  try {
+    const blogs = await Blog.find({ isApproved: false }) 
+    res.json(blogs);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 module.exports = {
-  createBlog
+  createBlog,
+  getAllApprovedBlogs,
+  getAllNotApprovedBlogs
 };
