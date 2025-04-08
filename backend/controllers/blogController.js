@@ -78,10 +78,35 @@ const getBlogByBlogId = async(req, res) => {
   }
 }
 
+//update blog by blogId
+const updateBlog = async (req, res) => {
+  try {
+    const  blogId = req.params.blogId;
+    if (!blogId) return res.status(400).json({ message: "Blog ID is required" });
+    const { title, blocks } = req.body;
+
+    const updatedBlog = await Blog.findByIdAndUpdate(
+      blogId,
+      { title, blocks },
+      { new: true }
+    );
+
+    if (!updatedBlog) {
+      return res.status(404).json({ message: "Blog not found" });
+    }
+
+    res.json({ message: "Blog updated successfully", blog: updatedBlog });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 module.exports = {
   createBlog,
   getAllApprovedBlogs,
   getAllNotApprovedBlogs,
   getAllBlogsByUserId,
-  getBlogByBlogId
+  getBlogByBlogId,
+  updateBlog
 };
