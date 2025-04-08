@@ -47,6 +47,27 @@ const getAllNotApprovedBlogs = async (req, res) => {
   }
 };
 
+//approve blog by blogId
+const approveBlog = async (req, res) => {
+  try {
+    const blogId = req.params.blogId;
+
+    const blog = await Blog.findById(blogId);
+
+    if (!blog) {
+      return res.status(404).json({ message: 'Blog not found' });
+    }
+
+    blog.isApproved = true;
+    await blog.save();
+
+    res.json({ message: 'Blog approved successfully'});
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
 //get all blogs by userId
 const getAllBlogsByUserId = async(req, res) => {
   try{
@@ -95,18 +116,42 @@ const updateBlog = async (req, res) => {
       return res.status(404).json({ message: "Blog not found" });
     }
 
-    res.json({ message: "Blog updated successfully", blog: updatedBlog });
+    res.json({ message: "Blog updated successfully"});
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Internal server error" });
   }
 };
 
+//delete blog by blogId
+const deletBlog = async (req, res) => {
+  try {
+    const blogId = req.params.blogId;
+    if (!blogId) {
+      return res.status(400).json({ message: "Blog ID is required" });
+    }
+
+    const user = await Blog.findByIdAndDelete(blogId);
+
+    if (!user) {
+      return res.status(404).json({ message: "Blog not found" });
+    }
+
+    return res.status(200).json({ message: "Blog deleted successfully" });
+  } catch (err) {
+    console.error("Error deleting user:", err); 
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+
 module.exports = {
   createBlog,
   getAllApprovedBlogs,
   getAllNotApprovedBlogs,
+  approveBlog,
   getAllBlogsByUserId,
   getBlogByBlogId,
-  updateBlog
+  updateBlog,
+  deletBlog,
 };
