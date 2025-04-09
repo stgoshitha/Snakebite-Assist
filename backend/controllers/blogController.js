@@ -25,11 +25,8 @@ const createBlog = async (req, res) => {
 //get all approved blogs with pagination
 const getAllApprovedBlogs = async (req, res) => {
   try {
-    const { page = 1, limit = 10 } = req.query;
     const blogs = await Blog.find({ isApproved: true }) 
-      .skip((page - 1) * limit)
-      .limit(Number(limit))
-      .populate('userId', 'username'); 
+      .populate('userId', 'name'); 
 
     res.json(blogs);
   } catch (err) {
@@ -40,7 +37,8 @@ const getAllApprovedBlogs = async (req, res) => {
 //get all not approved blogs
 const getAllNotApprovedBlogs = async (req, res) => {
   try {
-    const blogs = await Blog.find({ isApproved: false }) 
+    const blogs = await Blog.find({ isApproved: false }).populate('userId', 'name');
+    //console.log("Fetched blogs:", blogs)
     res.json(blogs);
   } catch (err) {
     res.status(500).json({ error: err.message });
