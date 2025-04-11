@@ -73,7 +73,7 @@ const getAllBlogsByUserId = async(req, res) => {
   
     if(!userId) return res.status(400).json({message: "User ID is required"});
 
-    const blogs = await Blog.find({userId});
+    const blogs = await Blog.find({userId}).populate('userId', 'name');
     res.json(blogs);
   }catch(err){
     res.status(500).json({ error: err.message });
