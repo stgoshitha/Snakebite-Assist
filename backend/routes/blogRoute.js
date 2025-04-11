@@ -9,6 +9,7 @@ blogRoute.get("/getAllNotApprovedBlogs", isAdminOrSuperAdmin, getAllNotApprovedB
 blogRoute.patch("/approveBlog/:blogId", isAdminOrSuperAdmin, approveBlog);
 blogRoute.get("/getAllBlogByUserId/:userId", authenticate, getAllBlogsByUserId);
 blogRoute.get("/getBlogByBlogId/:blogId", isAdminOrSuperAdmin, getBlogByBlogId);
+blogRoute.get("/usergetBlogByBlogId/:blogId", authenticate, getBlogByBlogId);
 blogRoute.patch("/updateBlog/:blogId", authenticate, updateBlog);
 blogRoute.delete("/deletBlog/:blogId", authenticate, deletBlog);
 
