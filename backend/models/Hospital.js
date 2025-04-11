@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const HospitalSchema = new mongoose.Schema(
   {
     hospitalName: { type: String, required: true },
+    hospitalType:{type: String, required:true,enum: ["government ", "private", "ayurvedic"]},
     address: { type: String, required: true },
     city: { type: String, required: true },
     phoneNumber: { type: String, required: true },
