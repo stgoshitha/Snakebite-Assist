@@ -17,6 +17,11 @@ import HospitalProfile from "./pages/HospitalProfile";
 import CreateHospitalForm from "./pages/CreateHospitalForm";
 import SnakeDetails from './pages/SnakeDetails';
 import SnakeDetail from './components/snakes/SnakeDetail';
+import BlogPage from "./pages/BlogPage";
+import BlogCreatePage from "./pages/BlogCreatePage";
+import AdminBlogApproved from "./pages/AdminBlogApproved";
+import AdminBlogNotApproved from "./pages/AdminBlogNotApproved";
+import UserBlogPage from "./pages/UserBlogPage";
 
 function App() {
   return (
@@ -31,10 +36,18 @@ function App() {
               <Route path='allAdmins/addAdminForm' element={<AddNewAdmin />} />
               <Route path='adminHospitalApproved' element={<AdminHospitalApproved />} />
               <Route path='adminHospitalNotApproved' element={<AdminHospitalNotApproved />} />
+              <Route path='adminBlogApproved' element={<AdminBlogApproved />} />
+              <Route path='adminBlogNotApproved' element={<AdminBlogNotApproved />} />
+              <Route path="blog" element={<BlogPage />} />
+              <Route path="blog/createBlog" element={<BlogCreatePage />} />
+              <Route path="userBlog" element={<UserBlogPage />} />
             </Route>
 
             <Route path='/' element={<UserLayout />}>
               <Route index element={<Home />} />
+              <Route path="blog" element={<BlogPage />} />
+              <Route path="blog/createBlog" element={<BlogCreatePage />} />
+              <Route path="userBlog" element={<UserBlogPage />} />
             </Route>
 
             <Route path="/hospital" element={<HospitalLayout />}>
@@ -47,6 +60,7 @@ function App() {
             <Route path='/' element={<PublicLayout />}>
               <Route path="login" element={<Login />} />
               <Route path="register" element={<Register />} />
+              
             </Route>
 
             <Route path="/admin/snake-details" element={<SnakeDetails />} />
