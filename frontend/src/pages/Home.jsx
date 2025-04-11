@@ -113,6 +113,20 @@ const Home = () => {
           >
             View Hospital Not Approved Details
           </button>
+
+          <button
+            onClick={() => navigate("/admin/adminBlogApproved")}
+            className="px-4 py-2 bg-zinc-600 text-white rounded"
+          >
+            View Blogs Approved Details
+          </button>
+
+          <button
+            onClick={() => navigate("/admin/adminBlogNotApproved")}
+            className="px-4 py-2 bg-zinc-600 text-white rounded"
+          >
+            View Blogs Not Approved Details
+          </button>
         </div>
       )}
 
