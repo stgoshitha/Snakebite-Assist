@@ -108,6 +108,7 @@ const AdminDashboardUsers = () => {
         <table className="min-w-full table-auto border-collapse bg-white shadow-md rounded-md">
           <thead>
             <tr className="bg-gray-100">
+            <th className="border-b py-2 px-4">#</th>
               <th className="py-2 px-4 border-b text-left w-xl">Email</th>
               <th className="py-2 px-4 border-b text-left w-sm">
                 <div className="flex gap-1 justify-left items-center">
@@ -141,8 +142,9 @@ const AdminDashboardUsers = () => {
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
+            {users.map((user,index) => (
               <tr key={user._id} className="hover:bg-gray-50">
+                <th className="border-b py-2 px-4">{index + 1}</th>
                 <td className="py-2 px-4 border-b">{user.email}</td>
                 <td className="py-2 px-4 border-b">{user.role}</td>
                 <td className="py-2 px-4 border-b">
