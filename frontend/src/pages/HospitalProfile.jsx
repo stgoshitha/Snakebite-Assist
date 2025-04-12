@@ -1,33 +1,34 @@
+// src/pages/HospitalProfile.js
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import LocationPicker from "../components/LocationPicker";
+import HospitalProfileForm from "../components/HospitalProfileForm";
+import HospitalProfileInfoItem from "../components/HospitalProfileInfoItem";
+import { FaHospital, FaRegAddressCard } from "react-icons/fa";
+import { MdEmail, MdPhotoLibrary } from "react-icons/md";
+import { HiOutlineLocationMarker } from "react-icons/hi";
+import { FiPhone } from "react-icons/fi";
+import { BiGlobe } from "react-icons/bi";
+import { Ri24HoursLine } from "react-icons/ri";
+import { PiCertificateBold } from "react-icons/pi";
+import { AiOutlineClockCircle } from "react-icons/ai";
+
+// Helper function
+const capitalizeWords = (str) =>
+  str?.replace(/\b\w/g, (char) => char.toUpperCase()) || "";
 
 const HospitalProfile = () => {
   const [hospital, setHospital] = useState(null);
+  const [formData, setFormData] = useState({});
+  const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [isEditing, setIsEditing] = useState(false);
   const navigate = useNavigate();
-
-  const [formData, setFormData] = useState({
-    hospitalName: "",
-    address: "",
-    city: "",
-    phoneNumber: "",
-    email: "",
-    latitude: "",
-    longitude: "",
-    is24hrService: false,
-    workingHours: [],
-    hospitalImages: [],
-    proofCertificate: "",
-  });
 
   const hospitalToken = localStorage.getItem("token");
 
   useEffect(() => {
-    const fetchUserHospital = async () => {
+    const fetchHospital = async () => {
       try {
         const response = await axios.get(
           "http://localhost:3000/api/hospital/getUserHospital",
@@ -36,355 +37,257 @@ const HospitalProfile = () => {
           }
         );
         setHospital(response.data);
-        setFormData(response.data); // Populate form with hospital data
+        setFormData({
+          ...response.data,
+          hospitalImages: response.data.hospitalImages?.join(",") || "",
+        });
       } catch (error) {
-        setError("Failed to fetch hospital details.");
+        setError("Failed to fetch hospital.");
       } finally {
         setLoading(false);
       }
     };
 
-    if (hospitalToken) {
-      fetchUserHospital();
-    }
+    if (hospitalToken) fetchHospital();
   }, [hospitalToken]);
-
-  // Handle text input changes
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData({ ...formData, [name]: type === "checkbox" ? checked : value });
-  };
-
-  // Handle working hours change
-  const handleWorkingHoursChange = (index, field, value) => {
-    const updatedHours = [...formData.workingHours];
-    updatedHours[index] = { ...updatedHours[index], [field]: value };
-    setFormData({ ...formData, workingHours: updatedHours });
-  };
-
-  // Add a new working hours entry
-  const addWorkingHours = () => {
-    setFormData({
-      ...formData,
-      workingHours: [
-        ...formData.workingHours,
-        { day: "", open: "", close: "" },
-      ],
-    });
-  };
-
-  // Remove a working hours entry
-  const removeWorkingHours = (index) => {
-    const updatedHours = [...formData.workingHours];
-    updatedHours.splice(index, 1);
-    setFormData({ ...formData, workingHours: updatedHours });
-  };
-
-  // Handle image upload
-  const handleImageUpload = (e) => {
-    const files = Array.from(e.target.files);
-    const newImageUrls = files.map((file) => URL.createObjectURL(file)); // Preview images
-    setFormData({
-      ...formData,
-      hospitalImages: [...formData.hospitalImages, ...newImageUrls],
-    });
-  };
-
-  // Handle form submission
-  const handleUpdate = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.put(
-        `http://localhost:3000/api/hospital/updateHospital/${hospital._id}`,
-        formData,
-        {
-          headers: { Authorization: `Bearer ${hospitalToken}` },
-        }
-      );
-      setHospital(response.data.hospital);
-      setIsEditing(false);
-      alert("Hospital updated successfully!");
-    } catch (error) {
-      alert("Failed to update hospital.");
-    }
-  };
 
   const handleDelete = async () => {
     if (window.confirm("Are you sure you want to delete this hospital?")) {
       try {
         await axios.delete(
           `http://localhost:3000/api/hospital/deleteHospital/${hospital._id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${hospitalToken}`,
-            },
-          }
+          { headers: { Authorization: `Bearer ${hospitalToken}` } }
         );
-        alert("Hospital deleted successfully!");
+        alert("Deleted successfully.");
         setHospital(null);
       } catch (error) {
-        alert("Failed to delete hospital.");
+        alert("Deletion failed.");
       }
     }
   };
 
-  if (!hospital) {
-    return (
-      <div>
-        <h2>No Hospital Found</h2>
-        <p>You have not created a hospital profile yet.</p>
-        <button
-          onClick={() =>
-            navigate("/hospital/hospitalprofile/createHospitalForm")
-          }
-          className="px-4 py-2 bg-zinc-600 text-white rounded"
-        >
-          Create Hospital
-        </button>
-      </div>
-    );
-  }
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData({ ...formData, [name]: type === "checkbox" ? checked : value });
+  };
 
-  if (loading) return <p>Loading hospital details...</p>;
+  const handleWorkingHoursChange = (index, field, value) => {
+    const updated = [...formData.workingHours];
+    updated[index][field] = value;
+    setFormData({ ...formData, workingHours: updated });
+  };
+
+  const addWorkingHours = () => {
+    setFormData({
+      ...formData,
+      workingHours: [
+        ...(formData.workingHours || []),
+        { day: "", open: "", close: "" },
+      ],
+    });
+  };
+
+  const removeWorkingHours = (index) => {
+    const updated = formData.workingHours.filter((_, i) => i !== index);
+    setFormData({ ...formData, workingHours: updated });
+  };
+
+  const handleImageUpload = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    const updatedData = {
+      ...formData,
+      hospitalImages: formData.hospitalImages
+        .split(",")
+        .map((img) => img.trim()),
+    };
+    try {
+      await axios.put(
+        `http://localhost:3000/api/hospital/updateHospital/${hospital._id}`,
+        updatedData,
+        { headers: { Authorization: `Bearer ${hospitalToken}` } }
+      );
+      alert("Updated successfully.");
+      setIsEditing(false);
+      window.location.reload();
+    } catch (error) {
+      console.error(error);
+      alert("Update failed.");
+    }
+  };
+
+  if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
-  if (!hospital) return <p>Hospital not found</p>;
+  if (!hospital) return <p>No hospital found.</p>;
 
   return (
-    <div>
-      <h2 className="text-2xl mb-8">Hospital Profile</h2>
-      {!isEditing ? (
-        <div>
-          <h2>{hospital.hospitalName}</h2>
-          <p>
-            <strong>City:</strong> {hospital.city}
-          </p>
-          <p>
-            <strong>Address:</strong> {hospital.address}
-          </p>
-          <p>
-            <strong>Phone:</strong> {hospital.phoneNumber}
-          </p>
-          <p>
-            <strong>Email:</strong> {hospital.email}
-          </p>
-          <p>
-            <strong>Latitude:</strong> {hospital.latitude}
-          </p>
-          <p>
-            <strong>Longitude:</strong> {hospital.longitude}
-          </p>
-          <p>
-            <strong>24/7 Service:</strong>{" "}
-            {hospital.is24hrService ? "Yes" : "No"}
-          </p>
-
-          <h3>Working Hours</h3>
-          <ul>
-            {hospital.workingHours?.map((hours, index) => (
-              <li key={index}>
-                <strong>{hours.day}:</strong> {hours.open} - {hours.close}
-              </li>
-            ))}
-          </ul>
-
-          <h3>Hospital Images</h3>
-          <div>
-            {hospital.hospitalImages?.map((image, index) => (
-              <img
-                key={index}
-                src={image}
-                alt={`Hospital Image ${index + 1}`}
-                width="100"
-                height="100"
-              />
-            ))}
+    <div className="max-w-6xl mx-auto p-6">
+      {isEditing ? (
+        <HospitalProfileForm
+          formData={formData}
+          setFormData={setFormData}
+          handleChange={handleChange}
+          handleUpdate={handleUpdate}
+          handleImageUpload={handleImageUpload}
+          handleWorkingHoursChange={handleWorkingHoursChange}
+          addWorkingHours={addWorkingHours}
+          removeWorkingHours={removeWorkingHours}
+          setIsEditing={setIsEditing}
+        />
+      ) : (
+        <div className="bg-white font-semibold shadow-sm rounded-lg p-6">
+          <div className="p-6 rounded-lg shadow-sm space-y-5 mb-10">
+            <h1 className="text-3xl">Hospital Profile</h1>
+          </div>
+          <div className="flex justify-between items-start mb-5">
+            <div className="text-2xl font-bold">
+              {capitalizeWords(hospital.hospitalName)} -{" "}
+              {capitalizeWords(hospital.city)}
+            </div>
+            <div
+              className={
+                hospital.isApproved
+                  ? "text-green-600 font-semibold border py-1 px-4 rounded-2xl text-sm"
+                  : "text-red-600 font-semibold border py-1 px-4 rounded-2xl text-sm"
+              }
+            >
+              {hospital.isApproved ? "Approved" : "Not Approved"}
+            </div>
           </div>
 
-          <p>
-            <strong>Proof Certificate:</strong> {hospital.proofCertificate}
-          </p>
-          <p>
-            <strong>Approved:</strong> {hospital.isApproved ? "Yes" : "No"}
-          </p>
-
-          <button
-            onClick={() => setIsEditing(true)}
-            className="px-4 py-2 bg-zinc-600 text-white rounded"
-          >
-            Edit
-          </button>
-          <button
-            onClick={handleDelete}
-            style={{
-              marginLeft: "10px",
-              backgroundColor: "red",
-              color: "white",
-            }}
-            className="px-4 py-2 bg-red-600 text-white rounded"
-          >
-            Delete
-          </button>
-          <button
-            type="submit"
-            onClick={() => navigate("/hospital")}
-            className="px-4 py-2 ml-2 bg-zinc-600 text-white rounded"
-          >
-            Back
-          </button>
-        </div>
-      ) : (
-        <form onSubmit={handleUpdate}>
-          <label>
-            Hospital Name:
-            <input
-              type="text"
-              name="hospitalName"
-              value={formData.hospitalName}
-              onChange={handleChange}
-              required
-              className="p-1 border rounded focus:outline-none focus:ring-2 mb-1"
-            />
-          </label>
-          <br />
-          <label>
-            Address:
-            <input
-              type="text"
-              name="address"
-              value={formData.address}
-              onChange={handleChange}
-              required
-              className="p-1 border rounded focus:outline-none focus:ring-2 mb-1"
-            />
-          </label>
-          <br />
-          <label>
-            City:
-            <input
-              type="text"
-              name="city"
-              value={formData.city}
-              onChange={handleChange}
-              required
-              className="p-1 border rounded focus:outline-none focus:ring-2 mb-1"
-            />
-          </label>
-          <br />
-          <label>
-            Phone Number:
-            <input
-              type="text"
-              name="phoneNumber"
-              value={formData.phoneNumber}
-              onChange={handleChange}
-              required
-              className="p-1 border rounded focus:outline-none focus:ring-2 mb-1"
-            />
-          </label>
-          <br />
-          <label>
-            Email:
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              className="p-1 border rounded focus:outline-none focus:ring-2 mb-1"
-            />
-          </label>
-          <br />
-
-          <LocationPicker formData={formData} setFormData={setFormData} />
-
-          <br />
-          <label>
-            24/7 Service:
-            <input
-              type="checkbox"
-              name="is24hrService"
-              checked={formData.is24hrService}
-              onChange={handleChange}
-              className="p-1 border rounded focus:outline-none focus:ring-2 mb-1"
-            />
-          </label>
-
-          <h3>Update Working Hours</h3>
-          {formData.workingHours?.map((hours, index) => (
-            <div key={index}>
-              <label>Day:</label>
-              <input
-                type="text"
-                value={hours.day}
-                onChange={(e) =>
-                  handleWorkingHoursChange(index, "day", e.target.value)
+          <div className="space-y-2 text-gray-700">
+            <div className="p-4 space-y-2 bg-white rounded-xl shadow-sm">
+              <HospitalProfileInfoItem
+                icon={FaHospital}
+                label="Hospital Type"
+                value={`${capitalizeWords(hospital.hospitalType)} Hospital`}
+              />
+              <HospitalProfileInfoItem
+                icon={FaRegAddressCard}
+                label="Address"
+                value={capitalizeWords(hospital.address)}
+              />
+              <HospitalProfileInfoItem
+                icon={HiOutlineLocationMarker}
+                label="Location"
+                value={
+                  <a
+                    href={`https://www.google.com/maps?q=${hospital.latitude},${hospital.longitude}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex justify-center hover:underline"
+                  >
+                    My Location
+                  </a>
                 }
               />
-              <input
-                type="time"
-                value={hours.open}
-                onChange={(e) =>
-                  handleWorkingHoursChange(index, "open", e.target.value)
+            </div>
+
+            <div className="flex p-4 pr-20 justify-between bg-white rounded-xl shadow-sm">
+              <HospitalProfileInfoItem
+                icon={FiPhone}
+                label="Phone"
+                value={hospital.phoneNumber}
+              />
+              <HospitalProfileInfoItem
+                icon={MdEmail}
+                label="Email"
+                value={hospital.email}
+              />
+              <HospitalProfileInfoItem
+                icon={BiGlobe}
+                label="Website"
+                value={hospital.website || "No link to show"}
+              />
+            </div>
+
+            <div className="p-4 space-y-2 bg-white rounded-xl shadow-sm">
+              <HospitalProfileInfoItem
+                icon={Ri24HoursLine}
+                label="24h Service"
+                value={hospital.is24hrService ? "Available" : "Not Available"}
+              />
+            </div>
+
+            <div className="p-4 bg-white rounded-xl shadow-sm">
+              <div className="flex items-center gap-2 mb-2">
+                <AiOutlineClockCircle size={25} />
+                <h4 className="font-semibold text-lg text-gray-800">
+                  Working Hours
+                </h4>
+              </div>
+              <ul className="list-disc list-inside text-gray-700 space-y-1 ml-1">
+                {hospital.workingHours?.map((hours, index) => (
+                  <li key={index}>
+                    <span className="font-medium">{hours.day}:</span>{" "}
+                    {hours.open} - {hours.close}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="p-4 bg-white rounded-xl shadow-sm">
+              <div className="flex items-center gap-2 mb-2">
+                <MdPhotoLibrary size={25} />
+                <h4 className="font-semibold text-lg text-gray-800">
+                  Hospital Images
+                </h4>
+              </div>
+              <div className="flex gap-5">
+                {hospital.hospitalImages?.map((image, index) => (
+                  <img
+                    key={index}
+                    src={image}
+                    alt={`Hospital ${index + 1}`}
+                    className="w-24 h-24 object-cover rounded border"
+                  />
+                ))}
+              </div>
+            </div>
+
+            <div className="p-4 bg-white rounded-xl shadow-sm">
+              <HospitalProfileInfoItem
+                icon={PiCertificateBold}
+                label="Proof Certificate PDF"
+                value={
+                  hospital.proofCertificate ? (
+                    <div
+                      onClick={() =>
+                        window.open(hospital.proofCertificate, "_blank")
+                      }
+                      className="font-semibold text-blue-600 cursor-pointer hover:underline"
+                    >
+                      Hospital Proof Certificate
+                    </div>
+                  ) : (
+                    <div className="font-semibold text-gray-500">
+                      No link to show
+                    </div>
+                  )
                 }
               />
-              -
-              <input
-                type="time"
-                value={hours.close}
-                onChange={(e) =>
-                  handleWorkingHoursChange(index, "close", e.target.value)
-                }
-              />
+            </div>
+
+            <div className="flex gap-4 mt-6 justify-end">
               <button
-                type="button"
-                onClick={() => removeWorkingHours(index)}
-                className="px-4 py-2 mt-1 bg-red-600 text-white rounded"
+                className="px-4 py-2 border border-blue-600 text-lg text-blue-600 rounded hover:border-blue-700"
+                onClick={() => setIsEditing(true)}
               >
-                Remove
+                Edit hospital profile
+              </button>
+              <button
+                onClick={handleDelete}
+                className="px-4 py-2  border-red-600 border text-lg text-red-600 rounded hover:border-red-700"
+              >
+                Delete hospital
               </button>
             </div>
-          ))}
-          <button
-            type="button"
-            onClick={addWorkingHours}
-            className="px-4 py-2 bg-zinc-600 text-white rounded"
-          >
-            + Add Working Hours
-          </button>
-
-          <h3>Update proof Certificate</h3>
-          <input
-            type="text"
-            name="proofCertificate"
-            placeholder="Hospital Image URL"
-            value={formData.proofCertificate}
-            onChange={handleImageUpload}
-            className="p-1 border rounded focus:outline-none focus:ring-2 mb-1"
-          />
-
-          <h3>Update Hospital Images</h3>
-          <input
-            type="text"
-            name="hospitalImages"
-            placeholder="Hospital Image URL"
-            onChange={handleImageUpload}
-            value={formData.hospitalImages}
-            className="p-1 border rounded focus:outline-none focus:ring-2 mb-1"
-          />
-          <button
-            type="submit"
-            className="px-4 py-2 bg-zinc-600 text-white rounded"
-          >
-            Update
-          </button>
-          <button
-            type="button"
-            onClick={() => setIsEditing(false)}
-            className="px-4 py-2 ml-4 bg-red-600 text-white rounded"
-          >
-            Cancel
-          </button>
-        </form>
+          </div>
+        </div>
       )}
     </div>
   );
