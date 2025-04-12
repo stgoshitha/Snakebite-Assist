@@ -4,7 +4,7 @@ const User = require('../models/User');
 // Create a new hospital (One-to-One Relationship)
 const createHospital = async (req, res) => {
   try {
-    const { hospitalName, hospitalType, address, city, phoneNumber, email, latitude, longitude, is24hrService, workingHours, proofCertificate, hospitalImages } = req.body;
+    const { hospitalName, hospitalType, address, city, phoneNumber, email, webSiteLink, latitude, longitude, is24hrService, workingHours, proofCertificate, hospitalImages } = req.body;
 
     const userId = req.user.id;
 
@@ -16,6 +16,7 @@ const createHospital = async (req, res) => {
       city,
       phoneNumber,
       email,
+      webSiteLink,
       latitude,
       longitude,
       is24hrService,
@@ -121,7 +122,7 @@ const updateHospital = async (req, res) => {
       return res.status(403).json({ message: 'Unauthorized: You do not own this hospital' });
     }
 
-    const allowedFields = ['hospitalName', 'address', 'city', 'phoneNumber', 'latitude', 'longitude', 'is24hrService', 'workingHours', 'hospitalImages'];
+    const allowedFields = ['hospitalName', 'hospitalType',  'address', 'city', 'phoneNumber', 'email', 'webSiteLink', 'latitude', 'longitude', 'is24hrService', 'workingHours', 'hospitalImages'];
     allowedFields.forEach(field => {
       if (req.body[field] !== undefined) {
         hospital[field] = req.body[field];
