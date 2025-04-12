@@ -146,6 +146,8 @@ const SnakeModal = ({ snake, onClose, onSubmit }) => {
     // Prepare form data for submission
     const submitData = new FormData();
     
+    console.log('Form data before submission:', formData);
+    
     // Add all form fields
     Object.keys(formData).forEach(key => {
       if (key === 'nativeProvinces' || key === 'commonSymptoms') {
@@ -160,7 +162,13 @@ const SnakeModal = ({ snake, onClose, onSubmit }) => {
     
     // Add the image file if it exists
     if (uploadedImage) {
+      console.log('Uploading image file:', uploadedImage);
       submitData.append('snakeImage', uploadedImage);
+    }
+    
+    // Log the FormData contents
+    for (let pair of submitData.entries()) {
+      console.log('FormData entry:', pair[0], pair[1]);
     }
     
     onSubmit(submitData);

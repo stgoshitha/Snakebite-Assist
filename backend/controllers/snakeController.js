@@ -85,14 +85,20 @@ const getSnakeById = async (req, res) => {
 // Add new snake with image upload
 const addSnake = async (req, res) => {
     try {
+        console.log('Request body:', req.body);
+        console.log('Request file:', req.file);
+        
         let imageData = { url: req.body.image };
         
         // Check if file was uploaded
         if (req.file) {
+            console.log('File uploaded, path:', req.file.path);
             // Upload image to Cloudinary
             const uploadResult = await uploadToCloudinary(req.file.path);
+            console.log('Cloudinary upload result:', uploadResult);
             
             if (!uploadResult.success) {
+                console.error('Cloudinary upload failed:', uploadResult.error);
                 return res.status(400).json({
                     success: false,
                     error: 'Image upload failed',
@@ -106,6 +112,8 @@ const addSnake = async (req, res) => {
                 public_id: uploadResult.public_id,
                 format: uploadResult.format
             };
+        } else {
+            console.log('No file uploaded, using image URL from body');
         }
         
         // Create snake with uploaded image or URL
@@ -115,6 +123,7 @@ const addSnake = async (req, res) => {
             imageData: req.file ? imageData : undefined
         };
         
+        console.log('Creating snake with data:', snakeData);
         const snake = await Snake.create(snakeData);
         
         res.status(201).json({
@@ -122,6 +131,7 @@ const addSnake = async (req, res) => {
             data: snake
         });
     } catch (error) {
+        console.error('Error in addSnake:', error);
         if (error.name === 'ValidationError') {
             const messages = Object.values(error.errors).map(err => err.message);
             return res.status(400).json({
@@ -141,14 +151,23 @@ const addSnake = async (req, res) => {
 // Update snake with image upload
 const updateSnake = async (req, res) => {
     try {
+        console.log('Update snake request received:', {
+            id: req.params.id,
+            body: req.body,
+            file: req.file
+        });
+        
         let updatedData = { ...req.body };
         
         // Check if file was uploaded
         if (req.file) {
+            console.log('Processing uploaded file:', req.file.path);
             // Upload image to Cloudinary
             const uploadResult = await uploadToCloudinary(req.file.path);
+            console.log('Cloudinary upload result:', uploadResult);
             
             if (!uploadResult.success) {
+                console.error('Cloudinary upload failed:', uploadResult.error);
                 return res.status(400).json({
                     success: false,
                     error: 'Image upload failed',
@@ -164,6 +183,19 @@ const updateSnake = async (req, res) => {
                 format: uploadResult.format
             };
         }
+
+        // Convert array fields from FormData format
+        if (updatedData['nativeProvinces[]']) {
+            updatedData.nativeProvinces = updatedData['nativeProvinces[]'];
+            delete updatedData['nativeProvinces[]'];
+        }
+        
+        if (updatedData['commonSymptoms[]']) {
+            updatedData.commonSymptoms = updatedData['commonSymptoms[]'];
+            delete updatedData['commonSymptoms[]'];
+        }
+        
+        console.log('Updating snake with data:', updatedData);
         
         const snake = await Snake.findByIdAndUpdate(
             req.params.id,
@@ -175,17 +207,20 @@ const updateSnake = async (req, res) => {
         );
 
         if (!snake) {
+            console.error('Snake not found with id:', req.params.id);
             return res.status(404).json({
                 success: false,
                 error: 'Snake not found'
             });
         }
 
+        console.log('Snake updated successfully:', snake);
         res.status(200).json({
             success: true,
             data: snake
         });
     } catch (error) {
+        console.error('Error in updateSnake:', error);
         if (error.name === 'ValidationError') {
             const messages = Object.values(error.errors).map(err => err.message);
             return res.status(400).json({
