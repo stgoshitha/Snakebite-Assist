@@ -1,4 +1,3 @@
-// src/pages/HospitalProfile.js
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -12,10 +11,7 @@ import { BiGlobe } from "react-icons/bi";
 import { Ri24HoursLine } from "react-icons/ri";
 import { PiCertificateBold } from "react-icons/pi";
 import { AiOutlineClockCircle } from "react-icons/ai";
-
-// Helper function
-const capitalizeWords = (str) =>
-  str?.replace(/\b\w/g, (char) => char.toUpperCase()) || "";
+import { capitalizeWords } from "../utils/textUtils";
 
 const HospitalProfile = () => {
   const [hospital, setHospital] = useState(null);
@@ -99,6 +95,7 @@ const HospitalProfile = () => {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
+    console.log("Submitted hospitalType:", formData.hospitalType)
     const updatedData = {
       ...formData,
       hospitalImages: formData.hospitalImages
@@ -121,8 +118,23 @@ const HospitalProfile = () => {
   };
 
   if (loading) return <p>Loading...</p>;
+
+  if (!hospital) {
+    return (
+      <div className="max-w-xl mx-auto p-6 bg-white rounded-lg shadow text-center">
+        <h2 className="text-2xl font-semibold mb-4">No hospital found.</h2>
+        <button
+          onClick={() =>
+            navigate("/hospital/hospitalprofile/createHospitalForm")
+          }
+          className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+        >
+          Create Hospital
+        </button>
+      </div>
+    );
+  }
   if (error) return <p>{error}</p>;
-  if (!hospital) return <p>No hospital found.</p>;
 
   return (
     <div className="max-w-6xl mx-auto p-6">
@@ -201,7 +213,7 @@ const HospitalProfile = () => {
               <HospitalProfileInfoItem
                 icon={BiGlobe}
                 label="Website"
-                value={hospital.website || "No link to show"}
+                value={hospital.webSiteLink || "No link to show"}
               />
             </div>
 
@@ -213,22 +225,28 @@ const HospitalProfile = () => {
               />
             </div>
 
-            <div className="p-4 bg-white rounded-xl shadow-sm">
-              <div className="flex items-center gap-2 mb-2">
-                <AiOutlineClockCircle size={25} />
-                <h4 className="font-semibold text-lg text-gray-800">
-                  Working Hours
-                </h4>
+            {!hospital.is24hrService ? (
+              <div>
+                <div className="p-4 bg-white rounded-xl shadow-sm">
+                  <div className="flex items-center gap-2 mb-2">
+                    <AiOutlineClockCircle size={25} />
+                    <h4 className="font-semibold text-lg text-gray-800">
+                      Working Hours
+                    </h4>
+                  </div>
+                  <ul className="list-disc list-inside text-gray-700 space-y-1 ml-1">
+                    {hospital.workingHours?.map((hours, index) => (
+                      <li key={index}>
+                        <span className="font-medium">{hours.day}:</span>{" "}
+                        {hours.open} - {hours.close}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
-              <ul className="list-disc list-inside text-gray-700 space-y-1 ml-1">
-                {hospital.workingHours?.map((hours, index) => (
-                  <li key={index}>
-                    <span className="font-medium">{hours.day}:</span>{" "}
-                    {hours.open} - {hours.close}
-                  </li>
-                ))}
-              </ul>
-            </div>
+            ) : (
+              ""
+            )}
 
             <div className="p-4 bg-white rounded-xl shadow-sm">
               <div className="flex items-center gap-2 mb-2">
