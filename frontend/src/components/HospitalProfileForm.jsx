@@ -1,6 +1,5 @@
-// src/components/HospitalProfileForm.js
 import React from "react";
-import LocationPicker from "./LocationPicker"; // Replace with your actual component if used
+import LocationPicker from "./LocationPicker";
 import { CiCircleRemove } from "react-icons/ci";
 
 const HospitalProfileForm = ({
@@ -23,7 +22,7 @@ const HospitalProfileForm = ({
         <h1 className="text-3xl font-semibold">Edit Hospital Details</h1>
       </div>
       <div className="p-6 rounded-lg shadow-sm space-y-5">
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid md:grid-cols-3 gap-6">
           <div className="flex flex-col">
             <label className="text-sm font-medium text-gray-700">
               Hospital Name
@@ -36,6 +35,25 @@ const HospitalProfileForm = ({
               required
               className="mt-1 px-4 py-2 border border-gray-300 rounded-md"
             />
+          </div>
+
+          <div className="flex flex-col w-full">
+            <label className="text-sm font-medium text-gray-700">
+              Hospital Type
+            </label>
+            <select
+              name="hospitalType"
+              value={formData.hospitalType}
+              onChange={handleChange}
+              className="mt-1 px-4 py-2 border border-gray-300 rounded-md"
+            >
+              <option value="" disabled>
+                Select hospital type
+              </option>
+              <option value="government">Government</option>
+              <option value="private">Private</option>
+              <option value="ayurvedic">Ayurvedic</option>
+            </select>
           </div>
 
           <div className="flex flex-col">
@@ -94,8 +112,8 @@ const HospitalProfileForm = ({
             <label className="text-sm font-medium text-gray-700">Website</label>
             <input
               type="text"
-              name="website"
-              value={formData.website}
+              name="webSiteLink"
+              value={formData.webSiteLink}
               onChange={handleChange}
               required
               className="mt-1 px-4 py-2 border border-gray-300 rounded-md"
@@ -210,14 +228,14 @@ const HospitalProfileForm = ({
       <div className="flex gap-4 justify-end">
         <button
           type="submit"
-          className="border border-blue-600 text-lg text-blue-600 px-4 py-2 w-40 rounded"
+          className="border border-blue-600 text-lg font-semibold text-blue-600 px-4 py-2 w-40 rounded"
         >
           Save Changes
         </button>
         <button
           type="button"
           onClick={() => setIsEditing(false)}
-          className="border border-red-600 text-lg text-red-600 px-4 py-2 w-40 rounded"
+          className="border border-red-600 text-lg font-semibold text-red-600 px-4 py-2 w-40 rounded"
         >
           Cancel
         </button>
