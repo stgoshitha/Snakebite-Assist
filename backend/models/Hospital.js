@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const HospitalSchema = new mongoose.Schema(
   {
     hospitalName: { type: String, required: true },
-    hospitalType:{type: String, required:true,enum: ["government ", "private", "ayurvedic"]},
+    hospitalType:{type: String, required:true,enum: ["government", "private", "ayurvedic"]},
     address: { type: String, required: true },
     city: { type: String, required: true },
     phoneNumber: { type: String, required: true },
@@ -11,6 +11,9 @@ const HospitalSchema = new mongoose.Schema(
       type: String, 
       required: true, 
       unique: true,
+    },
+    webSiteLink:{
+      type:String
     },
     latitude: { type: Number },
     longitude: { type: Number },
@@ -20,9 +23,9 @@ const HospitalSchema = new mongoose.Schema(
     },
     workingHours: [
       {
-        day: { type: String, required: true }, 
-        open: { type: String, required: true }, 
-        close: { type: String, required: true },
+        day: { type: String }, 
+        open: { type: String}, 
+        close: { type: String},
       },
     ],
     proofCertificate: { type: String, required: true },
