@@ -126,7 +126,7 @@ const Register = () => {
 
           <div className="relative gap-1">
             <input
-              type="password"
+              type={passwordVisibility.password ? "text" : "password"}
               name="confirmPassword"
               placeholder="Confirm Password"
               value={formData.confirmPassword}

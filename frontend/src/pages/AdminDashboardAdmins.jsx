@@ -117,7 +117,7 @@ const AdminDashboardAdmins = () => {
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-semibold mb-4">User Details</h1>
+      <h1 className="text-2xl font-semibold mb-4">Admin Details</h1>
       <div className="flex justify-end items-center mb-4">
         {user?.role === "superadmin" && (
           <button

@@ -8,6 +8,7 @@ const adminRoute = require('./routes/adminRoute');
 const hospitalRoute = require('./routes/hospitalRoute');
 const snakeRoute = require('./routes/snakeRoute');
 const searchRoute = require('./routes/searchRoute');
+const blogRoute = require('./routes/blogRoute');
 
 dotenv.config();
 
@@ -36,6 +37,7 @@ app.use('/api/admin', adminRoute);
 app.use('/api/hospital', hospitalRoute);
 app.use('/api/snakes', snakeRoute);
 app.use('/api/search', searchRoute);
+app.use('/api/blog', blogRoute);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

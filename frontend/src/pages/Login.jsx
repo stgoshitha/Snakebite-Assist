@@ -52,6 +52,7 @@ const Login = () => {
 
       if (request.status === 200 && response.token) {
         localStorage.setItem("token", response.token);
+        localStorage.setItem("user", JSON.stringify(response.user));
         dispatch(SetUser(response.user));
 
         if (response.user.role === "superadmin") {
@@ -91,7 +92,7 @@ const Login = () => {
 
           <div className="relative">
             <input
-              type="password"
+              type={passwordVisibility.password ? "text" : "password"}
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}

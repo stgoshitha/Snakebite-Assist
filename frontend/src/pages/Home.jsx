@@ -68,9 +68,15 @@ const Home = () => {
       )}
 
       {user?.role === "user" && (
-        <div>
+        <div className="flex flex-col justify-center items-center">
           <div className="flex justify-center items-center gap-2 text-2xl mb-3 "><img src={userProfile} className="w-15"/>{user.email} </div>
           <AutocompleteSearch />
+          <button
+            onClick={() => navigate("/userBlog")}
+            className="px-4 py-2 bg-zinc-600 text-white rounded"
+          >
+            My Blog
+          </button>
         </div>
         
       )}
@@ -112,6 +118,20 @@ const Home = () => {
             className="px-4 py-2 bg-zinc-600 text-white rounded"
           >
             View Hospital Not Approved Details
+          </button>
+
+          <button
+            onClick={() => navigate("/admin/adminBlogApproved")}
+            className="px-4 py-2 bg-zinc-600 text-white rounded"
+          >
+            View Blogs Approved Details
+          </button>
+
+          <button
+            onClick={() => navigate("/admin/adminBlogNotApproved")}
+            className="px-4 py-2 bg-zinc-600 text-white rounded"
+          >
+            View Blogs Not Approved Details
           </button>
         </div>
       )}
