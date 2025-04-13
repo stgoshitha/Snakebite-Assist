@@ -4,17 +4,19 @@ const User = require('../models/User');
 // Create a new hospital (One-to-One Relationship)
 const createHospital = async (req, res) => {
   try {
-    const { hospitalName, address, city, phoneNumber, email, latitude, longitude, is24hrService, workingHours, proofCertificate, hospitalImages } = req.body;
+    const { hospitalName, hospitalType, address, city, phoneNumber, email, webSiteLink, latitude, longitude, is24hrService, workingHours, proofCertificate, hospitalImages } = req.body;
 
     const userId = req.user.id;
 
     // Create new hospital
     const newHospital = new Hospital({
       hospitalName,
+      hospitalType,
       address,
       city,
       phoneNumber,
       email,
+      webSiteLink,
       latitude,
       longitude,
       is24hrService,
@@ -68,7 +70,7 @@ const getUserHospital = async (req, res) => {
 // Get all approved hospitals
 const getAllHospitalApproved = async (req, res) => {
   try {
-    const hospitals = await Hospital.find({ isApproved: true });
+    const hospitals = await Hospital.find({ isApproved: true }).populate('user','name');
     res.json(hospitals);
   } catch (error) {
     res.status(500).json({ message: 'Server Error', error: error.message });
@@ -120,7 +122,7 @@ const updateHospital = async (req, res) => {
       return res.status(403).json({ message: 'Unauthorized: You do not own this hospital' });
     }
 
-    const allowedFields = ['hospitalName', 'address', 'city', 'phoneNumber', 'latitude', 'longitude', 'is24hrService', 'workingHours', 'hospitalImages'];
+    const allowedFields = ['hospitalName', 'hospitalType',  'address', 'city', 'phoneNumber', 'email', 'webSiteLink', 'latitude', 'longitude', 'is24hrService', 'workingHours', 'hospitalImages'];
     allowedFields.forEach(field => {
       if (req.body[field] !== undefined) {
         hospital[field] = req.body[field];
