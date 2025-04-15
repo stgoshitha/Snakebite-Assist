@@ -12,6 +12,7 @@ import { Ri24HoursLine } from "react-icons/ri";
 import { PiCertificateBold } from "react-icons/pi";
 import { AiOutlineClockCircle } from "react-icons/ai";
 import { capitalizeWords } from "../utils/textUtils";
+import Header from "../components/common/Header";
 
 const HospitalProfile = () => {
   const [hospital, setHospital] = useState(null);
@@ -121,7 +122,9 @@ const HospitalProfile = () => {
 
   if (!hospital) {
     return (
-      <div className="max-w-xl mx-auto p-6 bg-white rounded-lg shadow text-center">
+      <div>
+        <Header/>
+      <div className="max-w-xl mt-4 mx-auto p-6 bg-white rounded-lg shadow text-center">
         <h2 className="text-2xl font-semibold mb-4">No hospital found.</h2>
         <button
           onClick={() =>
@@ -132,12 +135,13 @@ const HospitalProfile = () => {
           Create Hospital
         </button>
       </div>
+      </div>
     );
   }
   if (error) return <p>{error}</p>;
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
+    <div className="max-w-6xl mx-auto">
       {isEditing ? (
         <HospitalProfileForm
           formData={formData}
@@ -151,7 +155,9 @@ const HospitalProfile = () => {
           setIsEditing={setIsEditing}
         />
       ) : (
-        <div className="bg-white font-semibold shadow-sm rounded-lg p-6">
+        <div>
+          <Header/>
+          <div className="bg-white font-semibold shadow-sm rounded-lg p-6 mt-5">
           <div className="p-6 rounded-lg shadow-sm space-y-5 mb-10">
             <h1 className="text-3xl">Hospital Profile</h1>
           </div>
@@ -305,6 +311,7 @@ const HospitalProfile = () => {
               </button>
             </div>
           </div>
+        </div>
         </div>
       )}
     </div>

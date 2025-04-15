@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { SetUser } from "../redux/AuthSlice";
 import { MdOutlineVisibility, MdOutlineVisibilityOff } from "react-icons/md";
+import Header from "../components/common/Header";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -72,7 +73,9 @@ const Login = () => {
   };
 
   return (
-    <div className="flex justify-center  ">
+    <div>
+      <Header/>
+    <div className="flex justify-center mt-5">
       <div className="p-6 w-96 bg-white rounded">
         <h1 className="text-2xl mb-4 text-center font-bold">Login</h1>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -133,6 +136,7 @@ const Login = () => {
           </a>
         </label>
       </div>
+    </div>
     </div>
   );
 };

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { get } from "../services/ApiEndpoint";
 import { TbPointFilled } from "react-icons/tb";
+import Header from "../components/common/Header";
+import Loading from "../components/common/Loading";
 
 const BlogPage = () => {
   const [blogs, setBlogs] = useState([]);
@@ -21,9 +23,11 @@ const BlogPage = () => {
     fetchBlogs();
   }, []);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <Loading/>;
 
   return (
+    <div>
+      <Header/>
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">All Blogs</h1>
       {blogs.map((blog) => (
@@ -92,6 +96,7 @@ const BlogPage = () => {
           ))}
         </div>
       ))}
+    </div>
     </div>
   );
 };

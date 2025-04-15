@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { FaRegFilePdf } from "react-icons/fa6";
+import SideBar from "../components/common/SideBar";
+import Header from "../components/common/Header";
+import AdminLoading from "../components/common/AdminLoading";
 
 const AdminHospitalNotApproved = () => {
   const [hospitals, setHospitals] = useState([]);
@@ -69,11 +72,15 @@ const AdminHospitalNotApproved = () => {
     );
   });
 
-  if (loading) return <p>Loading hospitals...</p>;
+  if (loading) return <AdminLoading />;
   if (error) return <p>Error: {error}</p>;
 
   return (
-    <div className="p-4 flex flex-col gap-2">
+    <div className="flex gap-1">
+      <div><SideBar/></div>
+      <div className="ml-70 flex flex-col gap-2 overflow-auto w-full h-screen">
+        <Header/>
+      <div className=" p-5 flex flex-col gap-2 overflow-auto w-full h-screen">
       <div className="p-4 space-y-2 bg-white rounded-xl shadow-sm">
         <h2 className="text-xl font-semibold mb-4">Not Approved Hospitals</h2>
 
@@ -172,6 +179,8 @@ const AdminHospitalNotApproved = () => {
             </tbody>
           </table>
         </div>
+      </div>
+    </div>
       </div>
     </div>
   );

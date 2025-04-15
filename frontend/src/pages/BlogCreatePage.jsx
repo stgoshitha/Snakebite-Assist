@@ -7,6 +7,7 @@ import { BiImageAdd } from "react-icons/bi";
 import { AiOutlineVideoCameraAdd } from "react-icons/ai";
 import { FaListUl } from "react-icons/fa";
 import { BsTextareaResize } from "react-icons/bs";
+import Header from "../components/common/Header";
 
 const BlogCreatePage = () => {
   const [title, setTitle] = useState("");
@@ -58,6 +59,8 @@ const BlogCreatePage = () => {
   };
 
   return (
+    <div>
+      <Header/>
     <div className="p-6 max-w-3xl mx-auto ">
       <h1 className="text-2xl font-bold mb-4">Create Blog</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -203,6 +206,7 @@ const BlogCreatePage = () => {
           Submit Blog
         </button>
       </form>
+    </div>
     </div>
   );
 };

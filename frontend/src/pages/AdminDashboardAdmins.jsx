@@ -6,6 +6,9 @@ import { Lock, Unlock } from "lucide-react";
 import { CgAddR } from "react-icons/cg";
 import { FaEdit, FaSave } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
+import AdminLoading from "../components/common/AdminLoading";
+import SideBar from "../components/common/SideBar";
+import Header from "../components/common/Header";
 
 const AdminDashboardAdmins = () => {
   const user = useSelector((state) => state.Auth.user);
@@ -14,6 +17,7 @@ const AdminDashboardAdmins = () => {
   const [roleFilter, setRoleFilter] = useState("");
   const [editAdminId, setEditAdminId] = useState(null);
   const [editAdminData, setEditAdminData] = useState({});
+  const [loading, setLoading] = useState(true);
 
   //get all admins
   useEffect(() => {
@@ -33,6 +37,9 @@ const AdminDashboardAdmins = () => {
         setUsers(filteredUsers);
       } catch (err) {
         console.error(err);
+      }
+      finally {
+        setLoading(false);
       }
     };
 
@@ -115,8 +122,14 @@ const AdminDashboardAdmins = () => {
     }
   };
 
+  if (loading) return <AdminLoading/>
+
   return (
-    <div className="p-4">
+    <div className="flex gap-1">
+      <div><SideBar/></div>
+      <div className="ml-70 flex flex-col gap-2 overflow-auto w-full h-screen">
+        <Header/>
+      <div className="p-4">
       <h1 className="text-2xl font-semibold mb-4">Admin Details</h1>
       <div className="flex justify-end items-center mb-4">
         {user?.role === "superadmin" && (
@@ -262,6 +275,8 @@ const AdminDashboardAdmins = () => {
             ))}
           </tbody>
         </table>
+      </div>
+    </div>
       </div>
     </div>
   );

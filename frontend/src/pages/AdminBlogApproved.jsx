@@ -2,12 +2,16 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import BlogContentPreview from "../components/BlogContentPreview ";
 import { MdExpandMore } from "react-icons/md";
+import AdminLoading from "../components/common/AdminLoading";
+import SideBar from "../components/common/SideBar";
+import Header from "../components/common/Header";
 
 const AdminBlogApproved = () => {
   const [blogs, setBlogs] = useState([]);
   const [expandedBlog, setExpandedBlog] = useState(null);
   const [blogDetails, setBlogDetails] = useState({});
   const [sortByLikes, setSortByLikes] = useState(false); // state to control sorting
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchApprovedBlogs = async () => {
@@ -19,6 +23,9 @@ const AdminBlogApproved = () => {
       } catch (err) {
         console.error(err);
         alert("Failed to fetch approved blogs");
+      }
+      finally{
+        setLoading(false);
       }
     };
 
@@ -51,8 +58,16 @@ const AdminBlogApproved = () => {
     ? [...blogs].sort((a, b) => (b.likes?.length || 0) - (a.likes?.length || 0))
     : blogs;
 
+  if (loading) return <AdminLoading/>
+
   return (
-    <div className="p-6">
+    <div className="flex gap-1"> 
+      <div>
+        <SideBar/>
+      </div>
+      <div className="ml-70 flex flex-col gap-2 overflow-auto w-full h-screen">
+        <Header/>
+      <div className="p-6">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-bold">Approved Blogs</h2>
       </div>
@@ -113,6 +128,8 @@ const AdminBlogApproved = () => {
           ))}
         </tbody>
       </table>
+    </div>
+      </div>
     </div>
   );
 };

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { FiEye, FiEdit, FiTrash2 } from "react-icons/fi";
 import BlogContentPreview from "../components/BlogContentPreview ";
+import Header from "../components/common/Header";
+import Loading from "../components/common/Loading";
 
 const UserBlogPage = () => {
   const [blogs, setBlogs] = useState([]);
@@ -96,10 +98,12 @@ const UserBlogPage = () => {
     }
   };
 
-  if (loading) return <div className="text-center">Loading...</div>;
+  if (loading) return <Loading/>
   if (error) return <div className="text-center text-red-500">{error}</div>;
 
   return (
+    <div>
+      <Header/>
     <div className="p-6">
       <h2 className="text-2xl font-bold mb-4">Your Blogs</h2>
       {blogs.length === 0 ? (
@@ -151,6 +155,7 @@ const UserBlogPage = () => {
           ))}
         </div>
       )}
+    </div>
     </div>
   );
 };

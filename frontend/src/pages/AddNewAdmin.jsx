@@ -3,6 +3,8 @@ import { post } from "../services/ApiEndpoint";
 import { useNavigate } from "react-router-dom";
 import { MdOutlineVisibility, MdOutlineVisibilityOff } from "react-icons/md";
 import { IoClose } from "react-icons/io5";
+import Header from "../components/common/Header";
+import SideBar from "../components/common/SideBar";
 
 const AddNewAdmin = () => {
   const [formData, setFormData] = useState({
@@ -95,14 +97,18 @@ const AddNewAdmin = () => {
   };
 
   return (
-    <div className="flex justify-center items-center">
-      <div className="p-6 bg-white rounded-md w-96">
-        <div className="relative">
+    <div className="flex gap-1">
+      <div><SideBar/></div>
+      <div className="ml-70 flex flex-col overflow-auto w-full h-screen">
+      <Header/>
+      <div className="flex justify-start items-center">
+      <div className="relative px-20 py-10 bg-white rounded-md min-w-[600px]">
+        <div className="absolute right-15 top-5 ">
           <button
             onClick={() => navigate("/admin/allAdmins")}
-            className="absolute text-gray-500 text-xl"
+            className="absolute text-gray-500 text-xl cursor-pointer"
           >
-            <IoClose className="absolute text-2xl" />
+            <IoClose size={35} className="absolute text-2xl" />
           </button>
         </div>
         <h1 className="text-2xl mt-4 mb-4 text-center font-bold">
@@ -196,7 +202,7 @@ const AddNewAdmin = () => {
                 value="superadmin"
                 checked={formData.role === "superadmin"}
                 onChange={handleChange}
-                className="h-5 w-5"
+                className="h-5 w-5 cursor-pointer"
               />
               <span className="ml-2 text-justify ">Super Admin</span>
             </label>
@@ -208,7 +214,7 @@ const AddNewAdmin = () => {
                 value="admin"
                 checked={formData.role === "admin"}
                 onChange={handleChange}
-                className="h-5 w-5"
+                className="h-5 w-5 cursor-pointer"
               />
               <span className="ml-2 text-justify">Admin</span>
             </label>
@@ -220,11 +226,13 @@ const AddNewAdmin = () => {
 
           <button
             type="submit"
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 cursor-pointer"
           >
             {formData.role === "superadmin" ? "Add Super Admin" : "Add Admin"}
           </button>
         </form>
+      </div>
+    </div>
       </div>
     </div>
   );

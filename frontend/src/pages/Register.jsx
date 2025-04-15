@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { MdOutlineVisibility, MdOutlineVisibilityOff } from "react-icons/md";
 import { LiaHospital } from "react-icons/lia";
 import { Link } from "react-router-dom";
+import Header from "../components/common/Header";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -80,7 +81,9 @@ const Register = () => {
   };
 
   return (
-    <div className="flex justify-center items-center">
+    <div>
+      <Header />
+    <div className="flex justify-center items-center mt-5">
       <div className="p-6 bg-white rounded-md w-96">
         <h1 className="text-2xl mb-4 text-center font-bold">Register</h1>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -186,6 +189,7 @@ const Register = () => {
           </Link>
         </p>
       </div>
+    </div>
     </div>
   );
 };
