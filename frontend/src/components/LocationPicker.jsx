@@ -87,19 +87,22 @@ const LocationPicker = ({ formData, setFormData }) => {
       </div>
 
       {/* Map Container */}
-      <MapContainer
-        center={position}
-        zoom={8}
-        style={{ height: "400px", width: "100%" }}
-        className="mb-4 rounded border"
-      >
-        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-        {formData.latitude && formData.longitude && (
-          <Marker position={[formData.latitude, formData.longitude]} />
-        )}
-        <MapClickHandler />
-        <ChangeView center={position} />
-      </MapContainer>
+      <div className="flex-grow overflow-y-auto">
+    {/* Your map or other page content here */}
+    <MapContainer
+      center={position}
+      zoom={8}
+      style={{ height: "400px", width: "100%" }}
+      className="mb-4 rounded border"
+    >
+      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+      {formData.latitude && formData.longitude && (
+        <Marker position={[formData.latitude, formData.longitude]} />
+      )}
+      <MapClickHandler />
+      <ChangeView center={position} />
+    </MapContainer>
+  </div>
 
       {/* Lat/Long Info */}
       <div className="flex gap-5 text-sm text-gray-700 mt-2">
