@@ -27,7 +27,7 @@ function App() {
   return (
     <Router>
       <div className="min-h-screen bg-gray-50">
-        <main className="container mx-auto px-4 py-8">
+        <main className="container mx-auto">
           <Routes>
             <Route path='/admin' element={<AdminLayout />}>
               <Route index element={<Home />} />
@@ -60,6 +60,7 @@ function App() {
             <Route path='/' element={<PublicLayout />}>
               <Route path="login" element={<Login />} />
               <Route path="register" element={<Register />} />
+              <Route path="blogs" element={<BlogPage />} />
               
             </Route>
 
