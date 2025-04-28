@@ -114,6 +114,7 @@ const SnakeDetails = () => {
         const response = await axios.delete(`http://localhost:3000/api/snakes/${id}`);
         if (response.data.success) {
           dispatch({ type: 'DELETE_SNAKE', payload: id });
+          setSuccessMessage('Snake deleted successfully!');
         } else {
           setError('Failed to delete snake');
         }
