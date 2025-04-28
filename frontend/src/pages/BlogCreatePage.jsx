@@ -49,7 +49,7 @@ const BlogCreatePage = () => {
       );
 
       alert("Blog created!");
-      navigate("/");
+      navigate("/userBlog");
       setTitle("");
       setBlocks([]);
     } catch (err) {
@@ -61,8 +61,10 @@ const BlogCreatePage = () => {
   return (
     <div>
       <Header/>
-    <div className="p-6 max-w-3xl mx-auto ">
-      <h1 className="text-2xl font-bold mb-4">Create Blog</h1>
+      <div className="container mx-auto p-4 max-w-[1000px]">
+    <div className="flex items-center justify-center bg-green-500 text-white shadow-sm p-10 rounded mb-4">
+          <h2 className="text-9xl font-bold">CREATE BLOG</h2>
+        </div>
       <form onSubmit={handleSubmit} className="space-y-4">
         <input
           type="text"

@@ -141,7 +141,7 @@ const HospitalProfile = () => {
   if (error) return <p>{error}</p>;
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="mx-auto">
       {isEditing ? (
         <HospitalProfileForm
           formData={formData}
@@ -157,7 +157,7 @@ const HospitalProfile = () => {
       ) : (
         <div>
           <Header/>
-          <div className="bg-white font-semibold shadow-sm rounded-lg p-6 mt-5">
+          <div className="bg-white font-semibold shadow-sm rounded-lg p-6 mt-5 max-w-6xl mx-auto">
           <div className="p-6 rounded-lg shadow-sm space-y-5 mb-10">
             <h1 className="text-3xl">Hospital Profile</h1>
           </div>

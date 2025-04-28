@@ -22,6 +22,7 @@ import BlogCreatePage from "./pages/BlogCreatePage";
 import AdminBlogApproved from "./pages/AdminBlogApproved";
 import AdminBlogNotApproved from "./pages/AdminBlogNotApproved";
 import UserBlogPage from "./pages/UserBlogPage";
+import BlogUpdatePage from "./pages/BlogUpdatePage";
 
 function App() {
   return (
@@ -46,8 +47,9 @@ function App() {
             <Route path='/' element={<UserLayout />}>
               <Route index element={<Home />} />
               <Route path="blog" element={<BlogPage />} />
-              <Route path="blog/createBlog" element={<BlogCreatePage />} />
+              <Route path="userBlog/createBlog" element={<BlogCreatePage />} />
               <Route path="userBlog" element={<UserBlogPage />} />
+              <Route path="userBlog/update-blog/:blogId" element={<BlogUpdatePage />} />
             </Route>
 
             <Route path="/hospital" element={<HospitalLayout />}>
