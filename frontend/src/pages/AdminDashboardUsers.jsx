@@ -2,6 +2,9 @@ import { React, useEffect, useState } from "react";
 import { get, patch } from "../services/ApiEndpoint";
 import { Lock, Unlock } from "lucide-react";
 import { FaUsers, FaUser, FaHospital, FaUserSlash } from "react-icons/fa";
+import AdminLoading from "../components/common/AdminLoading";
+import Header from "../components/common/Header";
+import SideBar from "../components/common/SideBar";
 
 const AdminDashboardUsers = () => {
   const [users, setUsers] = useState([]);
@@ -10,6 +13,7 @@ const AdminDashboardUsers = () => {
   const [userCount, setUserCount] = useState(0);
   const [hospitalCount, setHospitalCount] = useState(0);
   const [blockedCount, setBlockedCount] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getUsers = async () => {
@@ -40,6 +44,9 @@ const AdminDashboardUsers = () => {
       } catch (err) {
         console.error(err);
       }
+      finally{
+        setLoading(false);
+      }
     };
 
     getUsers();
@@ -65,8 +72,14 @@ const AdminDashboardUsers = () => {
     }
   };
 
+  if(loading) return <AdminLoading/>
+
   return (
-    <div className="p-4">
+    <div className="flex gap-1">
+      <div><SideBar/></div>
+      <div className="ml-70 flex flex-col gap-2 overflow-auto w-full h-screen">
+        <Header/>
+      <div className="p-4">
       <h1 className="text-2xl font-semibold mb-4">User Details</h1>
 
       {/* Cards for Counts */}
@@ -105,9 +118,10 @@ const AdminDashboardUsers = () => {
       </div>
 
       <div className="overflow-x-auto">
-        <table className="min-w-full table-auto border-collapse bg-white shadow-md rounded-md">
+      <table className="min-w-max table-auto border-collapse bg-white shadow-md rounded-md">
           <thead>
             <tr className="bg-gray-100">
+            <th className="border-b py-2 px-4">#</th>
               <th className="py-2 px-4 border-b text-left w-xl">Email</th>
               <th className="py-2 px-4 border-b text-left w-sm">
                 <div className="flex gap-1 justify-left items-center">
@@ -141,8 +155,9 @@ const AdminDashboardUsers = () => {
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
+            {users.map((user,index) => (
               <tr key={user._id} className="hover:bg-gray-50">
+                <th className="border-b py-2 px-4">{index + 1}</th>
                 <td className="py-2 px-4 border-b">{user.email}</td>
                 <td className="py-2 px-4 border-b">{user.role}</td>
                 <td className="py-2 px-4 border-b">
@@ -181,6 +196,8 @@ const AdminDashboardUsers = () => {
             ))}
           </tbody>
         </table>
+      </div>
+    </div>
       </div>
     </div>
   );

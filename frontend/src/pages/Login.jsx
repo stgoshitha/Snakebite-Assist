@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { SetUser } from "../redux/AuthSlice";
 import { MdOutlineVisibility, MdOutlineVisibilityOff } from "react-icons/md";
+import Header from "../components/common/Header";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -52,6 +53,7 @@ const Login = () => {
 
       if (request.status === 200 && response.token) {
         localStorage.setItem("token", response.token);
+        localStorage.setItem("user", JSON.stringify(response.user));
         dispatch(SetUser(response.user));
 
         if (response.user.role === "superadmin") {
@@ -71,7 +73,9 @@ const Login = () => {
   };
 
   return (
-    <div className="flex justify-center  ">
+    <div>
+      <Header/>
+    <div className="flex justify-center mt-5">
       <div className="p-6 w-96 bg-white rounded">
         <h1 className="text-2xl mb-4 text-center font-bold">Login</h1>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -91,7 +95,7 @@ const Login = () => {
 
           <div className="relative">
             <input
-              type="password"
+              type={passwordVisibility.password ? "text" : "password"}
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -132,6 +136,7 @@ const Login = () => {
           </a>
         </label>
       </div>
+    </div>
     </div>
   );
 };
