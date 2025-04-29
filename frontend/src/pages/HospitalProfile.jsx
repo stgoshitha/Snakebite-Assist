@@ -13,6 +13,7 @@ import { PiCertificateBold } from "react-icons/pi";
 import { AiOutlineClockCircle } from "react-icons/ai";
 import { capitalizeWords } from "../utils/textUtils";
 import Header from "../components/common/Header";
+import Loading from "../components/common/Loading";
 
 const HospitalProfile = () => {
   const [hospital, setHospital] = useState(null);
@@ -96,7 +97,7 @@ const HospitalProfile = () => {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-    console.log("Submitted hospitalType:", formData.hospitalType)
+    console.log("Submitted hospitalType:", formData.hospitalType);
     const updatedData = {
       ...formData,
       hospitalImages: formData.hospitalImages
@@ -118,23 +119,23 @@ const HospitalProfile = () => {
     }
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <Loading/>;
 
   if (!hospital) {
     return (
       <div>
-        <Header/>
-      <div className="max-w-xl mt-4 mx-auto p-6 bg-white rounded-lg shadow text-center">
-        <h2 className="text-2xl font-semibold mb-4">No hospital found.</h2>
-        <button
-          onClick={() =>
-            navigate("/hospital/hospitalprofile/createHospitalForm")
-          }
-          className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-        >
-          Create Hospital
-        </button>
-      </div>
+        <Header />
+        <div className="w-[1000px] mt-4 mx-auto p-6 bg-white rounded-lg shadow text-center">
+          <h2 className="text-2xl font-semibold mb-4">No hospital found.</h2>
+          <button
+            onClick={() =>
+              navigate("/hospital/hospitalprofile/createHospitalForm")
+            }
+            className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+          >
+            Create Hospital
+          </button>
+        </div>
       </div>
     );
   }
@@ -143,175 +144,183 @@ const HospitalProfile = () => {
   return (
     <div className="mx-auto">
       {isEditing ? (
-        <HospitalProfileForm
-          formData={formData}
-          setFormData={setFormData}
-          handleChange={handleChange}
-          handleUpdate={handleUpdate}
-          handleImageUpload={handleImageUpload}
-          handleWorkingHoursChange={handleWorkingHoursChange}
-          addWorkingHours={addWorkingHours}
-          removeWorkingHours={removeWorkingHours}
-          setIsEditing={setIsEditing}
-        />
-      ) : (
-        <div>
-          <Header/>
-          <div className="bg-white font-semibold shadow-sm rounded-lg p-6 mt-5 max-w-6xl mx-auto">
-          <div className="p-6 rounded-lg shadow-sm space-y-5 mb-10">
-            <h1 className="text-3xl">Hospital Profile</h1>
-          </div>
-          <div className="flex justify-between items-start mb-5">
-            <div className="text-2xl font-bold">
-              {capitalizeWords(hospital.hospitalName)} -{" "}
-              {capitalizeWords(hospital.city)}
-            </div>
-            <div
-              className={
-                hospital.isApproved
-                  ? "text-green-600 font-semibold border py-1 px-4 rounded-2xl text-sm"
-                  : "text-red-600 font-semibold border py-1 px-4 rounded-2xl text-sm"
-              }
-            >
-              {hospital.isApproved ? "Approved" : "Not Approved"}
-            </div>
-          </div>
-
-          <div className="space-y-2 text-gray-700">
-            <div className="p-4 space-y-2 bg-white rounded-xl shadow-sm">
-              <HospitalProfileInfoItem
-                icon={FaHospital}
-                label="Hospital Type"
-                value={`${capitalizeWords(hospital.hospitalType)} Hospital`}
-              />
-              <HospitalProfileInfoItem
-                icon={FaRegAddressCard}
-                label="Address"
-                value={capitalizeWords(hospital.address)}
-              />
-              <HospitalProfileInfoItem
-                icon={HiOutlineLocationMarker}
-                label="Location"
-                value={
-                  <a
-                    href={`https://www.google.com/maps?q=${hospital.latitude},${hospital.longitude}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex justify-center hover:underline"
-                  >
-                    My Location
-                  </a>
-                }
-              />
-            </div>
-
-            <div className="flex p-4 pr-20 justify-between bg-white rounded-xl shadow-sm">
-              <HospitalProfileInfoItem
-                icon={FiPhone}
-                label="Phone"
-                value={hospital.phoneNumber}
-              />
-              <HospitalProfileInfoItem
-                icon={MdEmail}
-                label="Email"
-                value={hospital.email}
-              />
-              <HospitalProfileInfoItem
-                icon={BiGlobe}
-                label="Website"
-                value={hospital.webSiteLink || "No link to show"}
-              />
-            </div>
-
-            <div className="p-4 space-y-2 bg-white rounded-xl shadow-sm">
-              <HospitalProfileInfoItem
-                icon={Ri24HoursLine}
-                label="24h Service"
-                value={hospital.is24hrService ? "Available" : "Not Available"}
-              />
-            </div>
-
-            {!hospital.is24hrService ? (
-              <div>
-                <div className="p-4 bg-white rounded-xl shadow-sm">
-                  <div className="flex items-center gap-2 mb-2">
-                    <AiOutlineClockCircle size={25} />
-                    <h4 className="font-semibold text-lg text-gray-800">
-                      Working Hours
-                    </h4>
-                  </div>
-                  <ul className="list-disc list-inside text-gray-700 space-y-1 ml-1">
-                    {hospital.workingHours?.map((hours, index) => (
-                      <li key={index}>
-                        <span className="font-medium">{hours.day}:</span>{" "}
-                        {hours.open} - {hours.close}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            ) : (
-              ""
-            )}
-
-            <div className="p-4 bg-white rounded-xl shadow-sm">
-              <div className="flex items-center gap-2 mb-2">
-                <MdPhotoLibrary size={25} />
-                <h4 className="font-semibold text-lg text-gray-800">
-                  Hospital Images
-                </h4>
-              </div>
-              <div className="flex gap-5">
-                {hospital.hospitalImages?.map((image, index) => (
-                  <img
-                    key={index}
-                    src={image}
-                    alt={`Hospital ${index + 1}`}
-                    className="w-24 h-24 object-cover rounded border"
-                  />
-                ))}
-              </div>
-            </div>
-
-            <div className="p-4 bg-white rounded-xl shadow-sm">
-              <HospitalProfileInfoItem
-                icon={PiCertificateBold}
-                label="Proof Certificate PDF"
-                value={
-                  hospital.proofCertificate ? (
-                    <div
-                      onClick={() =>
-                        window.open(hospital.proofCertificate, "_blank")
-                      }
-                      className="font-semibold text-blue-600 cursor-pointer hover:underline"
-                    >
-                      Hospital Proof Certificate
-                    </div>
-                  ) : (
-                    <div className="font-semibold text-gray-500">
-                      No link to show
-                    </div>
-                  )
-                }
-              />
-            </div>
-
-            <div className="flex gap-4 mt-6 justify-end">
-              <button
-                className="px-4 py-2 border border-blue-600 text-lg text-blue-600 rounded hover:border-blue-700"
-                onClick={() => setIsEditing(true)}
-              >
-                Edit hospital profile
-              </button>
-              <button
-                onClick={handleDelete}
-                className="px-4 py-2  border-red-600 border text-lg text-red-600 rounded hover:border-red-700"
-              >
-                Delete hospital
-              </button>
-            </div>
+        <div className="flex justify-center ">
+          <div className="w-[1000px]">
+            <HospitalProfileForm
+              formData={formData}
+              setFormData={setFormData}
+              handleChange={handleChange}
+              handleUpdate={handleUpdate}
+              handleImageUpload={handleImageUpload}
+              handleWorkingHoursChange={handleWorkingHoursChange}
+              addWorkingHours={addWorkingHours}
+              removeWorkingHours={removeWorkingHours}
+              setIsEditing={setIsEditing}
+            />
           </div>
         </div>
+      ) : (
+        <div>
+          <Header />
+          <div className="flex justify-center">
+            <div className="bg-white font-semibold shadow-sm rounded-lg p-6 mt-5 max-w-6xl w-[1000px]">
+              <div className="p-6 rounded-lg shadow-sm space-y-5 mb-10">
+                <h1 className="text-3xl">Hospital Profile</h1>
+              </div>
+              <div className="flex justify-between items-start mb-5">
+                <div className="text-2xl font-bold">
+                  {capitalizeWords(hospital.hospitalName)} -{" "}
+                  {capitalizeWords(hospital.city)}
+                </div>
+                <div
+                  className={
+                    hospital.isApproved
+                      ? "text-green-600 font-semibold border py-1 px-4 rounded-2xl text-sm"
+                      : "text-red-600 font-semibold border py-1 px-4 rounded-2xl text-sm"
+                  }
+                >
+                  {hospital.isApproved ? "Approved" : "Not Approved"}
+                </div>
+              </div>
+
+              <div className="space-y-2 text-gray-700">
+                <div className="p-4 space-y-2 bg-white rounded-xl shadow-sm">
+                  <HospitalProfileInfoItem
+                    icon={FaHospital}
+                    label="Hospital Type"
+                    value={`${capitalizeWords(hospital.hospitalType)} Hospital`}
+                  />
+                  <HospitalProfileInfoItem
+                    icon={FaRegAddressCard}
+                    label="Address"
+                    value={capitalizeWords(hospital.address)}
+                  />
+                  <HospitalProfileInfoItem
+                    icon={HiOutlineLocationMarker}
+                    label="Location"
+                    value={
+                      <a
+                        href={`https://www.google.com/maps?q=${hospital.latitude},${hospital.longitude}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex justify-center hover:underline"
+                      >
+                        My Location
+                      </a>
+                    }
+                  />
+                </div>
+
+                <div className="flex p-4 pr-20 justify-between bg-white rounded-xl shadow-sm">
+                  <HospitalProfileInfoItem
+                    icon={FiPhone}
+                    label="Phone"
+                    value={hospital.phoneNumber}
+                  />
+                  <HospitalProfileInfoItem
+                    icon={MdEmail}
+                    label="Email"
+                    value={hospital.email}
+                  />
+                  <HospitalProfileInfoItem
+                    icon={BiGlobe}
+                    label="Website"
+                    value={hospital.webSiteLink || "No link to show"}
+                  />
+                </div>
+
+                <div className="p-4 space-y-2 bg-white rounded-xl shadow-sm">
+                  <HospitalProfileInfoItem
+                    icon={Ri24HoursLine}
+                    label="24h Service"
+                    value={
+                      hospital.is24hrService ? "Available" : "Not Available"
+                    }
+                  />
+                </div>
+
+                {!hospital.is24hrService ? (
+                  <div>
+                    <div className="p-4 bg-white rounded-xl shadow-sm">
+                      <div className="flex items-center gap-2 mb-2">
+                        <AiOutlineClockCircle size={25} />
+                        <h4 className="font-semibold text-lg text-gray-800">
+                          Working Hours
+                        </h4>
+                      </div>
+                      <ul className="list-disc list-inside text-gray-700 space-y-1 ml-1">
+                        {hospital.workingHours?.map((hours, index) => (
+                          <li key={index}>
+                            <span className="font-medium">{hours.day}:</span>{" "}
+                            {hours.open} - {hours.close}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                ) : (
+                  ""
+                )}
+
+                <div className="p-4 bg-white rounded-xl shadow-sm">
+                  <div className="flex items-center gap-2 mb-2">
+                    <MdPhotoLibrary size={25} />
+                    <h4 className="font-semibold text-lg text-gray-800">
+                      Hospital Images
+                    </h4>
+                  </div>
+                  <div className="flex gap-5">
+                    {hospital.hospitalImages?.map((image, index) => (
+                      <img
+                        key={index}
+                        src={image}
+                        alt={`Hospital ${index + 1}`}
+                        className="w-24 h-24 object-cover rounded border"
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                <div className="p-4 bg-white rounded-xl shadow-sm">
+                  <HospitalProfileInfoItem
+                    icon={PiCertificateBold}
+                    label="Proof Certificate PDF"
+                    value={
+                      hospital.proofCertificate ? (
+                        <div
+                          onClick={() =>
+                            window.open(hospital.proofCertificate, "_blank")
+                          }
+                          className="font-semibold text-blue-600 cursor-pointer hover:underline"
+                        >
+                          Hospital Proof Certificate
+                        </div>
+                      ) : (
+                        <div className="font-semibold text-gray-500">
+                          No link to show
+                        </div>
+                      )
+                    }
+                  />
+                </div>
+
+                <div className="flex gap-4 mt-6 justify-end">
+                  <button
+                    className="px-4 py-2 border border-blue-600 text-lg text-blue-600 rounded hover:border-blue-700"
+                    onClick={() => setIsEditing(true)}
+                  >
+                    Edit hospital profile
+                  </button>
+                  <button
+                    onClick={handleDelete}
+                    className="px-4 py-2  border-red-600 border text-lg text-red-600 rounded hover:border-red-700"
+                  >
+                    Delete hospital
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
