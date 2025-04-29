@@ -8,7 +8,6 @@ import Home from "./pages/Home";
 import AdminDashboardUsers from "./pages/AdminDashboardUsers";
 import AdminDashboardAdmins from "./pages/AdminDashboardAdmins";
 import AddNewAdmin from "./pages/AddNewAdmin";
-import HospitalDashboard from "./pages/HospitalDashboard";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import AdminHospitalApproved from "./pages/AdminHospitalApproved";
@@ -54,7 +53,6 @@ function App() {
 
             <Route path="/hospital" element={<HospitalLayout />}>
               <Route index element={<Home />} />
-              <Route path="hospitaldash" element={<HospitalDashboard />} />
             <Route path="hospitalprofile" element={<HospitalProfile />} />
             <Route path="hospitalprofile/createHospitalForm" element={<CreateHospitalForm />} />
             </Route>
