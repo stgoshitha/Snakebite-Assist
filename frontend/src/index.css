@@ -15,6 +15,9 @@
   clip-path: polygon(0 0, 100% 0, 100% 0%, 100% 80%, 0 50%); /* Custom shape */
 }
 
+.leaflet-container {
+  z-index: 10 !important;
+}
 
 
 @keyframes l2 {
