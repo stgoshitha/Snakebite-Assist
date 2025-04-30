@@ -50,6 +50,23 @@ const search = async (req, res) => {
   }
 };
 
+const isHospitalOpenNow = (hospital) => {
+  if (hospital.is24hrService) return true;
+
+  const now = new Date();
+  const currentDay = now.toLocaleString("en-US", { weekday: "long" });
+  const currentTime = now.toTimeString().split(" ")[0].slice(0, 5);
+
+  const todayHours = hospital.workingHours.find(
+    (day) => day.day.toLowerCase() === currentDay.toLowerCase()
+  );
+
+  if (!todayHours || !todayHours.open || !todayHours.close) return false;
+
+  return todayHours.open <= currentTime && currentTime <= todayHours.close;
+};
+
+
 
 // Convert degrees to radians
 const toRad = (deg) => (deg * Math.PI) / 180;
@@ -77,7 +94,7 @@ const findNearestHospitals = async (req, res) => {
   }
 
   try {
-    const hospitals = await Hospital.find({});
+    const hospitals = await Hospital.find({isApproved: true});
 
     const hospitalsWithDistance = hospitals
       .map((hospital) => {
@@ -93,12 +110,13 @@ const findNearestHospitals = async (req, res) => {
 
           return {
             ...hospital.toObject(),
-            distanceInKm: parseFloat(distance.toFixed(2))
+            distanceInKm: parseFloat(distance.toFixed(2)),
+            isOpenNow: isHospitalOpenNow(hospital)
           };
         }
         return null;
       })
-      .filter(Boolean)
+      .filter(h => h && h.distanceInKm <= 20)
       .sort((a, b) => a.distanceInKm - b.distanceInKm)
       .slice(0, 5);
 
@@ -116,5 +134,7 @@ const findNearestHospitals = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+
 
 module.exports = { search ,findNearestHospitals};
