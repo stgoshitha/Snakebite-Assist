@@ -1,6 +1,10 @@
-# 🐍 Snakebite Assist - MERN Stack Web Application
+<p align="center">
+  <img src="logo.png" alt="Snakebite Assist Logo" width="120" />
+</p>
 
-![Snakebite Assist Logo](path/to/logo.png)
+<h1 align="center">🐍 Snakebite Assist - MERN Stack Web Application</h1>
+
+
 
 ## 🌐 Introduction
 
