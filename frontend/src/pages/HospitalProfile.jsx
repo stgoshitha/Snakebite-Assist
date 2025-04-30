@@ -200,7 +200,7 @@ const HospitalProfile = () => {
                     label="Location"
                     value={
                       <a
-                        href={`https://www.google.com/maps?q=${hospital.latitude},${hospital.longitude}`}
+                        href={`https://www.google.com/maps?q=${hospital.location.coordinates[1]},${hospital.location.coordinates[0]}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex justify-center hover:underline"

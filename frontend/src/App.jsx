@@ -22,6 +22,7 @@ import AdminBlogApproved from "./pages/AdminBlogApproved";
 import AdminBlogNotApproved from "./pages/AdminBlogNotApproved";
 import UserBlogPage from "./pages/UserBlogPage";
 import BlogUpdatePage from "./pages/BlogUpdatePage";
+import NearestHospital from "./pages/NearestHospital";
 
 function App() {
   return (
@@ -49,19 +50,21 @@ function App() {
               <Route path="userBlog/createBlog" element={<BlogCreatePage />} />
               <Route path="userBlog" element={<UserBlogPage />} />
               <Route path="userBlog/update-blog/:blogId" element={<BlogUpdatePage />} />
+              <Route path="nearestHospital" element={<NearestHospital />} />
             </Route>
 
             <Route path="/hospital" element={<HospitalLayout />}>
               <Route index element={<Home />} />
-            <Route path="hospitalprofile" element={<HospitalProfile />} />
-            <Route path="hospitalprofile/createHospitalForm" element={<CreateHospitalForm />} />
+              <Route path="hospitalprofile" element={<HospitalProfile />} />
+              <Route path="hospitalprofile/createHospitalForm" element={<CreateHospitalForm />} />
+              <Route path="nearestHospital" element={<NearestHospital />} />
             </Route>
 
             <Route path='/' element={<PublicLayout />}>
               <Route path="login" element={<Login />} />
               <Route path="register" element={<Register />} />
               <Route path="blogs" element={<BlogPage />} />
-              
+              <Route path="nearestHospital" element={<NearestHospital />} />
             </Route>
 
             <Route path="/admin/snake-details" element={<SnakeDetails />} />

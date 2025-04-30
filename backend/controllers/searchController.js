@@ -1,4 +1,5 @@
 const Snake = require("../models/SnakeModel.js");
+const Hospital = require("../models/Hospital.js");
 
 const search = async (req, res) => {
   const { keyword } = req.query;
@@ -49,4 +50,91 @@ const search = async (req, res) => {
   }
 };
 
-module.exports = { search };
+const isHospitalOpenNow = (hospital) => {
+  if (hospital.is24hrService) return true;
+
+  const now = new Date();
+  const currentDay = now.toLocaleString("en-US", { weekday: "long" });
+  const currentTime = now.toTimeString().split(" ")[0].slice(0, 5);
+
+  const todayHours = hospital.workingHours.find(
+    (day) => day.day.toLowerCase() === currentDay.toLowerCase()
+  );
+
+  if (!todayHours || !todayHours.open || !todayHours.close) return false;
+
+  return todayHours.open <= currentTime && currentTime <= todayHours.close;
+};
+
+
+
+// Convert degrees to radians
+const toRad = (deg) => (deg * Math.PI) / 180;
+
+// Haversine formula
+const getDistance = (lat1, lon1, lat2, lon2) => {
+  const R = 6371;
+  const dLat = toRad(lat2 - lat1);
+  const dLon = toRad(lon2 - lon1);
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(lat1)) *
+      Math.cos(toRad(lat2)) *
+      Math.sin(dLon / 2) ** 2;
+
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+};
+
+const findNearestHospitals = async (req, res) => {
+  const { lat, lng } = req.query;
+
+  if (!lat || !lng) {
+    return res.status(400).json({ message: "Latitude and longitude required" });
+  }
+
+  try {
+    const hospitals = await Hospital.find({isApproved: true});
+
+    const hospitalsWithDistance = hospitals
+      .map((hospital) => {
+        const coords = hospital.location?.coordinates;
+        if (coords && coords.length === 2) {
+          const [lng2, lat2] = coords;
+          const distance = getDistance(
+            parseFloat(lat),
+            parseFloat(lng),
+            lat2,
+            lng2
+          );
+
+          return {
+            ...hospital.toObject(),
+            distanceInKm: parseFloat(distance.toFixed(2)),
+            isOpenNow: isHospitalOpenNow(hospital)
+          };
+        }
+        return null;
+      })
+      .filter(h => h && h.distanceInKm <= 20)
+      .sort((a, b) => a.distanceInKm - b.distanceInKm)
+      .slice(0, 5);
+
+    if (hospitalsWithDistance.length === 0) {
+      return res.status(404).json({ message: "No nearby hospitals found" });
+    }
+
+    res.json({
+      message: "Nearest hospitals found",
+      data: hospitalsWithDistance,
+    });
+
+  } catch (error) {
+    console.error("Error finding nearest hospitals:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+
+module.exports = { search ,findNearestHospitals};
