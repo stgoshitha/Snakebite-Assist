@@ -37,7 +37,8 @@ const AdminDashboardAdmins = () => {
         setUsers(filteredUsers);
       } catch (err) {
         console.error(err);
-      } finally {
+      }
+      finally {
         setLoading(false);
       }
     };
@@ -121,177 +122,161 @@ const AdminDashboardAdmins = () => {
     }
   };
 
-  if (loading) return <AdminLoading />;
+  if (loading) return <AdminLoading/>
 
   return (
     <div className="flex gap-1">
-      <div>
-        <SideBar />
-      </div>
+      <div><SideBar/></div>
       <div className="ml-70 flex flex-col gap-2 overflow-auto w-full h-screen">
-        <Header />
-        <div className="p-4 flex flex-col gap-2 bg-gray-100 h-screen overflow-auto">
-          <div className="p-4 space-y-2 bg-white rounded-xl shadow-sm">
-            <h1 className="text-2xl font-semibold mb-4">Admin Details</h1>
-          </div>
-          <div className="p-4 space-y-2 bg-white rounded-xl shadow-sm">
-            <div className="overflow-x-auto">
-              <div className="flex justify-end items-center mb-5">
-                <button
-                  onClick={() => navigate("/admin/allAdmins/addAdminForm")}
-                  className="flex items-center gap-2 px-4 py-2 bg-zinc-600 text-white rounded shadow-md hover:bg-zinc-700 transition duration-300"
-                >
-                  <CgAddR size={20} /> Create New Admin
-                </button>
-              </div>
-              <table className="min-w-full table-auto border-collapse bg-white shadow-md rounded-md">
-                <thead>
-                  <tr className="bg-gray-100 text-left">
-                    <th className="py-2 px-4 border-b text-center">#</th>
-                    <th className="py-2 px-4 border-b">Name</th>
-                    <th className="py-2 px-4 border-b">Email</th>
-                    <th className="py-2 px-4 border-b">
-                      <div className="flex gap-1 justify-left items-center">
-                        <label className="mr-2">Role </label>
-                        <select
-                          value={roleFilter}
-                          onChange={(e) => setRoleFilter(e.target.value)}
-                          className="p-2 w-48 border rounded-md"
-                        >
-                          <option value="">All Roles</option>
-                          <option value="superadmin">Super Admin</option>
-                          <option value="admin">Admin</option>
-                        </select>
-                      </div>
-                    </th>
-                    <th className="py-2 px-4 border-b text-left w-32">
-                      Password
-                    </th>
-                    <th className="py-2 px-4 border-b">Access Status</th>
-                    <th className="py-2 px-4 border-b">Change Access</th>
-                    <th className="py-2 px-4 border-b">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {users.map((user, index) => (
-                    <tr key={user._id} className="hover:bg-gray-50">
-                      <td className="text-center py-2 px-4 border-b">
-                        {index + 1}
-                      </td>
-                      <td className="py-2 px-4 border-b">
-                        {editAdminId === user._id ? (
-                          <input
-                            type="text"
-                            value={editAdminData.name}
-                            onChange={(e) => handleInputChange(e, "name")}
-                            className="p-2 border rounded-md w-full"
-                          />
-                        ) : (
-                          user.name
-                        )}
-                      </td>
-                      <td className="py-2 px-4 border-b">
-                        {editAdminId === user._id ? (
-                          <input
-                            type="email"
-                            value={editAdminData.email}
-                            onChange={(e) => handleInputChange(e, "email")}
-                            className="p-2 border rounded-md w-full"
-                          />
-                        ) : (
-                          user.email
-                        )}
-                      </td>
-                      <td className="py-2 px-4 border-b">
-                        {editAdminId === user._id ? (
-                          <select
-                            value={editAdminData.role || ""}
-                            onChange={(e) => handleInputChange(e, "role")}
-                            className="p-2 border rounded-md w-full"
-                          >
-                            <option value="superadmin">Super Admin</option>
-                            <option value="admin">Admin</option>
-                          </select>
-                        ) : (
-                          user.role
-                        )}
-                      </td>
-                      <td className="py-2 px-4 border-b">
-                        {editAdminId === user._id ? (
-                          <input
-                            type="password"
-                            value={editAdminData.password}
-                            onChange={(e) => handleInputChange(e, "password")}
-                            className="p-2 border rounded-md w-full"
-                          />
-                        ) : (
-                          "******"
-                        )}
-                      </td>
-                      <td className="py-2 px-4 border-b">
-                        <div className="flex justify-center items-center">
-                          <div
-                            className={`text-center w-20 rounded-2xl font-semibold border ${
-                              user.isBlocked
-                                ? "bg-red-100 text-red-600 border-none"
-                                : "bg-green-100 text-green-600 border-none"
-                            }`}
-                          >
-                            {user.isBlocked ? "Blocked" : "Active"}
-                          </div>
-                        </div>
-                      </td>
-                      <td className="flex justify-center items-center py-2 px-4 border-b">
-                        <button
-                          onClick={() =>
-                            handleBlockUser(user._id, user.isBlocked)
-                          }
-                          className={`flex items-center gap-2 px-4 py-2 w-28 rounded-md text-white font-medium shadow-md ${
-                            user.isBlocked
-                              ? "bg-green-600 hover:bg-green-500"
-                              : "bg-red-600 hover:bg-red-500"
-                          }`}
-                        >
-                          {user.isBlocked ? (
-                            <Unlock size={18} />
-                          ) : (
-                            <Lock size={18} />
-                          )}
-                          {user.isBlocked ? "Unblock" : "Block"}
-                        </button>
-                      </td>
-                      <td className="py-2 px-4 border-b">
-                        <div className="flex gap-2 justify-center">
-                          {editAdminId === user._id ? (
-                            <button
-                              onClick={handleSaveEdit}
-                              className="px-4 py-2 rounded-md text-white bg-green-500 hover:bg-green-600"
-                            >
-                              <FaSave size={20} />
-                            </button>
-                          ) : (
-                            <button
-                              onClick={() => handleEditClick(user)}
-                              className="px-4 py-2 rounded-md text-white bg-green-500 hover:bg-green-600"
-                            >
-                              <FaEdit size={20} />
-                            </button>
-                          )}
-                          <button
-                            onClick={() => handleDeleteUser(user._id)}
-                            className="px-4 py-2 rounded-md text-white bg-red-500 hover:bg-red-600"
-                          >
-                            <MdDelete size={20} />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
+        <Header/>
+      <div className="p-4">
+      <h1 className="text-2xl font-semibold mb-4">Admin Details</h1>
+      <div className="flex justify-end items-center mb-4">
+        {user?.role === "superadmin" && (
+          <button
+            onClick={() => navigate("/admin/allAdmins/addAdminForm")}
+            className="flex items-center gap-2 px-4 py-2 bg-zinc-600 text-white rounded shadow-md hover:bg-zinc-700 transition duration-300"
+          >
+            <CgAddR size={20} /> Create New Admin
+          </button>
+        )}
+      </div>
+      <div className="overflow-x-auto">
+        <table className="min-w-full table-auto border-collapse bg-white shadow-md rounded-md">
+          <thead>
+            <tr className="bg-gray-100">
+              <th className="py-2 px-4 border-b text-left w-64">Name</th>
+              <th className="py-2 px-4 border-b text-left w-72">Email</th>
+              <th className="py-2 px-4 border-b text-left w-64">
+                <div className="flex gap-1 justify-left items-center">
+                  <label className="mr-2">Role </label>
+                  <select
+                    value={roleFilter}
+                    onChange={(e) => setRoleFilter(e.target.value)}
+                    className="p-2 w-48 border rounded-md"
+                  >
+                    <option value="">All Roles</option>
+                    <option value="superadmin">Super Admin</option>
+                    <option value="admin">Admin</option>
+                  </select>
+                </div>
+              </th>
+              <th className="py-2 px-4 border-b text-left w-32">Password</th>
+              <th className="py-2 px-4 border-b">Access Status</th>
+              <th className="py-2 px-4 border-b">Change Access</th>
+              <th className="py-2 px-4 border-b">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((user) => (
+              <tr key={user._id} className="hover:bg-gray-50">
+                <td className="py-2 px-4 border-b">
+                  {editAdminId === user._id ? (
+                    <input
+                      type="text"
+                      value={editAdminData.name}
+                      onChange={(e) => handleInputChange(e, "name")}
+                      className="p-2 border rounded-md w-full"
+                    />
+                  ) : (
+                    user.name
+                  )}
+                </td>
+                <td className="py-2 px-4 border-b">
+                  {editAdminId === user._id ? (
+                    <input
+                      type="email"
+                      value={editAdminData.email}
+                      onChange={(e) => handleInputChange(e, "email")}
+                      className="p-2 border rounded-md w-full"
+                    />
+                  ) : (
+                    user.email
+                  )}
+                </td>
+                <td className="py-2 px-4 border-b">
+                  {editAdminId === user._id ? (
+                    <select
+                      value={editAdminData.role || ""}
+                      onChange={(e) => handleInputChange(e, "role")}
+                      className="p-2 border rounded-md w-full"
+                    >
+                      <option value="superadmin">Super Admin</option>
+                      <option value="admin">Admin</option>
+                    </select>
+                  ) : (
+                    user.role
+                  )}
+                </td>
+                <td className="py-2 px-4 border-b">
+                  {editAdminId === user._id ? (
+                    <input
+                      type="password"
+                      value={editAdminData.password}
+                      onChange={(e) => handleInputChange(e, "password")}
+                      className="p-2 border rounded-md w-full"
+                    />
+                  ) : (
+                    "******" 
+                  )}
+                </td>
+                <td className="py-2 px-4 border-b">
+                  <div className="flex justify-center items-center">
+                    <div
+                      className={`text-center w-20 rounded-2xl font-semibold border ${
+                        user.isBlocked
+                          ? "bg-red-100 text-red-600 border-none"
+                          : "bg-green-100 text-green-600 border-none"
+                      }`}
+                    >
+                      {user.isBlocked ? "Blocked" : "Active"}
+                    </div>
+                  </div>
+                </td>
+                <td className="flex justify-center items-center py-2 px-4 border-b">
+                  <button
+                    onClick={() => handleBlockUser(user._id, user.isBlocked)}
+                    className={`flex items-center gap-2 px-4 py-2 w-28 rounded-md text-white font-medium shadow-md ${
+                      user.isBlocked
+                        ? "bg-green-600 hover:bg-green-500"
+                        : "bg-red-600 hover:bg-red-500"
+                    }`}
+                  >
+                    {user.isBlocked ? <Unlock size={18} /> : <Lock size={18} />}
+                    {user.isBlocked ? "Unblock" : "Block"}
+                  </button>
+                </td>
+                <td className="py-2 px-4 border-b">
+                  <div className="flex gap-2 justify-center">
+                    {editAdminId === user._id ? (
+                      <button
+                        onClick={handleSaveEdit}
+                        className="px-4 py-2 rounded-md text-white bg-green-500 hover:bg-green-600"
+                      >
+                        <FaSave size={20} />
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => handleEditClick(user)}
+                        className="px-4 py-2 rounded-md text-white bg-green-500 hover:bg-green-600"
+                      >
+                        <FaEdit size={20} />
+                      </button>
+                    )}
+                    <button
+                      onClick={() => handleDeleteUser(user._id)}
+                      className="px-4 py-2 rounded-md text-white bg-red-500 hover:bg-red-600"
+                    >
+                      <MdDelete size={20} />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
       </div>
     </div>
   );

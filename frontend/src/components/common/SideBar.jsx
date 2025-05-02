@@ -73,7 +73,7 @@ const SideBar = () => {
 
         <div className="px-3 py-4 hover:bg-gray-200 hover:text-green-600 cursor-pointer">
           <Link
-            to="/snakes"
+            to="/admin/snake-details"
             className="flex items-center gap-3 hover:text-green-600"
           >
             <VscSnake size={25} /> Snake Information

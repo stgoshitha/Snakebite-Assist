@@ -1,0 +1,67 @@
+/* Fix for Leaflet default icon paths */
+.leaflet-default-icon-path {
+  background-image: url("https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png");
+}
+
+.leaflet-default-shadow-path {
+  background-image: url("https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png");
+}
+
+/* Fix for Leaflet container in modal */
+.leaflet-container {
+  height: 100%;
+  width: 100%;
+  z-index: 1;
+}
+
+/* Ensure map controls appear above the map */
+.leaflet-control-container .leaflet-top,
+.leaflet-control-container .leaflet-bottom {
+  z-index: 2;
+}
+
+/* Custom styles for province polygons */
+.province-polygon {
+  transition: all 0.3s ease;
+}
+
+.province-polygon:hover {
+  cursor: pointer;
+}
+
+/* Fix for map container in modal */
+.modal-map-container {
+  position: relative;
+  z-index: 1;
+}
+
+/* Ensure proper stacking context */
+.leaflet-pane {
+  z-index: 1;
+}
+
+.leaflet-top,
+.leaflet-bottom {
+  z-index: 2;
+}
+
+/* Fix for map tiles */
+.leaflet-tile-container img {
+  width: 256px !important;
+  height: 256px !important;
+}
+
+.leaflet-tooltip.province-tooltip {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #666;
+  border-radius: 4px;
+  color: #333;
+  font-weight: bold;
+  padding: 4px 8px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.leaflet-tooltip.province-tooltip::before {
+  display: none;
+} 

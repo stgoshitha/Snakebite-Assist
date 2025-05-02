@@ -1,23 +1,14 @@
 import React from "react";
 import AutocompleteSearch from "../AutocompleteSearch";
 import logo from "../../assets/logo.png";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
 
 const HeroSection = () => {
-  const user = useSelector((state) => state.Auth.user);
-  const navigate = useNavigate();
-
   return (
-    <section className="relative h-screen flex justify-center bg-gradient-to-r from-[#000428cc] to-[#00B4DBcc] overflow-hidden">
-      {/* Search bar centered above everything */}
-
-      {/* Content below search bar */}
-      <div className="z-10 border-white/20 rounded-3xl  p-12  text-center animate-fade-in space-y-6">
-        <div className="flex justify-center items-center space-x-4">
+    <section className="relative flex items-start justify-center h-screen bg-gradient-to-r from-[#000428] to-[#00B4DB] overflow-hidden ">
+      <div className="z-10 backdrop-blur-lg bg-white/10 border border-white/20 rounded-3xl shadow-2xl p-8 md:p-12 max-w-5xl w-full text-center animate-fade-in space-y-1 mt-10">
+        <div className="flex justify-center items-center space-x-1">
           <img src={logo} alt="Snake Icon" className="w-20 h-20" />
-          <h1 className="text-7xl font-extrabold text-white drop-shadow-lg">
+          <h1 className="text-5xl md:text-7xl font-extrabold text-white drop-shadow-lg">
             Bitten by a snake?
           </h1>
         </div>
@@ -25,20 +16,13 @@ const HeroSection = () => {
           Stay calm!
         </h1>
 
-        <div className="absolute inset-0 flex justify-center z-20 px-4 top-65 ">
-          <div className="w-[60%]">
-            <AutocompleteSearch />
-          </div>
-
-          <div className="absolute top-1/7 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center space-y-4">
-            <button
-              className="bg-orange-500 hover:bg-orange-600 text-white text-lg font-semibold px-8 py-4 rounded-full shadow-md transition duration-300 ease-in-out"
-              onClick={() => navigate("/nearestHospital")}
-            >
-              Get Nearest Hospital
-            </button>
-          </div>
+        <div className="mt-10">
+          <AutocompleteSearch />
         </div>
+
+        <button className="mt-6 bg-orange-500 hover:bg-orange-600 text-white font-bold px-6 py-3 rounded-full transition duration-300 shadow-lg">
+          Get Nearest Hospital
+        </button>
       </div>
     </section>
   );

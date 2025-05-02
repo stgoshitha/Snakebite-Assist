@@ -134,7 +134,8 @@ const CreateHospitalForm = () => {
 
   return (
     <div>
-      <div className="w-[1000px] mx-auto p-6">
+      <Header />
+      <div className="max-w-6xl mx-auto p-6">
         <form
           onSubmit={handleSubmit}
           className="space-y-4 font- bg-white p-6 rounded shadow"

@@ -17,10 +17,8 @@ const createHospital = async (req, res) => {
       phoneNumber,
       email,
       webSiteLink,
-      location: {
-        type: 'Point',
-        coordinates: [parseFloat(longitude), parseFloat(latitude)]
-      },
+      latitude,
+      longitude,
       is24hrService,
       workingHours,
       proofCertificate,
@@ -124,20 +122,12 @@ const updateHospital = async (req, res) => {
       return res.status(403).json({ message: 'Unauthorized: You do not own this hospital' });
     }
 
-    const allowedFields = ['hospitalName', 'hospitalType',  'address', 'city', 'phoneNumber', 'email', 'webSiteLink', 'is24hrService', 'workingHours', 'hospitalImages'];
+    const allowedFields = ['hospitalName', 'hospitalType',  'address', 'city', 'phoneNumber', 'email', 'webSiteLink', 'latitude', 'longitude', 'is24hrService', 'workingHours', 'hospitalImages'];
     allowedFields.forEach(field => {
       if (req.body[field] !== undefined) {
         hospital[field] = req.body[field];
       }
     });
-
-    const { latitude, longitude } = req.body;
-    if (latitude !== undefined && longitude !== undefined) {
-      hospital.location = {
-        type: 'Point',
-        coordinates: [parseFloat(longitude), parseFloat(latitude)],
-      };
-    }
 
     await hospital.save();
 

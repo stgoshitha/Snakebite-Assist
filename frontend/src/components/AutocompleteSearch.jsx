@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { MdOutlineSettingsVoice } from "react-icons/md";
 import { MdSettingsVoice } from "react-icons/md";
-import { AiOutlineClose } from "react-icons/ai";
 
 const AutocompleteSearch = () => {
   const [keyword, setKeyword] = useState("");
@@ -122,23 +121,23 @@ const AutocompleteSearch = () => {
   }, []);
 
   return (
-    <div className="relative w-full">
+    <div className="relative w-full max-w-md mx-auto">
       {/* Search Input */}
-      <div className="flex items-center justify-center  gap-2">
+      <div className="flex items-center justify-center gap-2">
         <input
           type="text"
           value={keyword}
           onChange={handleSearch}
           placeholder="Search for snakes..."
           autoComplete="off"
-          className="w-[75%] px-4 py-3 border border-gray-300 rounded-lg shadow-sm  bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         />
 
         {/* Voice  Button */}
         <button
           onClick={startVoiceRecognition}
           disabled={isListening}
-          className=" absolute  text-blue-500 right-30 rounded-full cuorsor-pointer hover:bg-blue-100 p-2 transition duration-200 ease-in-out"
+          className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-full "
         >
           {isListening ? (
             <MdSettingsVoice className="text-3xl" />
@@ -150,83 +149,62 @@ const AutocompleteSearch = () => {
 
       {/* Suggestions Dropdown */}
       {suggestions.length > 0 && (
-        <div className="flex justify-center mt-2">
-          <div className="absolute w-[75%] mt-1 bg-white border border-gray-200 shadow-md z-10">
-            {renderSuggestions()}
-          </div>
+        <div className="absolute w-full mt-1  bg-white border border-gray-200 rounded-lg shadow-md">
+          {renderSuggestions()}
         </div>
       )}
 
       {/* Display Selected Snake Details */}
       {selectedSnake && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex justify-center items-center">
-          <div className="w-[90%] md:w-[75%] max-h-[80vh] overflow-y-auto p-4 border rounded-lg shadow-lg bg-white relative z-50">
-            {/* Close Button */}
-            <button
-              onClick={() => setSelectedSnake(null)}
-              className="absolute top-2 right-2 text-gray-600 hover:text-red-600 text-xl"
-              aria-label="Close"
-            >
-              <AiOutlineClose />
-            </button>
-
-            <h2 className="text-xl font-semibold mb-2">{selectedSnake.name}</h2>
-
-            {selectedSnake.image && (
-              <img
-                src={selectedSnake.image}
-                alt={selectedSnake.name}
-                className="w-32 h-32 rounded-lg mb-4 object-cover"
-              />
-            )}
-
-            <div className="space-y-2 text-gray-700">
-              <p>
-                <strong>Color:</strong> {selectedSnake.color}
-              </p>
-              <p>
-                <strong>Size:</strong> {selectedSnake.size}
-              </p>
-              <p>
-                <strong>Length:</strong> {selectedSnake.length}
-              </p>
-              <p>
-                <strong>Head Shape:</strong> {selectedSnake.headShape}
-              </p>
-              <p>
-                <strong>Pattern:</strong> {selectedSnake.pattern}
-              </p>
-              <p>
-                <strong>Behavior:</strong> {selectedSnake.behavior}
-              </p>
-              <p>
-                <strong>Venom Type:</strong> {selectedSnake.venomType}
-              </p>
-              <p>
-                <strong>Pain Level:</strong> {selectedSnake.painLevel}
-              </p>
-              <p>
-                <strong>Pain Type:</strong> {selectedSnake.painType}
-              </p>
-              <p>
-                <strong>Time to Symptoms:</strong>{" "}
-                {selectedSnake.timeToSymptoms}
-              </p>
-
-              {selectedSnake.commonSymptoms?.length > 0 && (
-                <>
-                  <p>
-                    <strong>Common Symptoms:</strong>
-                  </p>
-                  <ul className="list-disc pl-5">
-                    {selectedSnake.commonSymptoms.map((symptom, index) => (
-                      <li key={index}>{symptom}</li>
-                    ))}
-                  </ul>
-                </>
-              )}
-            </div>
-          </div>
+        <div className="mt-4 p-4 border rounded-lg shadow-lg bg-white">
+          <h2 className="text-xl font-semibold">{selectedSnake.name}</h2>
+          {selectedSnake.image && (
+            <img
+              src={selectedSnake.image}
+              alt={selectedSnake.name}
+              className="w-32 h-32 rounded-lg mt-2"
+            />
+          )}
+          <p className="text-gray-700">
+            <strong>Color:</strong> {selectedSnake.color}
+          </p>
+          <p className="text-gray-700">
+            <strong>Size:</strong> {selectedSnake.size}
+          </p>
+          <p className="text-gray-700">
+            <strong>Length:</strong> {selectedSnake.length}
+          </p>
+          <p className="text-gray-700">
+            <strong>Head Shape:</strong> {selectedSnake.headShape}
+          </p>
+          <p className="text-gray-700">
+            <strong>Pattern:</strong> {selectedSnake.pattern}
+          </p>
+          <p className="text-gray-700">
+            <strong>Behavior:</strong> {selectedSnake.behavior}
+          </p>
+          <p className="text-gray-700">
+            <strong>Venom Type:</strong> {selectedSnake.venomType}
+          </p>
+          <p className="text-gray-700">
+            <strong>Pain Level:</strong> {selectedSnake.painLevel}
+          </p>
+          <p className="text-gray-700">
+            <strong>Pain Type:</strong> {selectedSnake.painType}
+          </p>
+          <p className="text-gray-700">
+            <strong>Time to Symptoms:</strong> {selectedSnake.timeToSymptoms}
+          </p>
+          <p className="text-gray-700">
+            <strong>Common Symptoms:</strong>
+          </p>
+          <ul className="list-disc pl-5">
+            {selectedSnake.commonSymptoms.map((symptom, index) => (
+              <li key={index} className="text-gray-700">
+                {symptom}
+              </li>
+            ))}
+          </ul>
         </div>
       )}
     </div>

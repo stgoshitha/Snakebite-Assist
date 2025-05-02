@@ -97,7 +97,7 @@ const LocationPicker = ({ formData, setFormData }) => {
     >
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
       {formData.latitude && formData.longitude && (
-        <Marker position={[parseFloat(formData.latitude), parseFloat(formData.longitude)]} />
+        <Marker position={[formData.latitude, formData.longitude]} />
       )}
       <MapClickHandler />
       <ChangeView center={position} />

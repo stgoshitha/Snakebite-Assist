@@ -99,22 +99,25 @@ const getBlogByBlogId = async(req, res) => {
 
 //update blog by blogId
 const updateBlog = async (req, res) => {
-  const { title, blocks } = req.body;
   try {
-    const blog = await Blog.findById(req.params.blogId);
-    if (!blog) {
+    const  blogId = req.params.blogId;
+    if (!blogId) return res.status(400).json({ message: "Blog ID is required" });
+    const { title, blocks } = req.body;
+
+    const updatedBlog = await Blog.findByIdAndUpdate(
+      blogId,
+      { title, blocks },
+      { new: true }
+    );
+
+    if (!updatedBlog) {
       return res.status(404).json({ message: "Blog not found" });
     }
 
-    // Update the blog details
-    blog.title = title || blog.title;
-    blog.blocks = blocks || blog.blocks;
-
-    await blog.save();
-    res.json({ message: "Blog updated successfully", blog });
+    res.json({ message: "Blog updated successfully"});
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Error updating blog" });
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -137,40 +140,7 @@ const deletBlog = async (req, res) => {
     console.error("Error deleting user:", err); 
     return res.status(500).json({ message: "Internal server error" });
   }
-  
 };
-
-
-// like or unlike a blog
-const likeBlog = async (req, res) => {
-  try {
-    const blogId = req.params.blogId;
-    const userId = req.user.id;
-
-    const blog = await Blog.findById(blogId);
-    if (!blog) {
-      return res.status(404).json({ message: "Blog not found" });
-    }
-
-    const alreadyLiked = blog.likes.includes(userId);
-
-    if (alreadyLiked) {
-      // If already liked, remove the like (Unlike)
-      blog.likes.pull(userId);
-    } else {
-      // If not liked, add the like
-      blog.likes.push(userId);
-    }
-
-    await blog.save();
-
-    res.status(200).json({ message: alreadyLiked ? "Unliked the blog" : "Liked the blog", blog });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Server error", error: err.message });
-  }
-};
-
 
 
 module.exports = {
@@ -182,5 +152,4 @@ module.exports = {
   getBlogByBlogId,
   updateBlog,
   deletBlog,
-  likeBlog,
 };

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import BlogContentPreview from "../components/BlogContentPreview ";
 import { BsCheck2Circle } from "react-icons/bs";
-import { FiEye, FiEyeOff } from "react-icons/fi";
+import { MdExpandMore } from "react-icons/md";
 import AdminLoading from "../components/common/AdminLoading";
 import SideBar from "../components/common/SideBar";
 import Header from "../components/common/Header";
@@ -12,7 +12,6 @@ const AdminBlogNotApproved = () => {
   const [expandedBlog, setExpandedBlog] = useState(null);
   const [blogDetails, setBlogDetails] = useState({});
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState(""); 
 
   // Fetch all not approved blogs
   const fetchBlogs = async () => {
@@ -72,10 +71,6 @@ const AdminBlogNotApproved = () => {
     }
   };
 
-  const filteredBlogs = blogs.filter((blog) =>
-    blog.userId?.name?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
   if (loading) return <AdminLoading />;
 
   return (
@@ -85,30 +80,21 @@ const AdminBlogNotApproved = () => {
       </div>
       <div className="ml-70 flex flex-col gap-2 overflow-auto w-full h-screen">
         <Header />
-        <div className="p-4 flex flex-col gap-2 bg-gray-100 h-screen overflow-auto">
-          <div className="p-4 space-y-2 bg-white rounded-xl shadow-sm">
-            <h2 className="text-2xl font-bold">Pending Approval Blogs</h2>
-          </div>
-          <div className="p-4 space-y-2 bg-white rounded-xl shadow-sm">
-            <input
-              type="text"
-              placeholder="Search by Author Name..."
-              className="border border-gray-300 rounded-md p-2 w-full md:w-64"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
+        <div className="p-6">
+          <h2 className="text-2xl font-bold mb-4">Pending Approval Blogs</h2>
+          <div className="overflow-x-auto">
             <table className="min-w-full table-fixed border-collapse bg-white shadow-md rounded-md">
               <thead className="bg-gray-100">
                 <tr>
-                  <th className="py-2 border-b">#</th>
-                  <th className="py-2 px-4 border-b text-left">Title</th>
-                  <th className="py-2 px-4 border-b text-left">Author</th>
+                  <th className="py-2 border-b ">#</th>
+                  <th className="py-2 px-4  border-b text-left ">Title</th>
+                  <th className="py-2 px-4 border-b text-left ">User</th>
                   <th className="py-2 px-4 border-b w-48">View More</th>
                   <th className="py-2 px-4 border-b w-48">Action</th>
                 </tr>
               </thead>
               <tbody>
-                {filteredBlogs.map((blog, index) => (
+                {blogs.map((blog, index) => (
                   <React.Fragment key={blog._id}>
                     <tr className="text-center hover:bg-gray-50">
                       <td className="py-2 px-4 border-b">{index + 1}</td>
@@ -118,33 +104,27 @@ const AdminBlogNotApproved = () => {
                       <td className="py-2 px-4 border-b text-left">
                         {blog.userId?.name}
                       </td>
-                      <td className="py-2 px-4 border-b">
-                        <div
-                          className="flex justify-center text-blue-600 rounded cursor-pointer"
+                      <td className="py-2 px-4 border-b ">
+                        <button
+                          className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 w-32 rounded"
                           onClick={() => toggleExpanded(blog._id)}
                         >
-                          {expandedBlog === blog._id ? (
-                            <FiEyeOff
-                              size={25}
-                              className="text-blue-500 hover:text-blue-600"
-                            />
-                          ) : (
-                            <FiEye
-                              size={25}
-                              className="text-blue-500 hover:text-blue-600"
-                            />
-                          )}
-                        </div>
+                          <MdExpandMore
+                            className={`inline mr-2 transition-transform duration-300 ${
+                              expandedBlog === blog._id ? "rotate-180" : ""
+                            }`}
+                          />
+                          {expandedBlog === blog._id
+                            ? "View Less"
+                            : "View More"}
+                        </button>
                       </td>
                       <td className="py-2 px-4 border-b">
                         <button
-                          className="text-green-500 px-3 py-1 cursor-pointer"
+                          className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
                           onClick={() => approveBlog(blog._id)}
                         >
-                          <BsCheck2Circle
-                            size={25}
-                            className="inline font-bold"
-                          />
+                          <BsCheck2Circle size={20} className="inline mr-1" />
                         </button>
                       </td>
                     </tr>
