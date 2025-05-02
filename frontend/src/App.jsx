@@ -64,7 +64,7 @@ function App() {
               <Route path="login" element={<Login />} />
               <Route path="register" element={<Register />} />
               <Route path="blogs" element={<BlogPage />} />
-              <Route path="nearestHospital" element={<NearestHospital />} />
+              <Route path="user/nearestHospital" element={<NearestHospital />} />
             </Route>
 
             <Route path="/admin/snake-details" element={<SnakeDetails />} />
