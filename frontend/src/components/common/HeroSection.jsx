@@ -30,7 +30,7 @@ const HeroSection = () => {
             <AutocompleteSearch />
           </div>
 
-          <div className="absolute top-1/7 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center space-y-4">
+          <div className="absolute top-1/5 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center space-y-4">
             <button
               className="bg-orange-500 hover:bg-orange-600 text-white text-lg font-semibold px-8 py-4 rounded-full shadow-md transition duration-300 ease-in-out"
               onClick={() => navigate("/nearestHospital")}
