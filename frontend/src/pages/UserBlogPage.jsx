@@ -131,7 +131,7 @@ const UserBlogPage = () => {
                 className="bg-blue-500 text-white px-3 py-2 rounded"
               >
                 <div className="flex items-center justify-center gap-1 font-bold">
-                  <IoAdd size={20} /> <lable>Create New Blog</lable>
+                  <IoAdd size={20} /> <label>Create New Blog</label>
                 </div>
               </Link>
             </div>

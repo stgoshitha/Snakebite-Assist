@@ -70,12 +70,12 @@ const BlogPage = () => {
               <div className="flex items-center gap-2">
                 <img src={userimage} className="w-12" />
                 <div className="flex flex-col">
-                <lable className="font-bold text-lg">
+                <label className="font-bold text-lg">
                   {blog.userId.name || "@Anonymous"}
-                </lable>
-                <lable className="text-sm">
+                </label>
+                <label className="text-sm">
                   Author
-                </lable>
+                </label>
                 </div>
               </div>
             </div>
