@@ -141,7 +141,7 @@ const BlogPage = () => {
                 )}
               </div>
             ))}
-            {user?.role === "user" && (
+            {(user?.role === "user" || user?.role === "hospital" || user?.role === "superadmin" || user?.role === "admin") && (
               <div className="flex items-center justify-end mt-5">
                 <button
                   onClick={() => handleLike(blog._id)}
