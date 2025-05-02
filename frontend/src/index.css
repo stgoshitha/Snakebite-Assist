@@ -1,25 +1,5 @@
 @import "tailwindcss";
 
-/* Custom scrollbar styling */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #c5c5c5;
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #a8a8a8;
-}
-
 .loader {
   --c: no-repeat linear-gradient(#c60505 0 0);
   background: 
@@ -34,6 +14,11 @@
   height: 120vh; /* Or whatever height you need */
   clip-path: polygon(0 0, 100% 0, 100% 0%, 100% 80%, 0 50%); /* Custom shape */
 }
+
+.leaflet-container {
+  z-index: 10 !important;
+}
+
 
 @keyframes l2 {
   0%  {background-size: 20% 100%,20% 100%,20% 100%}

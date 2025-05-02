@@ -13,7 +13,6 @@
     "@reduxjs/toolkit": "^2.6.1",
     "@tailwindcss/postcss": "^4.0.14",
     "@tailwindcss/vite": "^4.0.14",
-    "@types/leaflet": "^1.9.17",
     "axios": "^1.8.3",
     "js-cookie": "^3.0.5",
     "leaflet": "^1.9.4",

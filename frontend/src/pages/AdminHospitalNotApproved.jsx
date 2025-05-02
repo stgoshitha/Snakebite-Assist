@@ -4,6 +4,7 @@ import { FaRegFilePdf } from "react-icons/fa6";
 import SideBar from "../components/common/SideBar";
 import Header from "../components/common/Header";
 import AdminLoading from "../components/common/AdminLoading";
+import { IoLocationSharp } from "react-icons/io5";
 
 const AdminHospitalNotApproved = () => {
   const [hospitals, setHospitals] = useState([]);
@@ -77,110 +78,133 @@ const AdminHospitalNotApproved = () => {
 
   return (
     <div className="flex gap-1">
-      <div><SideBar/></div>
+      <div>
+        <SideBar />
+      </div>
       <div className="ml-70 flex flex-col gap-2 overflow-auto w-full h-screen">
-        <Header/>
-      <div className=" p-5 flex flex-col gap-2 overflow-auto w-full h-screen">
-      <div className="p-4 space-y-2 bg-white rounded-xl shadow-sm">
-        <h2 className="text-xl font-semibold mb-4">Not Approved Hospitals</h2>
+        <Header />
+        <div className=" p-5 flex flex-col gap-2 overflow-auto w-full h-screen">
+          <div className="p-4 space-y-2 bg-white rounded-xl shadow-sm">
+            <h2 className="text-xl font-semibold mb-4">
+              Not Approved Hospitals
+            </h2>
 
-        {/* Search bar */}
-        
-      </div>
+            {/* Search bar */}
+          </div>
 
-      <div className="p-4 space-y-2 bg-white rounded-xl shadow-sm">
-      <input
-          type="text"
-          placeholder="Search by name, type, or email..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-[400px] p-2 border border-gray-300 rounded"
-        />
-        <div className="overflow-x-auto">
-          <table className="min-w-max table-auto border-collapse bg-white shadow-md rounded-md">
-            <thead>
-              <tr className="bg-gray-100 text-left">
-                <th className="py-2 px-4 border-b">
-                  <input
-                    type="checkbox"
-                    onChange={toggleAllIdVisibility}
-                    checked={areAllVisible}
-                    className="mr-2"
-                  />
-                  <label className="text-sm">
-                    {!areAllVisible ? "" : "Hospital ID"}
-                  </label>
-                </th>
-                <th className="py-2 px-4 border-b">Hospital Owner Name</th>
-                <th className="py-2 px-4 border-b">Hospital Name</th>
-                <th className="py-2 px-4 border-b">Address</th>
-                <th className="py-2 px-4 border-b">City</th>
-                <th className="py-2 px-4 border-b">Phone Number</th>
-                <th className="py-2 px-4 border-b">Email</th>
-                <th className="py-2 px-4 border-b">Proof Certificate</th>
-                <th className="py-2 px-4 border-b">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredHospitals.map((hospital) => (
-                <tr key={hospital._id} className="hover:bg-gray-50">
-                  <td className="py-2 px-4 border-b">
-                    <div className="flex flex-col gap-1">
-                      <div className="flex items-center">
-                        <input
-                          type="checkbox"
-                          id={`toggle-${hospital._id}`}
-                          onChange={() => toggleIdVisibility(hospital._id)}
-                          checked={visibleIds[hospital._id] || false}
-                          className="mr-2 text-sm"
-                        />
-                        {visibleIds[hospital._id] && (
-                          <div className="text-sm text-gray-600 break-all">
-                            {hospital._id}
+          <div className="p-4 space-y-2 bg-white rounded-xl shadow-sm">
+            <input
+              type="text"
+              placeholder="Search by name, type, or email..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-[400px] p-2 border border-gray-300 rounded"
+            />
+            <div className="overflow-x-auto">
+              <table className="min-w-max table-auto border-collapse bg-white shadow-md rounded-md">
+                <thead>
+                  <tr className="bg-gray-100 text-left">
+                    <th className="py-2 px-4 border-b">
+                      <input
+                        type="checkbox"
+                        onChange={toggleAllIdVisibility}
+                        checked={areAllVisible}
+                        className="mr-2"
+                      />
+                      <label className="text-sm">
+                        {!areAllVisible ? "" : "Hospital ID"}
+                      </label>
+                    </th>
+                    <th className="py-2 px-4 border-b">Hospital Owner Name</th>
+                    <th className="py-2 px-4 border-b">Hospital Name</th>
+                    <th className="py-2 px-4 border-b">Address</th>
+                    <th className="py-2 px-4 border-b">City</th>
+                    <th className="py-2 px-4 border-b">Phone Number</th>
+                    <th className="py-2 px-4 border-b">Email</th>
+                    <th className="py-2 px-4 border-b">Proof Certificate</th>
+                    <th className="py-2 px-4 border-b">Location</th>
+                    <th className="py-2 px-4 border-b">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredHospitals.map((hospital) => (
+                    <tr key={hospital._id} className="hover:bg-gray-50">
+                      <td className="py-2 px-4 border-b">
+                        <div className="flex flex-col gap-1">
+                          <div className="flex items-center">
+                            <input
+                              type="checkbox"
+                              id={`toggle-${hospital._id}`}
+                              onChange={() => toggleIdVisibility(hospital._id)}
+                              checked={visibleIds[hospital._id] || false}
+                              className="mr-2 text-sm"
+                            />
+                            {visibleIds[hospital._id] && (
+                              <div className="text-sm text-gray-600 break-all">
+                                {hospital._id}
+                              </div>
+                            )}
                           </div>
-                        )}
-                      </div>
-                    </div>
-                  </td>
-                  <td className="py-2 px-4 border-b">{hospital.user?.name}</td>
-                  <td className="py-2 px-4 border-b">{hospital.hospitalName}</td>
-                  <td className="py-2 px-4 border-b">{hospital.address}</td>
-                  <td className="py-2 px-4 border-b">{hospital.city}</td>
-                  <td className="py-2 px-4 border-b">{hospital.phoneNumber}</td>
-                  <td className="py-2 px-4 border-b">{hospital.email}</td>
-                  <td className="py-2 px-4 border-b">
-                    <a
-                      href={hospital.proofCertificate}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex gap-2 hover:text-blue-500 hover:underline"
-                    >
-                      <FaRegFilePdf size={25} />
-                      <label>View</label>
-                    </a>
-                  </td>
-                  <td className="py-2 px-4 border-b">
-                    <button
-                      onClick={() => handleApprove(hospital._id)}
-                      className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
-                    >
-                      Approve
-                    </button>
-                  </td>
-                </tr>
-              ))}
-              {filteredHospitals.length === 0 && (
-                <tr>
-                  <td colSpan="9" className="text-center py-4 text-gray-500">
-                    No hospitals match your search.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+                        </div>
+                      </td>
+                      <td className="py-2 px-4 border-b">
+                        {hospital.user?.name}
+                      </td>
+                      <td className="py-2 px-4 border-b">
+                        {hospital.hospitalName}
+                      </td>
+                      <td className="py-2 px-4 border-b">{hospital.address}</td>
+                      <td className="py-2 px-4 border-b">{hospital.city}</td>
+                      <td className="py-2 px-4 border-b">
+                        {hospital.phoneNumber}
+                      </td>
+                      <td className="py-2 px-4 border-b">{hospital.email}</td>
+                      <td className="py-2 px-4 border-b">
+                        <a
+                          href={hospital.proofCertificate}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex gap-2 hover:text-blue-500 hover:underline"
+                        >
+                          <FaRegFilePdf size={25} />
+                          <label>View</label>
+                        </a>
+                      </td>
+                      <td className="py-2 px-4 border-b">
+                        <a
+                          href={`https://www.google.com/maps?q=${hospital.location.coordinates[1]},${hospital.location.coordinates[0]}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex justify-center text-red-500 hover:text-red-600"
+                        >
+                          <IoLocationSharp size={25} />
+                        </a>
+                      </td>
+                      <td className="py-2 px-4 border-b">
+                        <button
+                          onClick={() => handleApprove(hospital._id)}
+                          className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
+                        >
+                          Approve
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                  {filteredHospitals.length === 0 && (
+                    <tr>
+                      <td
+                        colSpan="9"
+                        className="text-center py-4 text-gray-500"
+                      >
+                        No hospitals match your search.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
       </div>
     </div>
   );

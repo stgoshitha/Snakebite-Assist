@@ -5,13 +5,15 @@ import { MdOutlineVisibility, MdOutlineVisibilityOff } from "react-icons/md";
 import { LiaHospital } from "react-icons/lia";
 import { Link } from "react-router-dom";
 import Header from "../components/common/Header";
+import logo from "../assets/logo.png";
 
 const Register = () => {
   const [formData, setFormData] = useState({
+    name: "",
     email: "",
     password: "",
     confirmPassword: "",
-    role: "user", 
+    role: "user",
   });
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
@@ -48,6 +50,8 @@ const Register = () => {
   const validateForm = () => {
     let newErrors = {};
 
+    if (!formData.name.trim()) newErrors.name = "Name is required";
+
     //email
     if (!formData.email.trim()) newErrors.email = "Email is required";
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email))
@@ -81,115 +85,132 @@ const Register = () => {
   };
 
   return (
-    <div>
-      <Header />
-    <div className="flex justify-center items-center mt-5">
-      <div className="p-6 bg-white rounded-md w-96">
-        <h1 className="text-2xl mb-4 text-center font-bold">Register</h1>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+    <div className="h-screen flex flex-col ">
+      <div className="flex-grow flex overflow-y-hidden  bg-gray-100 bg-[url(src/assets/snake04.jpg)] bg-cover bg-center">
+      
+      <div className="flex justify-center items-center w-full h-full p-15">
+          <div className="p-6rounded-md w-96 backdrop-blur-5xl bg-gray-300/60 shadow-md flex flex-col gap-4">
+            <h1 className="text-2xl mb-4 text-center font-bold">Register</h1>
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+              <div className="relative gap-1">
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  className="p-2 w-full border rounded focus:outline-none focus:ring-2 "
+                />
+                {errors.name && (
+                  <p className="text-red-500 text-sm">{errors.name}</p>
+                )}
+              </div>
 
-          <div className="relative gap-1">
-            <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              value={formData.email}
-              onChange={handleChange}
-              className="p-2 w-full border rounded focus:outline-none focus:ring-2 "
-            />
-            {errors.email && (
-              <p className="text-red-500 text-sm">{errors.email}</p>
+              <div className="relative gap-1">
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className="p-2 w-full border rounded focus:outline-none focus:ring-2 "
+                />
+                {errors.email && (
+                  <p className="text-red-500 text-sm">{errors.email}</p>
+                )}
+              </div>
+
+              <div className="relative gap-1">
+                <input
+                  type={passwordVisibility.password ? "text" : "password"}
+                  name="password"
+                  placeholder="Password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  className="p-2 w-full border rounded focus:outline-none focus:ring-2 "
+                />
+                <button
+                  type="button"
+                  className="absolute right-3 top-3 text-gray-500 text-xl"
+                  onClick={() => togglePasswordVisibility("password")}
+                >
+                  {passwordVisibility.password ? (
+                    <MdOutlineVisibilityOff />
+                  ) : (
+                    <MdOutlineVisibility />
+                  )}
+                </button>
+                {errors.password && (
+                  <p className="text-red-500 text-sm">{errors.password}</p>
+                )}
+              </div>
+
+              <div className="relative gap-1">
+                <input
+                  type={passwordVisibility.password ? "text" : "password"}
+                  name="confirmPassword"
+                  placeholder="Confirm Password"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  className="p-2 w-full border rounded focus:outline-none focus:ring-2 "
+                />
+                <button
+                  type="button"
+                  className="absolute right-3 top-3 text-gray-500 text-xl"
+                  onClick={() => togglePasswordVisibility("confirmPassword")}
+                >
+                  {passwordVisibility.confirmPassword ? (
+                    <MdOutlineVisibilityOff />
+                  ) : (
+                    <MdOutlineVisibility />
+                  )}
+                </button>
+                {errors.confirmPassword && (
+                  <p className="text-red-500 text-sm">
+                    {errors.confirmPassword}
+                  </p>
+                )}
+              </div>
+
+              <div className="flex items-center gap-2">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    name="role"
+                    value="hospital"
+                    checked={formData.role === "hospital"}
+                    onChange={handleChange}
+                    className="h-5 w-5 cursor-pointer"
+                  />
+                  <LiaHospital className="text-2xl" />
+                  <span className="text-gray-700 select-none">
+                    Register as Hospital Owner
+                  </span>
+                </label>
+              </div>
+
+              <button
+                type="submit"
+                className="px-4 py-2 mt-5 bg-green-600 text-white rounded hover:bg-green-700"
+              >
+                {formData.role === "hospital"
+                  ? "Register as Hospital Owner"
+                  : "Register"}
+              </button>
+            </form>
+            {errors.form && (
+              <p className="text-red-500 text-sm text-center">{errors.form}</p>
             )}
+
+            <p className="text-center mt-5">
+              Already have an account?{" "}
+              <Link to={"/login"} className="text-blue-500 underline">
+                Login
+              </Link>
+            </p>
           </div>
-
-          <div className="relative gap-1">
-            <input
-              type={passwordVisibility.password ? "text" : "password"}
-              name="password"
-              placeholder="Password"
-              value={formData.password}
-              onChange={handleChange}
-              className="p-2 w-full border rounded focus:outline-none focus:ring-2 "
-            />
-            <button
-              type="button"
-              className="absolute right-3 top-3 text-gray-500 text-xl"
-              onClick={() => togglePasswordVisibility("password")}
-            >
-              {passwordVisibility.password ? (
-                <MdOutlineVisibilityOff />
-              ) : (
-                <MdOutlineVisibility />
-              )}
-            </button>
-            {errors.password && (
-              <p className="text-red-500 text-sm">{errors.password}</p>
-            )}
-          </div>
-
-          <div className="relative gap-1">
-            <input
-              type={passwordVisibility.password ? "text" : "password"}
-              name="confirmPassword"
-              placeholder="Confirm Password"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              className="p-2 w-full border rounded focus:outline-none focus:ring-2 "
-            />
-            <button
-              type="button"
-              className="absolute right-3 top-3 text-gray-500 text-xl"
-              onClick={() => togglePasswordVisibility("confirmPassword")}
-            >
-              {passwordVisibility.confirmPassword ? (
-                <MdOutlineVisibilityOff />
-              ) : (
-                <MdOutlineVisibility />
-              )}
-            </button>
-            {errors.confirmPassword && (
-              <p className="text-red-500 text-sm">{errors.confirmPassword}</p>
-            )}
-          </div>
-
-          <div className="flex items-center gap-2">
-            <label className="flex items-center gap-2 cursor-pointer">
-              <input
-                type="checkbox"
-                name="role"
-                value="hospital"
-                checked={formData.role === "hospital"}
-                onChange={handleChange}
-                className="h-5 w-5 cursor-pointer"
-              />
-              <LiaHospital className="text-2xl" />
-              <span className="text-gray-700 select-none">
-                Register as Hospital Owner
-              </span>
-            </label>
-          </div>
-
-          <button
-            type="submit"
-            className="px-4 py-2 mt-5 bg-green-600 text-white rounded hover:bg-green-700"
-          >
-            {formData.role === "hospital"
-              ? "Register as Hospital Owner"
-              : "Register"}
-          </button>
-        </form>
-        {errors.form && (
-          <p className="text-red-500 text-sm text-center">{errors.form}</p>
-        )}
-
-        <p className="text-center mt-5">
-          Already have an account?{" "}
-          <Link to={'/login'} className="text-blue-500 underline">
-            Login
-          </Link>
-        </p>
+        </div>
       </div>
-    </div>
     </div>
   );
 };
