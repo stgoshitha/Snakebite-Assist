@@ -52,7 +52,8 @@ const BlogContentPreview = ({ blogDetail }) => {
                   alt="blog"
                   loading="lazy"
                   onError={(e) => {
-                    e.target.src = "https://placehold.co/400x200?text=Image+Not+Found";
+                    e.target.src =
+                      "https://placehold.co/400x200?text=Image+Not+Found";
                   }}
                   className="max-h-[400px] object-contain rounded shadow-lg"
                 />
@@ -60,9 +61,17 @@ const BlogContentPreview = ({ blogDetail }) => {
             </div>
           )}
           {block.type === "video" && (
-            <video controls className="w-full max-w-lg">
-              <source src={block.content} type="video/mp4" />
-            </video>
+            <div className="relative mb-2 rounded overflow-hidden">
+              <div
+                className="absolute inset-0 bg-cover bg-center filter blur-lg scale-110"
+                style={{ backgroundImage: `url(${block.content})` }}
+              ></div>
+              <div className="relative z-10 flex justify-center p-2">
+                <video controls className="max-h-[500px] w-full max-w-lg">
+                  <source src={block.content} type="video/mp4" />
+                </video>
+              </div>
+            </div>
           )}
         </div>
       ))}

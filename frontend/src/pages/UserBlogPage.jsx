@@ -110,7 +110,7 @@ const UserBlogPage = () => {
     <div>
       <Header />
       <div className="container mx-auto p-4 max-w-[1000px]">
-        <div className="flex items-center justify-center bg-green-500 text-white shadow-sm p-10 rounded mb-4">
+        <div className="flex items-center justify-center bg-gradient-to-r from-[#557512] to-[#d5aa54] text-white shadow-sm p-10 rounded mb-4">
           <h2 className="text-9xl font-bold">MY BLOGS</h2>
         </div>
         {blogs.length === 0 ? (
@@ -128,7 +128,7 @@ const UserBlogPage = () => {
             <div className="flex items-center justify-end w-full">
               <Link
                 to="/userBlog/createBlog"
-                className="bg-blue-500 text-white px-3 py-2 rounded"
+                className="bg-[#0f1600] hover:bg-[#6a4c11] text-white px-3 py-2 rounded"
               >
                 <div className="flex items-center justify-center gap-1 font-bold">
                   <IoAdd size={20} /> <label>Create New Blog</label>

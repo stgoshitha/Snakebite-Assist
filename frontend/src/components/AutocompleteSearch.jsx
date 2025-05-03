@@ -131,14 +131,14 @@ const AutocompleteSearch = () => {
           onChange={handleSearch}
           placeholder="Search for snakes..."
           autoComplete="off"
-          className="w-[75%] px-4 py-3 border border-gray-300 rounded-lg shadow-sm  bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className="w-[75%] px-4 py-3 border border-gray-300 rounded-lg shadow-sm  bg-white focus:outline-none focus:ring-2 focus:ring-[#0f1600] focus:border-[#0f1600]"
         />
 
         {/* Voice  Button */}
         <button
           onClick={startVoiceRecognition}
           disabled={isListening}
-          className=" absolute  text-blue-500 right-30 rounded-full cuorsor-pointer hover:bg-blue-100 p-2 transition duration-200 ease-in-out"
+          className=" absolute  text-[#0f1600] right-30 rounded-full cuorsor-pointer hover:bg-blue-100 p-2 transition duration-200 ease-in-out"
         >
           {isListening ? (
             <MdSettingsVoice className="text-3xl" />

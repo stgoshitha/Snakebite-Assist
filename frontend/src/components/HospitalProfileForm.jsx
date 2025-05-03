@@ -194,7 +194,7 @@ const HospitalProfileForm = ({
         <button
           type="button"
           onClick={addWorkingHours}
-          className="bg-gray-700 text-white px-4 py-2 mt-2 rounded-md shadow"
+          className="bg-[#0f1600] hover:bg-[#6a4c11] text-white px-4 py-2 mt-2 rounded-md shadow"
         >
           + Add Working Hours
         </button>
@@ -228,14 +228,14 @@ const HospitalProfileForm = ({
       <div className="flex gap-4 justify-end">
         <button
           type="submit"
-          className="border border-blue-600 text-lg font-semibold text-blue-600 px-4 py-2 w-40 rounded"
+          className="border bg-[#0f1600] hover:bg-[#6a4c11]  font-semibold text-white px-4 py-2 w-40 rounded"
         >
           Save Changes
         </button>
         <button
           type="button"
           onClick={() => setIsEditing(false)}
-          className="border border-red-600 text-lg font-semibold text-red-600 px-4 py-2 w-40 rounded"
+          className="border bg-red-600  font-semibold text-white hover:bg-white hover:text-red-700 px-4 py-2 w-40 rounded"
         >
           Cancel
         </button>

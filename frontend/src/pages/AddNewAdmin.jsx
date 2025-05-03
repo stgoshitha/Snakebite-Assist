@@ -137,7 +137,7 @@ const AddNewAdmin = () => {
               placeholder="Email"
               value={formData.email}
               onChange={handleChange}
-              className="p-2 w-full border rounded focus:outline-none focus:ring-2"
+              className="p-2 w-full border rounded focus:outline-none focus:ring-1 focus:ring-[#0f1600] "
             />
             {errors.email && (
               <p className="text-red-500 text-sm">{errors.email}</p>
@@ -151,7 +151,7 @@ const AddNewAdmin = () => {
               placeholder="Password"
               value={formData.password}
               onChange={handleChange}
-              className="p-2 w-full border rounded focus:outline-none focus:ring-2"
+              className="p-2 w-full border rounded focus:outline-none focus:ring-1 focus:ring-[#0f1600] "
             />
             <button
               type="button"
@@ -176,7 +176,7 @@ const AddNewAdmin = () => {
               placeholder="Confirm Password"
               value={formData.confirmPassword}
               onChange={handleChange}
-              className="p-2 w-full border rounded focus:outline-none focus:ring-2"
+              className="p-2 w-full border rounded focus:outline-none focus:ring-1 focus:ring-[#0f1600] "
             />
             <button
               type="button"
@@ -202,7 +202,7 @@ const AddNewAdmin = () => {
                 value="superadmin"
                 checked={formData.role === "superadmin"}
                 onChange={handleChange}
-                className="h-5 w-5 cursor-pointer"
+                className="h-5 w-5 cursor-pointer "
               />
               <span className="ml-2 text-justify ">Super Admin</span>
             </label>
@@ -226,7 +226,7 @@ const AddNewAdmin = () => {
 
           <button
             type="submit"
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 cursor-pointer"
+            className="px-4 py-2 bg-[#0f1600] hover:bg-[#6a4c11] text-white rounded cursor-pointer"
           >
             {formData.role === "superadmin" ? "Add Super Admin" : "Add Admin"}
           </button>

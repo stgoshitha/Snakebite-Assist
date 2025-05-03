@@ -3,8 +3,15 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import LocationPicker from "../components/LocationPicker";
 import Header from "../components/common/Header";
+import DropzoneUploader from "../components/DropzoneUploader";
+import PdfUpload  from '../components/PdfUpload ';
+
+
 
 const CreateHospitalForm = () => {
+  const [proofCertificate, setProofCertificate] = useState(null);
+
+  console.log("gdbchd :" ,proofCertificate);
   const [formData, setFormData] = useState({
     hospitalName: "",
     hospitalType: "",
@@ -16,9 +23,12 @@ const CreateHospitalForm = () => {
     longitude: "",
     is24hrService: false,
     workingHours: [{ day: "", open: "", close: "" }], // Default working hours
-    proofCertificate: "",
-    hospitalImages: ["https://example.com/default-hospital.jpg"], // Default Image URL
+    proofCertificate: proofCertificate,
+    hospitalImages: [], // Default Image URL
   });
+
+  console.log("gdbchdaaaa :" ,proofCertificate);
+
 
   const navigate = useNavigate();
   const [errors, setErrors] = useState({});
@@ -64,6 +74,7 @@ const CreateHospitalForm = () => {
     );
     setFormData({ ...formData, workingHours: updatedWorkingHours });
   };
+  
 
   // **Validation function**
   const validateForm = () => {
@@ -353,7 +364,7 @@ const CreateHospitalForm = () => {
               <button
                 type="button"
                 onClick={addWorkingHours}
-                className="bg-gray-700 text-white px-4 py-2 mt-2 rounded-md shadow"
+                className="bg-[#0f1600] hover:bg-[#6a4c11] text-white px-4 py-2 mt-2 rounded-md shadow"
               >
                 + Add Working Hours
               </button>
@@ -362,44 +373,111 @@ const CreateHospitalForm = () => {
 
           <LocationPicker formData={formData} setFormData={setFormData} />
 
-          <div className="flex flex-col">
-            <label className="text-sm font-medium text-gray-700">
-              Proof Certificate
-            </label>
-            <input
-              type="text"
-              name="proofCertificate"
-              onChange={handleChange}
-              className="mt-1 px-4 py-2 border border-gray-300 rounded-md"
-            />
-            {errors.proofCertificate && (
-              <span className="text-red-500 text-sm italic">
-                {errors.proofCertificate}
-              </span>
-            )}
-          </div>
 
-          <div className="flex flex-col">
-            <label className="text-sm font-medium text-gray-700">
-              Hospital Images
-            </label>
-            <input
-              type="text"
-              name="hospitalImages"
-              onChange={handleChange}
-              className="mt-1 px-4 py-2 border border-gray-300 rounded-md"
-            />
-            {errors.hospitalImages && (
-              <span className="text-red-500 text-sm italic">
-                {errors.hospitalImages}
-              </span>
-            )}
-          </div>
+
+
+
+          {/* <div className="flex flex-col">
+  <label className="text-sm font-medium text-gray-700">Proof Certificate</label>
+
+  <PdfUpload onUpload={(url) => setProofCertificate(url)} />
+
+
+  {formData.proofCertificate && (
+    <PdfViewer url={formData.proofCertificate} />
+  )}
+</div>
+
+<div className="flex flex-col">
+  <label className="text-sm font-medium text-gray-700">Proof Certificate</label>
+  <DropzoneUploader
+    accept={{ "image/*": [] }}
+    resourceType="image"
+    multiple={true}
+    onUpload={(urls) => 
+      setFormData({
+        ...formData,
+        proofCertificate: [...formData.proofCertificate, ...urls],
+      })
+    }
+    
+  />
+  {formData.hospitalImages.length > 0 && (
+  <div className="flex flex-wrap gap-4 mt-2">
+    {formData.proofCertificate.map((img, i) => (
+      <div key={i} className="relative w-24 h-24">
+        <img
+          src={img}
+          alt={`Hospital ${i}`}
+          className="w-full h-full object-cover rounded border"
+        />
+        <button
+          type="button"
+          onClick={() => {
+            const updatedImages = formData.proofCertificate.filter(
+              (_, index) => index !== i
+            );
+            setFormData({ ...formData, proofCertificate: updatedImages });
+          }}
+          className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-1 py-0.5"
+        >
+          ✕
+        </button>
+      </div>
+    ))}
+  </div>
+)}
+
+</div> */}
+
+<div className="flex flex-col">
+  <label className="text-sm font-medium text-gray-700">Hospital Images</label>
+  <DropzoneUploader
+    accept={{ "image/*": [] }}
+    resourceType="image"
+    multiple={true}
+    onUpload={(urls) => 
+      setFormData({
+        ...formData,
+        hospitalImages: [...formData.hospitalImages, ...urls],
+      })
+    }
+    
+  />
+  {formData.hospitalImages.length > 0 && (
+  <div className="flex flex-wrap gap-4 mt-2">
+    {formData.hospitalImages.map((img, i) => (
+      <div key={i} className="relative w-24 h-24">
+        <img
+          src={img}
+          alt={`Hospital ${i}`}
+          className="w-full h-full object-cover rounded border"
+        />
+        <button
+          type="button"
+          onClick={() => {
+            const updatedImages = formData.hospitalImages.filter(
+              (_, index) => index !== i
+            );
+            setFormData({ ...formData, hospitalImages: updatedImages });
+          }}
+          className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-1 py-0.5"
+        >
+          ✕
+        </button>
+      </div>
+    ))}
+  </div>
+)}
+
+</div>
+
+
 
           <div className="flex gap-2 justify-end">
             <button
               type="submit"
-              className="font-semibold border border-blue-600 text-lg text-blue-600 px-4 py-2 w-40 rounded"
+              className="font-semibold border bg-[#0f1600] hover:bg-[#6a4c11] text-white px-4 py-2 w-40 rounded"
             >
               Create Hospital
             </button>
@@ -407,7 +485,7 @@ const CreateHospitalForm = () => {
             <button
               type="button"
               onClick={() => navigate("/hospital/hospitalprofile")}
-              className="font-semibold border border-red-600 text-lg text-red-600 px-4 py-2 w-40 rounded"
+              className="font-semibold border bg-red-700 text-white hover:text-red-700 hover:bg-white  px-4 py-2 w-40 rounded"
             >
               Cancel
             </button>

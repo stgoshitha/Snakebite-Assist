@@ -9,5 +9,17 @@ export default defineConfig({
     proxy: {
       '/api': 'http://localhost:3000'
     }
+  },
+  assetsInclude: ['**/*.pdf'],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: undefined,
+      },
+    },
+  },
+  worker: {
+    format: 'es',
   }
+
 })

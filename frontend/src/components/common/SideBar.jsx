@@ -19,7 +19,7 @@ const SideBar = () => {
         <div className="px-3 py-6 ">
           <Link
             to="/"
-            className="flex items-center gap-2 text-2xl font-bold text-green-700 "
+            className="flex items-center gap-2 text-2xl font-bold text-[#0f1600]  "
           >
             🐍 <span>Snakebite Assist</span>
           </Link>
@@ -27,7 +27,7 @@ const SideBar = () => {
 
         <div className="px-3 py-4 hover:bg-gray-200 cursor-pointer ">
           <Link
-            to="/dashboard"
+            to="/admin/adminDash"
             className="flex  items-center gap-3 hover:bg-gray-200 hover:text-green-600"
           >
             <HiOutlineViewGrid size={25} /> Dashboard
@@ -73,7 +73,7 @@ const SideBar = () => {
 
         <div className="px-3 py-4 hover:bg-gray-200 hover:text-green-600 cursor-pointer">
           <Link
-            to="/snakes"
+            to="/admin/snake-details"
             className="flex items-center gap-3 hover:text-green-600"
           >
             <VscSnake size={25} /> Snake Information

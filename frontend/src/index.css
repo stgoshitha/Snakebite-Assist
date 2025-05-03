@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 .loader {
-  --c: no-repeat linear-gradient(#c60505 0 0);
+  --c: no-repeat linear-gradient(#6a4c11 0 0);
   background: 
     var(--c) 0%   100%,
     var(--c) 50%  100%,

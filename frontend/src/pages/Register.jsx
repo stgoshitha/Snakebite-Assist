@@ -85,91 +85,78 @@ const Register = () => {
   };
 
   return (
-    <div className="h-screen flex flex-col ">
-      <div className="flex-grow flex overflow-y-hidden  bg-gray-100 bg-[url(src/assets/snake04.jpg)] bg-cover bg-center">
-      
-      <div className="flex justify-center items-center w-full h-full p-15">
-          <div className="p-6rounded-md w-96 backdrop-blur-5xl bg-gray-300/60 shadow-md flex flex-col gap-4">
-            <h1 className="text-2xl mb-4 text-center font-bold">Register</h1>
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-              <div className="relative gap-1">
+    <div className="min-h-screen flex flex-col bg-gray-50">
+      <Header />
+      <div className="flex-grow flex flex-col md:flex-row bg-white shadow-inner">
+        {/* Register Form Section */}
+        <div className="md:w-1/2 flex justify-center items-center px-6 py-12 bg-white">
+          <div className="w-full max-w-md space-y-6">
+            <div className="text-center">
+              <h1 className="text-4xl font-bold text-gray-800">Register</h1>
+              <p className="text-sm text-gray-500 mt-2">Create your account to get started.</p>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
                 <input
                   type="text"
                   name="name"
                   placeholder="Name"
                   value={formData.name}
                   onChange={handleChange}
-                  className="p-2 w-full border rounded focus:outline-none focus:ring-2 "
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 transition"
                 />
-                {errors.name && (
-                  <p className="text-red-500 text-sm">{errors.name}</p>
-                )}
+                {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
               </div>
 
-              <div className="relative gap-1">
+              <div>
                 <input
                   type="email"
                   name="email"
                   placeholder="Email"
                   value={formData.email}
                   onChange={handleChange}
-                  className="p-2 w-full border rounded focus:outline-none focus:ring-2 "
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 transition"
                 />
-                {errors.email && (
-                  <p className="text-red-500 text-sm">{errors.email}</p>
-                )}
+                {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
               </div>
 
-              <div className="relative gap-1">
+              <div className="relative">
                 <input
                   type={passwordVisibility.password ? "text" : "password"}
                   name="password"
                   placeholder="Password"
                   value={formData.password}
                   onChange={handleChange}
-                  className="p-2 w-full border rounded focus:outline-none focus:ring-2 "
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 transition"
                 />
                 <button
                   type="button"
-                  className="absolute right-3 top-3 text-gray-500 text-xl"
+                  className="absolute right-3 top-3 text-gray-500 hover:text-gray-700"
                   onClick={() => togglePasswordVisibility("password")}
                 >
-                  {passwordVisibility.password ? (
-                    <MdOutlineVisibilityOff />
-                  ) : (
-                    <MdOutlineVisibility />
-                  )}
+                  {passwordVisibility.password ? <MdOutlineVisibilityOff size={25} /> : <MdOutlineVisibility size={25}/>}
                 </button>
-                {errors.password && (
-                  <p className="text-red-500 text-sm">{errors.password}</p>
-                )}
+                {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
               </div>
 
-              <div className="relative gap-1">
+              <div className="relative">
                 <input
-                  type={passwordVisibility.password ? "text" : "password"}
+                  type={passwordVisibility.confirmPassword ? "text" : "password"}
                   name="confirmPassword"
                   placeholder="Confirm Password"
                   value={formData.confirmPassword}
                   onChange={handleChange}
-                  className="p-2 w-full border rounded focus:outline-none focus:ring-2 "
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 transition"
                 />
                 <button
                   type="button"
-                  className="absolute right-3 top-3 text-gray-500 text-xl"
+                  className="absolute right-3 top-3 text-gray-500 hover:text-gray-700"
                   onClick={() => togglePasswordVisibility("confirmPassword")}
                 >
-                  {passwordVisibility.confirmPassword ? (
-                    <MdOutlineVisibilityOff />
-                  ) : (
-                    <MdOutlineVisibility />
-                  )}
+                  {passwordVisibility.confirmPassword ? <MdOutlineVisibilityOff size={25} /> : <MdOutlineVisibility size={25}/>}
                 </button>
-                {errors.confirmPassword && (
-                  <p className="text-red-500 text-sm">
-                    {errors.confirmPassword}
-                  </p>
-                )}
+                {errors.confirmPassword && <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>}
               </div>
 
               <div className="flex items-center gap-2">
@@ -180,7 +167,7 @@ const Register = () => {
                     value="hospital"
                     checked={formData.role === "hospital"}
                     onChange={handleChange}
-                    className="h-5 w-5 cursor-pointer"
+                    className="h-5 w-5 cursor-pointer "
                   />
                   <LiaHospital className="text-2xl" />
                   <span className="text-gray-700 select-none">
@@ -191,23 +178,48 @@ const Register = () => {
 
               <button
                 type="submit"
-                className="px-4 py-2 mt-5 bg-green-600 text-white rounded hover:bg-green-700"
+                className="w-full py-3 bg-[#0f1600] hover:bg-[#6a4c11] text-white font-semibold rounded-lg transition shadow"
               >
-                {formData.role === "hospital"
-                  ? "Register as Hospital Owner"
-                  : "Register"}
+                {formData.role === "hospital" ? "Register as Hospital Owner" : "Register"}
               </button>
             </form>
-            {errors.form && (
-              <p className="text-red-500 text-sm text-center">{errors.form}</p>
-            )}
 
-            <p className="text-center mt-5">
+            {errors.form && <p className="text-red-500 text-sm text-center">{errors.form}</p>}
+
+            <div className="text-center text-sm mt-4">
               Already have an account?{" "}
-              <Link to={"/login"} className="text-blue-500 underline">
+              <Link to="/login" className="text-green-700 hover:underline">
                 Login
               </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* Info Panel Section */}
+        <div className="md:w-1/2 bg-gradient-to-br from-green-100 via-amber-100 to-yellow-50 flex flex-col justify-center px-10 py-12">
+          <div className="max-w-md mx-auto">
+            <h1 className="text-3xl font-bold text-green-800 mb-4">Welcome to</h1>
+            <div className="flex items-center gap-3 mb-6">
+              <img src={logo} className="w-12 h-12" alt="Logo" />
+              <span className="text-3xl font-bold text-green-900">Snakebite Assist</span>
+            </div>
+            <p className="text-gray-700 mb-4 leading-relaxed">
+              A national solution to assist snakebite victims quickly and safely.
             </p>
+
+            <ul className="text-gray-600 space-y-2 mb-6 text-base">
+              <li>✅ Find nearby hospitals</li>
+              <li>✅ Create & read blogs</li>
+              <li>✅ Hospital & admin access</li>
+              <li>✅ Safety tips for everyone</li>
+            </ul>
+
+            <div className="text-sm text-gray-600">
+              <p className="mb-1">Already have an account?</p>
+              <Link to="/login" className="text-green-800 font-medium hover:underline">
+                Login Now
+              </Link>
+            </div>
           </div>
         </div>
       </div>

@@ -121,7 +121,7 @@ const AdminHospitalNotApproved = () => {
                     <th className="py-2 px-4 border-b">City</th>
                     <th className="py-2 px-4 border-b">Phone Number</th>
                     <th className="py-2 px-4 border-b">Email</th>
-                    <th className="py-2 px-4 border-b">Proof Certificate</th>
+                    {/* <th className="py-2 px-4 border-b">Proof Certificate</th> */}
                     <th className="py-2 px-4 border-b">Location</th>
                     <th className="py-2 px-4 border-b">Actions</th>
                   </tr>
@@ -159,7 +159,7 @@ const AdminHospitalNotApproved = () => {
                         {hospital.phoneNumber}
                       </td>
                       <td className="py-2 px-4 border-b">{hospital.email}</td>
-                      <td className="py-2 px-4 border-b">
+                      {/* <td className="py-2 px-4 border-b">
                         <a
                           href={hospital.proofCertificate}
                           target="_blank"
@@ -169,7 +169,7 @@ const AdminHospitalNotApproved = () => {
                           <FaRegFilePdf size={25} />
                           <label>View</label>
                         </a>
-                      </td>
+                      </td> */}
                       <td className="py-2 px-4 border-b">
                         <a
                           href={`https://www.google.com/maps?q=${hospital.location.coordinates[1]},${hospital.location.coordinates[0]}`}

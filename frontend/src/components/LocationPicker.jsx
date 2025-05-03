@@ -80,7 +80,7 @@ const LocationPicker = ({ formData, setFormData }) => {
         <button
           type="button"
           onClick={handleSearchlocation}
-          className="px-4 py-2 bg-zinc-600 text-white rounded hover:bg-zinc-700"
+          className="px-4 py-2 bg-[#0f1600] hover:bg-[#6a4c11] text-white rounded "
         >
           Search
         </button>

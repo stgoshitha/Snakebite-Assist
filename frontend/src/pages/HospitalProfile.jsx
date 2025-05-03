@@ -131,7 +131,7 @@ const HospitalProfile = () => {
             onClick={() =>
               navigate("/hospital/hospitalprofile/createHospitalForm")
             }
-            className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+            className="px-6 py-2 bg-[#0f1600] hover:bg-[#6a4c11] text-white rounded  transition"
           >
             Create Hospital
           </button>
@@ -281,7 +281,7 @@ const HospitalProfile = () => {
                   </div>
                 </div>
 
-                <div className="p-4 bg-white rounded-xl shadow-sm">
+                {/* <div className="p-4 bg-white rounded-xl shadow-sm">
                   <HospitalProfileInfoItem
                     icon={PiCertificateBold}
                     label="Proof Certificate PDF"
@@ -302,18 +302,18 @@ const HospitalProfile = () => {
                       )
                     }
                   />
-                </div>
+                </div> */}
 
                 <div className="flex gap-4 mt-6 justify-end">
                   <button
-                    className="px-4 py-2 border border-blue-600 text-lg text-blue-600 rounded hover:border-blue-700"
+                    className="px-4 py-2 bg-[#0f1600] hover:bg-[#6a4c11] text-white rounded"
                     onClick={() => setIsEditing(true)}
                   >
                     Edit hospital profile
                   </button>
                   <button
                     onClick={handleDelete}
-                    className="px-4 py-2  border-red-600 border text-lg text-red-600 rounded hover:border-red-700"
+                    className="px-4 py-2  bg-red-700 border text-lg text-white rounded hover:bg-white hover:text-red-700"
                   >
                     Delete hospital
                   </button>

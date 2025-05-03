@@ -10,12 +10,9 @@ const HeroSection = () => {
   const navigate = useNavigate();
 
   return (
-    <section className="relative h-screen flex justify-center bg-gradient-to-r from-[#000428cc] to-[#00B4DBcc] overflow-hidden">
-      {/* Search bar centered above everything */}
-
-      {/* Content below search bar */}
-      <div className="z-10 border-white/20 rounded-3xl  p-12  text-center animate-fade-in space-y-6">
-        <div className="flex justify-center items-center space-x-4">
+    <section className="relative h-screen flex justify-center bg-gradient-to-r from-[#557512] to-[#d5aa54] overflow-hidden">
+      <div className="z-10 border-white/20 rounded-3xl  p-16 text-center animate-fade-in space-y-6">
+        <div className="flex justify-center items-center space-x-5">
           <img src={logo} alt="Snake Icon" className="w-20 h-20" />
           <h1 className="text-7xl font-extrabold text-white drop-shadow-lg">
             Bitten by a snake?
@@ -32,7 +29,7 @@ const HeroSection = () => {
 
           <div className="absolute top-1/5 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center space-y-4">
             <button
-              className="bg-orange-500 hover:bg-orange-600 text-white text-lg font-semibold px-8 py-4 rounded-full shadow-md transition duration-300 ease-in-out"
+              className="bg-[#0f1600] hover:bg-[#6a4c11] text-white text-lg font-semibold px-8 py-4 rounded-full shadow-md transition duration-300 ease-in-out"
               onClick={() => navigate("/nearestHospital")}
             >
               Get Nearest Hospital

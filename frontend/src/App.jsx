@@ -20,6 +20,7 @@ import BlogPage from "./pages/BlogPage";
 import BlogCreatePage from "./pages/BlogCreatePage";
 import AdminBlogApproved from "./pages/AdminBlogApproved";
 import AdminBlogNotApproved from "./pages/AdminBlogNotApproved";
+import AdminDashboard from "./pages/AdminDashboard";
 import UserBlogPage from "./pages/UserBlogPage";
 import BlogUpdatePage from "./pages/BlogUpdatePage";
 import NearestHospital from "./pages/NearestHospital";
@@ -32,6 +33,7 @@ function App() {
           <Routes>
             <Route path='/admin' element={<AdminLayout />}>
               <Route index element={<Home />} />
+              <Route path='adminDash' element={<AdminDashboard />} />
               <Route path='adminUsers' element={<AdminDashboardUsers />} />
               <Route path='allAdmins' element={<AdminDashboardAdmins />} />
               <Route path='allAdmins/addAdminForm' element={<AddNewAdmin />} />

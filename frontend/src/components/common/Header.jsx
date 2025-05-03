@@ -12,6 +12,7 @@ import { LiaHospital } from "react-icons/lia";
 import { HiOutlineViewGrid } from "react-icons/hi";
 import { IoNotificationsOutline } from "react-icons/io5";
 import logo from "../../assets/logo.png";
+import { FaArrowRight } from "react-icons/fa";
 
 const Header = () => {
   const user = useSelector((state) => state.Auth.user);
@@ -52,7 +53,7 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-[#00448B] rr shadow-md sticky top-0 z-50 ">
+    <header className="bg-[#0f1600] rr shadow-md sticky top-0 z-50 ">
       <div className="container mx-auto px-10 py-5 flex items-center justify-between">
         {!hideNav && (
           <Link
@@ -100,7 +101,7 @@ const Header = () => {
               <button onClick={toggleDropdown}>
                 <FaCircleUser
                   size={36}
-                  className="text-gray-500 cursor-pointer"
+                  className="text-white cursor-pointer"
                 />
               </button>
 
@@ -140,7 +141,7 @@ const Header = () => {
 
                     {(user?.role === "admin" ||
                       user?.role === "superadmin") && (
-                      <Link to="/admin/adminUsers">
+                      <Link to="/admin/adminDash">
                         <div className="flex items-center w-full px-4 py-2 rounded hover:bg-gray-100 transition duration-300">
                           <HiOutlineViewGrid size={20} />
                           <span className="ml-2 font-semibold">
@@ -164,9 +165,12 @@ const Header = () => {
           </div>
         ) : (
           <Link to="/login">
-            <button className="hidden md:block px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition duration-300">
-              Login
-            </button>
+            <div className="hidden md:block px-4 py-2 text-[#0f1600] hover:bg-[#6a4c11] hover:text-white bg-white rounded font-semibold w-32 transition duration-300">
+             <div className="flex items-center justify-center gap-2 py-1">
+               <span>Login</span>
+               <FaArrowRight size={20}/>
+             </div>
+            </div>
           </Link>
         )}
 

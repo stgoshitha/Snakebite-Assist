@@ -9,6 +9,8 @@ const hospitalRoute = require('./routes/hospitalRoute');
 const snakeRoute = require('./routes/snakeRoute');
 const searchRoute = require('./routes/searchRoute');
 const blogRoute = require('./routes/blogRoute');
+const pdfRoute = require('./routes/pdfRoute'); // Import PDF route
+
 
 dotenv.config();
 
@@ -38,6 +40,8 @@ app.use('/api/hospital', hospitalRoute);
 app.use('/api/snakes', snakeRoute);
 app.use('/api/search', searchRoute);
 app.use('/api/blog', blogRoute);
+app.use('/api/pdf', pdfRoute); // Use the PDF route
+
 
 // Error handling middleware
 app.use((err, req, res, next) => {

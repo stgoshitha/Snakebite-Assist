@@ -75,18 +75,16 @@ const NearestHospital = () => {
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         const { latitude, longitude } = position.coords;
-        setUserLocation([latitude, longitude]);
-
+        console.log("Latitude:", latitude, "Longitude:", longitude); // Log the coordinates to check
+        setUserLocation([latitude, longitude]); // Ensure the coordinates are being set correctly
+  
         try {
-          const response = await axios.get(
-            "http://localhost:3000/api/search/hospitals/nearest",
-            {
-              params: {
-                lat: latitude,
-                lng: longitude,
-              },
-            }
-          );
+          const response = await axios.get("http://localhost:3000/api/search/hospitals/nearest", {
+            params: {
+              lat: latitude,
+              lng: longitude,
+            },
+          });
           setHospitals(response.data.data);
         } catch (err) {
           setError("No nearby hospitals found or server error");
@@ -95,11 +93,18 @@ const NearestHospital = () => {
         }
       },
       (err) => {
+        console.error(err);
         setError("Location access denied or unavailable");
         setLoading(false);
+      },
+      {
+        enableHighAccuracy: true, // Ensures high accuracy
       }
     );
-  }, []);
+  }, []); 
+ 
+  
+  
 
   if (loading) return <Loading />;
   if (error) return <p>{error}</p>;

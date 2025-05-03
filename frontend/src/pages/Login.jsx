@@ -74,103 +74,100 @@ const Login = () => {
   };
 
   return (
-    <div className="h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gray-50">
       <Header />
-      <div className="flex-grow flex overflow-y-hidden  bg-gray-100">
-        <div className="flex flex-col w-1/3">
-          <div className="flex justify-center items-center w-full h-full p-15">
-            <div className="w-full">
-              <h1 className="text-5xl mb-4 text-center font-bold">Login</h1>
-              <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                <div>
-                  <input
-                    type="email"
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    autoComplete="email"
-                    className="p-2 w-full border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                  {errors.email && (
-                    <p className="text-red-500 text-sm">{errors.email}</p>
-                  )}
-                </div>
-
-                <div className="relative">
-                  <input
-                    type={passwordVisibility.password ? "text" : "password"}
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    autoComplete="current-password"
-                    className="p-2 w-full border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                  <button
-                    type="button"
-                    className="absolute right-3 top-3 text-gray-500 text-xl"
-                    onClick={() => togglePasswordVisibility("password")}
-                  >
-                    {passwordVisibility.password ? (
-                      <MdOutlineVisibilityOff />
-                    ) : (
-                      <MdOutlineVisibility />
-                    )}
-                  </button>
-                  {errors.password && (
-                    <p className="text-red-500 text-sm">{errors.password}</p>
-                  )}
-                </div>
-
+      <div className="flex-grow flex flex-col md:flex-row bg-white shadow-inner">
+        {/* Login Form Section */}
+        <div className="md:w-1/2 flex justify-center items-center px-6 py-12 bg-white">
+          <div className="w-full max-w-md space-y-6">
+            <div className="text-center">
+              <h1 className="text-4xl font-bold text-gray-800">Login</h1>
+              <p className="text-sm text-gray-500 mt-2">Welcome back! Please enter your credentials.</p>
+            </div>
+  
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <input
+                  type="email"
+                  placeholder="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  autoComplete="email"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 transition"
+                />
+                {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+              </div>
+  
+              <div className="relative">
+                <input
+                  type={passwordVisibility.password ? "text" : "password"}
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  autoComplete="current-password"
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 transition"
+                />
                 <button
-                  type="submit"
-                  className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+                  type="button"
+                  className="absolute right-3 top-3 text-gray-500 hover:text-gray-700"
+                  onClick={() => togglePasswordVisibility("password")}
                 >
-                  Login
+                  {passwordVisibility.password ? <MdOutlineVisibilityOff size={25}/> : <MdOutlineVisibility size={25}/>}
                 </button>
-                {errors.form && (
-                  <p className="text-red-500 text-sm text-center">
-                    {errors.form}
-                  </p>
-                )}
-              </form>
-
-              <label className="text-center block mt-4">
-                Don't have an account?{" "}
-                <a href="/register" className="text-blue-500 underline">
-                  Register
-                </a>
-              </label>
+                {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
+              </div>
+  
+              <button
+                type="submit"
+                className="w-full py-3 bg-[#0f1600] hover:bg-[#6a4c11] text-white font-semibold rounded-lg transition shadow"
+              >
+                Login
+              </button>
+  
+              {errors.form && (
+                <p className="text-red-500 text-sm text-center">{errors.form}</p>
+              )}
+            </form>
+  
+            <div className="text-center text-sm mt-4">
+              Don't have an account?{" "}
+              <a href="/register" className="text-green-700 hover:underline">
+                Register
+              </a>
             </div>
           </div>
         </div>
-
-        <div className="flex w-2/3 flex-col bg-amber-200 h-full p-20 justify-center">
-          <h1 className="text-3xl font-bold text-green-700 mb-6">Welcome,</h1>
-          <img src={logo} className="w-12" /> 
-          <div className="text-2xl font-bold text-green-700 flex items-center gap-2">
-            <span>Snakebite Assist</span>
-          </div>
-          <p className="text-gray-700 mb-4">
-            A national solution to assist snakebite victims quickly and safely.
-          </p>
-
-          <ul className="text-gray-600 space-y-2 mb-6 align-left">
-            <li>✅ Find nearby hospitals</li>
-            <li>✅ Create & read blogs</li>
-            <li>✅ Hospital & admin access</li>
-            <li>✅ Safety tips for everyone</li>
-          </ul>
-
-          <div className="text-sm text-gray-500">
-            <p>Don't have an account?</p>
-            <a href="/register" className="text-green-700 hover:underline">
-              Register Now
-            </a>
+  
+        {/* Info Panel Section */}
+        <div className="md:w-1/2 bg-gradient-to-br from-green-100 via-amber-100 to-yellow-50 flex flex-col justify-center px-10 py-12">
+          <div className="max-w-md mx-auto">
+            <h1 className="text-3xl font-bold text-green-800 mb-4">Welcome to</h1>
+            <div className="flex items-center gap-3 mb-6">
+              <img src={logo} className="w-12 h-12" alt="Logo" />
+              <span className="text-3xl font-bold text-green-900">Snakebite Assist</span>
+            </div>
+            <p className="text-gray-700 mb-4 leading-relaxed">
+              A national solution to assist snakebite victims quickly and safely.
+            </p>
+  
+            <ul className="text-gray-600 space-y-2 mb-6 text-base">
+              <li>✅ Find nearby hospitals</li>
+              <li>✅ Create & read blogs</li>
+              <li>✅ Hospital & admin access</li>
+              <li>✅ Safety tips for everyone</li>
+            </ul>
+  
+            <div className="text-sm text-gray-600">
+              <p className="mb-1">Don’t have an account?</p>
+              <a href="/register" className="text-green-800 font-medium hover:underline">
+                Register Now
+              </a>
+            </div>
           </div>
         </div>
       </div>
     </div>
   );
-};
-
+  
+}
 export default Login;

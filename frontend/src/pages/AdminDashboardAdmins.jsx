@@ -139,7 +139,7 @@ const AdminDashboardAdmins = () => {
               <div className="flex justify-end items-center mb-5">
                 <button
                   onClick={() => navigate("/admin/allAdmins/addAdminForm")}
-                  className="flex items-center gap-2 px-4 py-2 bg-zinc-600 text-white rounded shadow-md hover:bg-zinc-700 transition duration-300"
+                  className="flex items-center gap-2 px-4 py-2 bg-[#0f1600] hover:bg-[#6a4c11] text-white rounded shadow-md transition duration-300"
                 >
                   <CgAddR size={20} /> Create New Admin
                 </button>

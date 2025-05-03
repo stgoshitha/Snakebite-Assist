@@ -6,6 +6,8 @@ const createHospital = async (req, res) => {
   try {
     const { hospitalName, hospitalType, address, city, phoneNumber, email, webSiteLink, latitude, longitude, is24hrService, workingHours, proofCertificate, hospitalImages } = req.body;
 
+    console.log("Received proofCertificate URL:", proofCertificate);
+
     const userId = req.user.id;
 
     // Create new hospital

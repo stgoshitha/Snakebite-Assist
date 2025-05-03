@@ -55,7 +55,7 @@ const BlogPage = () => {
         <div className="bg-white shadow-sm p-10 rounded mb-5 text-red-600 h-[500px] flex items-center justify-center relative">
           <div className="absolute inset-0 bg-[url('src/assets/bloghero.png')] bg-cover bg-center opacity-90 rounded"></div>
           <div className="relative z-10 flex items-center justify-center gap-2">
-            <h1 className="text-9xl font-bold opacity-100 mask-image-[linear-gradient(to_right, transparent, transparent 50%, rgba(0,0,0,0.5) 100%)] text-white">
+            <h1 className="text-9xl font-bold opacity-100 mask-image-[linear-gradient(to_right, transparent, transparent 10%, rgba(0,0,0,0.5) 10%)] text-white">
               All Blogs
             </h1>
           </div>
@@ -148,7 +148,7 @@ const BlogPage = () => {
                   className="bg-gray-100 p-2 rounded-full hover:bg-gray-200"
                 >
                   {blog.likes.includes(user._id) ? (
-                    <BiSolidLike size={30} className="text-blue-500" />
+                    <BiSolidLike size={30} className="text-[#0f1600]" />
                   ) : (
                     <BiLike size={30} className="text-gray-600" />
                   )}
